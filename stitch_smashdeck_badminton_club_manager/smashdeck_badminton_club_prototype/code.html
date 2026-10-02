@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=JetBrains+Mono:wght@600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0a122a;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary-fixed": "#6ffbbe", "surface-container": "#171e37", "surface-dim": "#0a122a", "on-tertiary": "#002e69", "background": "#0a122a", "on-background": "#dbe1ff", "inverse-surface": "#dbe1ff", "tertiary-fixed-dim": "#adc6ff", "surface-container-high": "#212942", "on-tertiary-fixed": "#001a41", "on-primary-fixed-variant": "#3c4d00", "surface": "#0a122a", "on-secondary-fixed-variant": "#005236", "outline-variant": "#444933", "on-primary": "#283500", "on-primary-container": "#556d00", "outline": "#8e9379", "on-error-container": "#ffdad6", "on-secondary-fixed": "#002113", "primary-fixed-dim": "#abd600", "inverse-on-surface": "#282f49", "secondary-fixed-dim": "#4edea3", "surface-container-low": "#131a33", "secondary-container": "#00a572", "inverse-primary": "#506600", "on-tertiary-fixed-variant": "#004494", "tertiary-fixed": "#d8e2ff", "error-container": "#93000a", "surface-variant": "#2c344d", "tertiary-container": "#d8e2ff", "primary-container": "#c3f400", "primary-fixed": "#c3f400", "on-secondary-container": "#00311f", "on-error": "#690005", "secondary": "#4edea3", "on-secondary": "#003824", "on-tertiary-container": "#0060cd", "surface-container-highest": "#2c344d", "surface-container-lowest": "#050d25", "on-primary-fixed": "#161e00", "tertiary": "#ffffff", "on-surface": "#dbe1ff", "surface-tint": "#abd600", "primary": "#ffffff", "error": "#ffb4ab", "on-surface-variant": "#c4c9ac", "surface-bright": "#313852" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-tablet": "2rem", "gutter-tablet": "1.5rem", "margin-mobile": "1rem", "space-xl": "1.5rem", "space-lg": "1.25rem", "space-base": "1rem", "space-3xl": "3rem", "space-sm": "0.5rem", "space-2xs": "0.125rem", "gutter-mobile": "1rem", "space-2xl": "2rem", "space-md": "0.75rem", "space-xs": "0.25rem" }, fontFamily: { "headline-lg": ["Chivo"], "headline-md": ["Chivo"], "label-caps": ["JetBrains Mono"], "body-lg": ["Space Grotesk"], "stat-badge": ["JetBrains Mono"], "headline-xl": ["Chivo"], "headline-xl-mobile": ["Chivo"], "body-md": ["Space Grotesk"], "display-ovr": ["Chivo"], "body-sm": ["Space Grotesk"] }, fontSize: { "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "24px", "fontWeight": "700" }], "label-caps": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }], "stat-badge": ["14px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "700" }], "headline-xl": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-xl-mobile": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-ovr": ["56px", { "lineHeight": "56px", "letterSpacing": "-0.04em", "fontWeight": "900" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen antialiased"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_4px_20px_rgba(5,13,37,0.6)]"><div class="h-20 px-space-base flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="SmashDeck Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPKUjx_o-0HIUpXkDrHIsOxLNeq2LaBo8woIflvoBkjYwMeuXHMWvrLGGKYiIBM9PcDhA3KoqDqFdaF8QA4tYGIwzSgEbKptyhn9d2T7zEMHXUEUDOX7YwKYkZbB6azcdOlALJ0YJ4IjTZPdMpstJjr8Exeuv0WT0ILaC7Yqwm5ogHQHziUFQWT1MmeJadNtowNO2_B4HzL85yM3brbMlgEwyLbqfHj56eErZDPwtj3kaOlVe2G8ca"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">SmashDeck</span><span class="px-space-xs py-space-2xs rounded bg-surface-container-high text-secondary font-label-caps text-label-caps uppercase shrink-0">Court 4 LIVE</span></div><span class="font-body-sm text-body-sm text-on-surface-variant truncate">UC Badminton Club • 20 Active</span></div></div><div class="flex items-center gap-space-xs shrink-0"><div class="flex items-center bg-surface-container px-space-xs py-space-2xs rounded-lg"><span class="font-stat-badge text-stat-badge text-primary-container mr-space-xs font-black">89</span><span class="font-label-caps text-label-caps text-on-surface-variant">OVR</span></div><div class="relative flex items-center justify-center p-0.5 rounded-full bg-surface-container-high"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqMIEnMbKbyEme-B7eCssEDB0ACkETfE2p3dcbGg7W67pxW0xMfbOlmiyHrmqISgFbEplfKi0IxazGOqyKZyhSMcG4Cfy0vlmGOx5HylkIPKb_ZC-yH0z26-h5LBH02jw2I67N2CiTbr6IiubZwCmm-amCBJ8U74__jONyFgbi0TMao52AkcdV-EY6VD-dG7ZTFzGjMF8h5i3FpEprh2uBBTdc_F6rFWdanhIUJbhIEh-90mrq3RUj"/><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 px-space-base bg-surface min-h-screen"><div class="flex flex-col w-full gap-space-lg pb-space-2xl">
+<!-- Hero Card Display Wrapper -->
+<div class="relative w-full flex flex-col items-center pt-space-xs">
+<!-- Rank 1 Crown Banner & Glow -->
+<div class="flex items-center gap-space-xs px-space-md py-space-2xs rounded-full bg-surface-container-high shadow-lg mb-space-sm">
+<span class="material-symbols-outlined text-[16px] text-primary-container" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-label-caps text-label-caps text-primary-container uppercase tracking-wider font-bold">CLUB RANK #1 • GOLD APEX TIER</span>
+</div>
+<!-- FIFA Style Elite Player Card -->
+<div class="relative w-full max-w-sm rounded-xl overflow-hidden bg-gradient-to-b from-surface-container-high via-surface-container to-surface-container-lowest shadow-[0_0_32px_rgba(195,244,0,0.18)] flex flex-col p-space-base">
+<!-- Badminton Court Vector Wireframe Overlay Background -->
+<div class="absolute inset-0 pointer-events-none opacity-10">
+<svg class="w-full h-full" fill="none" viewbox="0 0 320 480" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#dbe1ff" stroke-width="1.5" x1="20" x2="300" y1="20" y2="20"></line>
+<line stroke="#dbe1ff" stroke-width="1.5" x1="20" x2="300" y1="460" y2="460"></line>
+<line stroke="#dbe1ff" stroke-width="1.5" x1="20" x2="20" y1="20" y2="460"></line>
+<line stroke="#dbe1ff" stroke-width="1.5" x1="300" x2="300" y1="20" y2="460"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="45" x2="45" y1="20" y2="460"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="275" x2="275" y1="20" y2="460"></line>
+<line stroke="#c3f400" stroke-width="2" x1="20" x2="300" y1="240" y2="240"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="20" x2="300" y1="180" y2="180"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="20" x2="300" y1="300" y2="300"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="160" x2="160" y1="20" y2="180"></line>
+<line stroke="#dbe1ff" stroke-width="1" x1="160" x2="160" y1="300" y2="460"></line>
+</svg>
+</div>
+<!-- Card Upper: Left Stats & Right Portrait Cutout -->
+<div class="relative z-10 grid grid-cols-12 gap-space-xs items-start min-h-[190px]">
+<!-- Top Left Ratings Column -->
+<div class="col-span-5 flex flex-col items-start pt-space-2xs">
+<div class="font-display-ovr text-display-ovr text-primary-container leading-none tracking-tighter drop-shadow-[0_2px_12px_rgba(195,244,0,0.35)]">
+            94
+          </div>
+<div class="font-label-caps text-label-caps text-on-surface-variant font-bold tracking-widest mt-space-2xs uppercase">
+            SGL / ALL-ROUND
+          </div>
+<!-- Crests / Flags Row -->
+<div class="flex items-center gap-space-xs mt-space-sm">
+<!-- SG/USA Duel Badge -->
+<div class="px-space-xs py-space-2xs rounded bg-surface-container-highest text-on-surface font-label-caps text-label-caps uppercase flex items-center gap-1">
+<span class="text-[11px]">🇸🇬</span>
+<span class="text-on-surface-variant text-[9px]">/</span>
+<span class="text-[11px]">🇺🇸</span>
+</div>
+<!-- Weapon Crest -->
+<div class="px-space-xs py-space-2xs rounded bg-surface-container-highest flex items-center gap-space-2xs text-secondary">
+<span class="material-symbols-outlined text-[13px]">sports_tennis</span>
+<span class="font-label-caps text-label-caps uppercase text-[9px] font-bold">88D</span>
+</div>
+</div>
+<!-- Apex Trophy Tag -->
+<div class="mt-space-md flex items-center gap-space-2xs bg-surface-container-lowest/80 px-space-xs py-space-2xs rounded-md shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-primary-container uppercase">APEX SEED</span>
+</div>
+</div>
+<!-- Right Side: Cutout Portrait Image -->
+<div class="col-span-7 relative flex justify-end items-end h-full">
+<div class="relative w-full aspect-square max-w-[170px] overflow-hidden rounded-xl shadow-2xl bg-gradient-to-tr from-surface-container-highest/60 to-transparent">
+<img alt="Maya Lin" class="w-full h-full object-cover object-center scale-105 transform hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqMIEnMbKbyEme-B7eCssEDB0ACkETfE2p3dcbGg7W67pxW0xMfbOlmiyHrmqISgFbEplfKi0IxazGOqyKZyhSMcG4Cfy0vlmGOx5HylkIPKb_ZC-yH0z26-h5LBH02jw2I67N2CiTbr6IiubZwCmm-amCBJ8U74__jONyFgbi0TMao52AkcdV-EY6VD-dG7ZTFzGjMF8h5i3FpEprh2uBBTdc_F6rFWdanhIUJbhIEh-90mrq3RUj"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent opacity-60"></div>
+</div>
+</div>
+</div>
+<!-- Player Name Plate -->
+<div class="relative z-10 mt-space-sm pt-space-xs pb-space-xs flex flex-col items-center text-center bg-surface-container-lowest/70 rounded-lg">
+<span class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface tracking-wide uppercase font-black">
+          MAYA LIN
+        </span>
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary font-semibold">UC VARSITY 1ST SEED</span>
+<span class="text-surface-variant">•</span>
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">RIGHT HANDED</span>
+</div>
+</div>
+<!-- Six FIFA-Style Radar Stat Attributes -->
+<div class="relative z-10 grid grid-cols-3 gap-space-xs mt-space-sm bg-surface-container-highest/50 p-space-sm rounded-lg">
+<!-- Stat 1: Smash -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-primary-container font-black">96</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">SMA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">382 km/h peak</span>
+</div>
+<!-- Stat 2: Defense -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-on-surface font-black">91</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">DEF</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">Lift &amp; Block</span>
+</div>
+<!-- Stat 3: Net Touch -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-primary-container font-black">95</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">NET</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">Tumbling Spin</span>
+</div>
+<!-- Stat 4: Speed -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-on-surface font-black">93</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">SPD</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">Court Footwork</span>
+</div>
+<!-- Stat 5: Stamina -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-on-surface font-black">88</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">STM</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">Set 3 Gas Tank</span>
+</div>
+<!-- Stat 6: Tactics -->
+<div class="flex flex-col items-center bg-surface-container-high/70 p-space-xs rounded shadow-sm">
+<div class="flex items-baseline gap-space-2xs">
+<span class="font-headline-md text-headline-md text-primary-container font-black">94</span>
+<span class="font-label-caps text-label-caps text-on-surface font-bold">TAC</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[10px] text-center leading-tight">Deceptive IQ</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Share / Badge Export Floating Bar -->
+<div class="flex gap-space-xs w-full">
+<button class="flex-1 bg-primary-container active:scale-[0.98] transition-transform text-on-primary-container py-space-sm px-space-base rounded-lg flex items-center justify-center gap-space-xs shadow-md" id="shareCardBtn">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+<span class="font-headline-md text-headline-md text-on-primary uppercase font-bold tracking-tight">Share Card</span>
+</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest active:scale-[0.98] transition-all text-on-surface p-space-sm rounded-lg flex items-center justify-center" id="downloadBadgeBtn">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</div>
+<!-- Current Racket Gear Status Pill -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md flex items-center justify-between gap-space-sm shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-[22px]">tune</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-2xs">
+<span class="font-body-lg text-body-lg text-on-surface font-bold truncate">Yonex BG80 @ 28 lbs</span>
+<span class="w-2 h-2 rounded-full bg-secondary shrink-0"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Strung 6 days ago • Optimal Tension</span>
+</div>
+</div>
+<div class="shrink-0 bg-surface-container px-space-xs py-space-2xs rounded text-right">
+<span class="font-label-caps text-label-caps text-secondary font-bold uppercase">Ready</span>
+</div>
+</div>
+<!-- Season Summary Grid (Bento Style) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-space-2xs">
+<span class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Season 2024–25 Record</span>
+<span class="font-label-caps text-label-caps text-primary-container uppercase font-bold">Fall Ladder #1</span>
+</div>
+<div class="grid grid-cols-3 gap-space-xs">
+<!-- Matches Played -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">Played</span>
+<div class="flex items-baseline gap-space-2xs mt-space-xs">
+<span class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface font-black">21</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">M</span>
+</div>
+<div class="flex items-center gap-space-2xs text-[11px] text-on-surface-variant mt-space-2xs font-stat-badge">
+<span>18W</span>
+<span class="text-error font-bold">3L</span>
+</div>
+</div>
+<!-- Win Rate -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">Win Rate</span>
+<div class="flex items-baseline mt-space-xs">
+<span class="font-headline-xl-mobile text-headline-xl-mobile text-primary-container font-black">85.7</span>
+<span class="font-body-sm text-body-sm text-primary-container font-bold">%</span>
+</div>
+<!-- Progress mini bar -->
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 mt-space-2xs overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-[85.7%]"></div>
+</div>
+</div>
+<!-- Current Streak -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">Hot Streak</span>
+<div class="flex items-baseline gap-space-2xs mt-space-xs">
+<span class="font-headline-xl-mobile text-headline-xl-mobile text-secondary font-black">7</span>
+<span class="material-symbols-outlined text-secondary text-[16px]">local_fire_department</span>
+</div>
+<span class="font-label-caps text-label-caps text-secondary uppercase font-bold mt-space-2xs">Unbeaten</span>
+</div>
+</div>
+</div>
+<!-- Head-to-Head (H2H) Showdown Rivalry Card -->
+<div class="w-full bg-surface-container rounded-xl p-space-base flex flex-col gap-space-md shadow-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">sports_mma</span>
+<span class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Rival Showdown</span>
+</div>
+<span class="font-label-caps text-label-caps px-space-xs py-space-2xs rounded bg-surface-container-highest text-on-surface-variant uppercase">
+        5 Encounters
+      </span>
+</div>
+<!-- Rivals Split Faceoff Display -->
+<div class="flex items-center justify-between bg-surface-container-low rounded-lg p-space-md">
+<!-- Maya Lin (Leader) -->
+<div class="flex items-center gap-space-sm">
+<div class="relative w-12 h-12 rounded-full overflow-hidden bg-surface-container-high shrink-0">
+<img alt="Maya Lin" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqMIEnMbKbyEme-B7eCssEDB0ACkETfE2p3dcbGg7W67pxW0xMfbOlmiyHrmqISgFbEplfKi0IxazGOqyKZyhSMcG4Cfy0vlmGOx5HylkIPKb_ZC-yH0z26-h5LBH02jw2I67N2CiTbr6IiubZwCmm-amCBJ8U74__jONyFgbi0TMao52AkcdV-EY6VD-dG7ZTFzGjMF8h5i3FpEprh2uBBTdc_F6rFWdanhIUJbhIEh-90mrq3RUj"/>
+<span class="absolute bottom-0 right-0 bg-primary-container text-on-primary font-label-caps text-[9px] px-1 rounded-full font-bold">1</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg text-on-surface font-bold leading-tight">Maya L.</span>
+<span class="font-label-caps text-label-caps text-secondary font-bold">3 WINS</span>
+</div>
+</div>
+<!-- Set Differential Central Badge -->
+<div class="flex flex-col items-center px-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant font-bold uppercase">SETS</span>
+<span class="font-headline-md text-headline-md text-on-surface font-black tracking-tight">7 — 5</span>
+<span class="font-label-caps text-label-caps text-secondary font-semibold">+2 DIFF</span>
+</div>
+<!-- Alex Chen (Rival Rank 2) -->
+<div class="flex items-center gap-space-sm flex-row-reverse text-right">
+<div class="relative w-12 h-12 rounded-full overflow-hidden bg-surface-container-high shrink-0 flex items-center justify-center">
+<div class="w-full h-full bg-cover bg-center" data-alt="Athletic collegiate male badminton player in competitive stance under championship court lighting, determined competitive expression with dynamic badminton jersey, high detail portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwbW7RggysB7553vcBrPaKhxXKGCFthrLZAFj6GxJXwbWrsmO4iri-CInXXb8dmzRUiewbXq6KVPkmlucBu1JjDfjJsaEusp89vKjFVblogAi8D29kpkaSaOec4XZbanUheM2iLbwgH_9hSRXzK6zaKxBp3ngJp7s7ybF7jdC6sFoPr6sQgOsrbOXGXVDGUP2UjNhPOogTd6qdkIML9rKBB7sDaaSndJEaG6fA9ZP1eIQQECnak2cF')"></div>
+<span class="absolute bottom-0 left-0 bg-surface-container-highest text-on-surface font-label-caps text-[9px] px-1 rounded-full font-bold">2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-body-lg text-body-lg text-on-surface font-bold leading-tight">Alex C.</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-bold">2 WINS</span>
+</div>
+</div>
+</div>
+<!-- Recent Match History Pills in H2H -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">Recent Clashes</span>
+<div class="grid grid-cols-3 gap-space-xs">
+<div class="bg-surface-container-high/80 p-space-xs rounded flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-secondary font-bold">OCT 14 • W</span>
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">21-19, 21-18</span>
+</div>
+<div class="bg-surface-container-high/80 p-space-xs rounded flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-error font-bold">SEP 28 • L</span>
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">18-21, 19-21</span>
+</div>
+<div class="bg-surface-container-high/80 p-space-xs rounded flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-secondary font-bold">SEP 09 • W</span>
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">21-14, 22-20</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactical Shot Distribution Visualizer -->
+<div class="w-full bg-surface-container rounded-xl p-space-base flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface uppercase tracking-tight">Point Winning Weaponry</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">Last 100 Rallies</span>
+</div>
+<div class="flex flex-col gap-space-xs mt-space-2xs">
+<!-- Steep Steep Cross Smash -->
+<div class="flex flex-col gap-space-2xs">
+<div class="flex justify-between items-center font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Jump Cross-Court Smash</span>
+<span class="text-primary-container font-stat-badge font-bold">42 pts (42%)</span>
+</div>
+<div class="w-full bg-surface-container-lowest rounded-full h-2 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full w-[42%]"></div>
+</div>
+</div>
+<!-- Hairpin Net Tumble -->
+<div class="flex flex-col gap-space-2xs">
+<div class="flex justify-between items-center font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Hairpin Net Tumbler Kill</span>
+<span class="text-secondary font-stat-badge font-bold">34 pts (34%)</span>
+</div>
+<div class="w-full bg-surface-container-lowest rounded-full h-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[34%]"></div>
+</div>
+</div>
+<!-- Deceptive Reverse Slice -->
+<div class="flex flex-col gap-space-2xs">
+<div class="flex justify-between items-center font-body-sm text-body-sm">
+<span class="text-on-surface font-medium">Deceptive Overhead Drop / Push</span>
+<span class="text-tertiary-fixed-dim font-stat-badge font-bold">24 pts (24%)</span>
+</div>
+<div class="w-full bg-surface-container-lowest rounded-full h-2 overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full rounded-full w-[24%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Delight micro-interaction: Quick haptic visual feedback for Share button
+    const shareBtn = document.getElementById('shareCardBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const originalText = shareBtn.innerHTML;
+        shareBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[20px] text-on-primary">check_circle</span>
+          <span class="font-headline-md text-headline-md text-on-primary uppercase font-bold tracking-tight">Card Copied!</span>
+        `;
+        setTimeout(() => {
+          shareBtn.innerHTML = originalText;
+        }, 1800);
+      });
+    }
+
+    const downloadBtn = document.getElementById('downloadBadgeBtn');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        const icon = downloadBtn.querySelector('.material-symbols-outlined');
+        if (icon) {
+          icon.textContent = 'download_done';
+          icon.classList.add('text-primary-container');
+          setTimeout(() => {
+            icon.textContent = 'download';
+            icon.classList.remove('text-primary-container');
+          }, 1800);
+        }
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(5,13,37,0.7)]" data-active-classes="text-primary-container font-headline-md"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="ladder" href="#"><span class="material-symbols-outlined text-[22px]">military_tech</span><span class="font-label-caps text-label-caps uppercase">Ladder</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="matches" href="#"><span class="material-symbols-outlined text-[22px]">sports_score</span><span class="font-label-caps text-label-caps uppercase">Matches</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs transition-colors text-primary-container font-headline-md" data-path="my-card" href="#"><span class="material-symbols-outlined text-[22px]">stars</span><span class="font-label-caps text-label-caps uppercase">My Card</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="attendance-and-gear" href="#"><span class="material-symbols-outlined text-[22px]">calendar_clock</span><span class="font-label-caps text-label-caps uppercase">Gear &amp; Play</span></a></div></nav></body></html>

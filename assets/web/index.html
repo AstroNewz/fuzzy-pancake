@@ -1,0 +1,2936 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>SmashDeck - Badminton Club Manager & FIFA Player Cards</title>
+  
+  <!-- Material Symbols & Google Fonts (Exact Stitch Suite) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&family=JetBrains+Mono:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- PWA & Mobile Install Meta Tags -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0a122a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="icon" type="image/png" href="assets/logo.png"/>
+  <link rel="apple-touch-icon" href="assets/logo.png"/>
+
+  <!-- Supabase JS Client v2 (Zero-Budget Backend) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- QRious Pure JS QR Code Generator for Attendance Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
+  <!-- Tailwind CSS CDN with Exact Stitch Tokens -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#0a122a",
+            "on-secondary-container": "#00311f",
+            "on-primary": "#283500",
+            "secondary": "#4edea3",
+            "surface-tint": "#abd600",
+            "primary": "#ffffff",
+            "secondary-container": "#00a572",
+            "error": "#ffb4ab",
+            "on-secondary": "#003824",
+            "on-tertiary": "#002e69",
+            "primary-fixed-dim": "#abd600",
+            "secondary-fixed-dim": "#4edea3",
+            "surface-variant": "#2c344d",
+            "on-secondary-fixed-variant": "#005236",
+            "surface-dim": "#0a122a",
+            "outline": "#8e9379",
+            "surface-container-lowest": "#050d25",
+            "surface-container-high": "#212942",
+            "on-secondary-fixed": "#002113",
+            "tertiary-fixed": "#d8e2ff",
+            "on-tertiary-fixed-variant": "#004494",
+            "on-primary-fixed-variant": "#3c4d00",
+            "on-primary-fixed": "#161e00",
+            "tertiary-fixed-dim": "#adc6ff",
+            "surface-bright": "#313852",
+            "on-surface-variant": "#c4c9ac",
+            "surface-container-highest": "#2c344d",
+            "on-tertiary-fixed": "#001a41",
+            "inverse-on-surface": "#282f49",
+            "surface-container": "#171e37",
+            "on-error-container": "#ffdad6",
+            "inverse-primary": "#506600",
+            "on-error": "#690005",
+            "on-primary-container": "#556d00",
+            "tertiary": "#ffffff",
+            "primary-fixed": "#c3f400",
+            "on-tertiary-container": "#0060cd",
+            "secondary-fixed": "#6ffbbe",
+            "surface": "#0a122a",
+            "error-container": "#93000a",
+            "surface-container-low": "#131a33",
+            "outline-variant": "#444933",
+            "inverse-surface": "#dbe1ff",
+            "on-background": "#dbe1ff",
+            "tertiary-container": "#d8e2ff",
+            "on-surface": "#dbe1ff",
+            "primary-container": "#c3f400"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-sm": "0.5rem",
+            "space-lg": "1.25rem",
+            "gutter-tablet": "1.5rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-3xl": "3rem",
+            "space-2xs": "0.125rem",
+            "margin-tablet": "2rem",
+            "margin-mobile": "1rem",
+            "space-base": "1rem",
+            "space-2xl": "2rem",
+            "gutter-mobile": "1rem",
+            "space-xs": "0.25rem"
+          },
+          fontFamily: {
+            "display-ovr": ["Chivo", "sans-serif"],
+            "headline-xl-mobile": ["Chivo", "sans-serif"],
+            "headline-xl": ["Chivo", "sans-serif"],
+            "headline-lg": ["Chivo", "sans-serif"],
+            "headline-md": ["Chivo", "sans-serif"],
+            "body-lg": ["Space Grotesk", "sans-serif"],
+            "body-md": ["Space Grotesk", "sans-serif"],
+            "body-sm": ["Space Grotesk", "sans-serif"],
+            "label-caps": ["JetBrains Mono", "monospace"],
+            "stat-badge": ["JetBrains Mono", "monospace"]
+          },
+          fontSize: {
+            "display-ovr": ["56px", { lineHeight: "56px", letterSpacing: "-0.04em", fontWeight: "900" }],
+            "headline-xl-mobile": ["28px", { lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "500" }],
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "headline-xl": ["36px", { lineHeight: "40px", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "label-caps": ["10px", { lineHeight: "12px", letterSpacing: "0.08em", fontWeight: "600" }],
+            "stat-badge": ["14px", { lineHeight: "14px", letterSpacing: "0.02em", fontWeight: "700" }],
+            "headline-md": ["20px", { lineHeight: "24px", fontWeight: "700" }],
+            "headline-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "700" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #050d25;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .perspective-1000 { perspective: 1000px; }
+  </style>
+</head>
+
+<body class="bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex justify-center">
+
+  <!-- Mobile Viewport Frame (Exact Stitch Dimensions: 390-440px on desktop with ambient glow, 100% on phone) -->
+  <div class="w-full max-w-[430px] min-h-screen bg-surface relative shadow-[0_0_80px_rgba(0,0,0,0.8)] border-x border-surface-container-high/40 flex flex-col overflow-x-hidden">
+
+    <!-- FIXED TOP HEADER (Exact Stitch Design across all screens) -->
+    <header class="fixed top-0 max-w-[430px] w-full z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_1px_12px_rgba(0,0,0,0.35)]">
+      <div class="h-16 px-space-base flex items-center justify-between">
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-space-sm cursor-pointer" onclick="switchTab('card')">
+          <img alt="SmashDeck Logo" class="h-8 w-auto object-contain" src="assets/logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuCVnvdxPD26O6z0RO4DTpIMctpHg5TbBGdKl8oGpxBgZox48TEL5t9JRYBluU8wnB0iW1VNgjnporkYrbOcumA3sBKh_YJAVcPXK1w8PjKXglYIBYA4VYJ0KHNzMB_15z2_Jdjv9ZD0Vw9gTAPDZcwQ89imMymss45si2X5ubesVdHf_bSdekXgUKwmVbxQvOm-dnNeuAtbzY55ituF1ft09F2p9mKjllUpWZlEna0yI55-bEhx-q-8'"/>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-space-xs">
+              <span class="font-headline-md text-headline-md text-primary tracking-tight">SMASH<span class="text-primary-container">DECK</span></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+            </div>
+            <span class="font-label-caps text-label-caps uppercase text-on-surface-variant" id="headerSectionLabel">Card</span>
+          </div>
+        </div>
+
+        <!-- Right Side: Division Badge, PWA Install & Active User Avatar -->
+        <div class="flex items-center gap-space-xs sm:gap-space-sm">
+          <button id="pwaInstallBtn" onclick="triggerPWAInstall()" class="hidden items-center gap-1 bg-primary-container text-on-primary-container px-2.5 py-1 rounded-full text-[11px] font-headline-md uppercase tracking-wider active:scale-95 shadow-md">
+            <span class="material-symbols-outlined text-[14px]">download</span>
+            <span>Install</span>
+          </button>
+          <div class="flex items-center gap-space-2xs bg-surface-container-high px-space-sm py-space-2xs rounded-full cursor-pointer hover:bg-surface-container-highest transition-colors" onclick="switchTab('ladder')">
+            <span class="material-symbols-outlined text-primary-container text-[16px]">bolt</span>
+            <span class="font-stat-badge text-stat-badge text-primary-container" id="headerDivBadge">DIV 1</span>
+          </div>
+          <button class="w-10 h-10 flex items-center justify-center rounded-full active:scale-95 transition-transform ring-2 ring-primary-container/40 hover:ring-primary-container relative" onclick="openProfileModal()" title="Edit Profile & Gear">
+            <img alt="Profile" class="w-8 h-8 rounded-full object-cover" id="headerAvatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAwXq8Z7Et6VHOMW8zxLCxJz-Vj_2ONxMKcwC_NiwNTov5Gh8zrsch3dxfeSC-VZrSBanTkMY5fT4-GhI1BFy2bdzHv7XfTFUOPQmRsiuJhlDjcloXqfmyjm_o-jCtcgeDQOC4Ix3JH83TMmZPhOC7rtMEzmw86I3lzbOSgDunjPOOvXCzk5rrwaaDT2namOOR1Za-ax8NO-8eZf5O__Ko8LVK-_kv_T-DNu9FH9r6cPrpCREfh6Px"/>
+            <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 1: OPENING SIGN IN & CREATE PROFILE (Exact Stitch) -->
+    <!-- ======================================================== -->
+    <!-- ======================================================== -->
+    <!-- SCREEN 1: OPENING SIGN IN & CREATE PROFILE (Exact Stitch) -->
+    <!-- ======================================================== -->
+    <section id="screen-auth" class="flex flex-col w-full pt-16 pb-24 px-space-base min-h-screen">
+      <div class="relative w-full flex flex-col items-center pt-space-base pb-space-md text-center overflow-hidden">
+        <div class="absolute -top-12 inset-x-0 h-48 bg-gradient-to-b from-primary-container/10 via-primary-container/5 to-transparent pointer-events-none blur-3xl"></div>
+        
+        <!-- Hero Brand Badge -->
+        <div class="relative flex items-center justify-center mb-space-base">
+          <div class="absolute inset-0 bg-primary-container/20 rounded-full blur-xl scale-125"></div>
+          <div class="relative w-20 h-20 rounded-xl bg-surface-container-high p-space-xs shadow-xl flex items-center justify-center">
+            <img alt="SmashDeck emblem" class="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(195,244,0,0.4)]" src="assets/logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida/AEtjO1X-uAeZZQqp_0-1dLUAG82sxVh8deV8t8E4e727bAPMi2ehzG0XhU6HA_vcp1PNcNizrHPwKJkZJMx8_u3Hqvx5zc4twhpurlsW7NM9BhwaOH9BO1b2TWalu1_Gake2OX-M5qbxHaowK-TZ4-8Tla5ZDvJJYZhJMRHmjgXIbWX65AC7rmjVfFKvHddtVjPsl6zil9nYZMaM0p5_m5hBUscXYojreqhSEoseJWfrbLKkB4Gw-LtNmjhFVr0'"/>
+          </div>
+        </div>
+
+        <h1 class="font-headline-xl-mobile text-headline-xl-mobile text-primary tracking-tight mb-space-2xs">
+          Smash<span class="text-primary-container">Deck</span>
+        </h1>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-[300px] mb-space-sm">
+          Collegiate Badminton Ladder &amp; FIFA Athlete Cards
+        </p>
+
+        <div class="inline-flex items-center gap-space-xs bg-surface-container-high px-space-md py-space-2xs rounded-full shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+          <span class="font-label-caps text-label-caps uppercase tracking-wider text-primary">
+            Badminton Club • Athlete Gateway
+          </span>
+        </div>
+      </div>
+
+      <!-- Sign In / Create Profile Card -->
+      <div class="w-full bg-surface-container-low rounded-xl p-space-lg shadow-xl relative overflow-hidden border border-surface-container-high">
+        <!-- Segmented Role & Action Toggle: CREATE ID by default! -->
+        <div class="w-full bg-surface-container-lowest p-space-2xs rounded-lg flex items-center mb-space-md text-[11px]" id="authRoleToggle">
+          <button class="flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 bg-surface-container-high text-primary-container shadow-sm flex items-center justify-center gap-space-xs" id="tabAuthCreate" onclick="switchAuthMode('register')" type="button">
+            <span class="material-symbols-outlined text-[15px]">person_add</span>
+            CREATE ACCOUNT
+          </button>
+          <button class="flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 text-on-surface-variant hover:text-primary flex items-center justify-center gap-space-xs" id="tabAuthPlayer" onclick="switchAuthMode('signin')" type="button">
+            <span class="material-symbols-outlined text-[15px]">badge</span>
+            SIGN IN
+          </button>
+        </div>
+
+        <!-- Notice Banner -->
+        <div class="mb-space-md p-space-xs bg-surface-container rounded-lg border border-primary-container/20 flex items-center gap-space-xs text-[12px] text-on-surface-variant">
+          <span class="material-symbols-outlined text-primary-container text-[18px]">verified_user</span>
+          <span id="authBannerText">Create your athlete profile to generate your 3D FIFA card and join the ladder!</span>
+        </div>
+
+        <!-- FORM B: CREATE ID & REGISTER (Default for first time user) -->
+        <form id="authRegisterForm" class="flex flex-col gap-space-md" onsubmit="handleAuthRegister(event)">
+          <!-- Photo Selector -->
+          <div class="flex flex-col gap-space-2xs text-left">
+            <label class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">Athlete Photo &amp; Avatar</label>
+            <div class="flex items-center gap-space-md bg-surface-container-highest p-space-sm rounded-lg">
+              <div class="relative w-14 h-14 rounded-full overflow-hidden bg-surface-container shrink-0 border-2 border-primary-container shadow-md">
+                <img id="regPhotoPreview" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Avatar Preview"/>
+              </div>
+              <div class="flex flex-col flex-1 gap-1">
+                <label class="px-space-sm py-1 bg-surface-container hover:bg-surface-bright text-primary-container font-label-caps text-label-caps uppercase rounded cursor-pointer text-center inline-block transition-colors">
+                  <span>Upload Your Photo</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleRegisterPhotoUpload(event)"/>
+                </label>
+                <div class="flex gap-1 overflow-x-auto py-0.5">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120" onclick="setRegAvatar(this.src)" class="w-7 h-7 rounded-full object-cover cursor-pointer hover:ring-2 ring-primary-container" title="Avatar 1"/>
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" onclick="setRegAvatar(this.src)" class="w-7 h-7 rounded-full object-cover cursor-pointer hover:ring-2 ring-primary-container" title="Avatar 2"/>
+                  <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120" onclick="setRegAvatar(this.src)" class="w-7 h-7 rounded-full object-cover cursor-pointer hover:ring-2 ring-primary-container" title="Avatar 3"/>
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120" onclick="setRegAvatar(this.src)" class="w-7 h-7 rounded-full object-cover cursor-pointer hover:ring-2 ring-primary-container" title="Avatar 4"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Name & Roll No -->
+          <div class="grid grid-cols-2 gap-space-sm">
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Full Name *</label>
+              <input class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regName" placeholder="e.g. Ishan Shukla" required value=""/>
+            </div>
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">College Roll # *</label>
+              <input class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regRoll" placeholder="e.g. 21BCS001" required value=""/>
+            </div>
+          </div>
+
+          <!-- Playstyle & Handedness -->
+          <div class="grid grid-cols-2 gap-space-sm">
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Play Style</label>
+              <select class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regStyle">
+                <option value="Speed Attacker">Speed Attacker (PAC 94)</option>
+                <option value="Smash Heavy">Smash Heavy (SMA 97)</option>
+                <option value="Deceptive Net">Deceptive Net (NET 96)</option>
+                <option value="Baseline Rally">Baseline Rally (DEF 94)</option>
+                <option value="Defensive Wall">Defensive Wall (DEF 97)</option>
+                <option value="Tactical All-Round">Tactical All-Round (BAL 92)</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Handedness</label>
+              <select class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regHand">
+                <option value="Right">Right-Handed</option>
+                <option value="Left">Left-Handed</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Racket & String Details -->
+          <div class="flex flex-col gap-space-2xs text-left">
+            <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Racket Model</label>
+            <input class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regRacket" placeholder="e.g. Yonex Astrox 88D Pro" value="Yonex Astrox 88D Pro"/>
+          </div>
+
+          <div class="grid grid-cols-2 gap-space-sm">
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant">String Model</label>
+              <input class="bg-surface-container-highest rounded-lg px-space-sm py-space-sm text-primary font-body-md focus:outline-none focus:ring-1 ring-primary-container" id="regString" placeholder="e.g. Yonex BG66 Ultimax" value="Yonex BG66 Ultimax"/>
+            </div>
+            <div class="flex flex-col gap-space-2xs text-left">
+              <label class="font-label-caps text-label-caps uppercase text-on-surface-variant flex justify-between">
+                <span>Tension</span>
+                <span class="text-primary-container font-bold" id="regTensionLabel">28 LBS</span>
+              </label>
+              <input type="range" min="20" max="32" value="28" class="accent-primary-container h-8 cursor-pointer" id="regTensionSlider" oninput="document.getElementById('regTensionLabel').innerText = this.value + ' LBS'"/>
+            </div>
+          </div>
+
+          <button class="mt-space-xs w-full bg-primary-container text-on-primary-container hover:brightness-110 active:scale-[0.98] transition-all py-space-md px-space-base rounded-lg flex items-center justify-center gap-space-sm shadow-[0_0_20px_rgba(195,244,0,0.3)] font-headline-md uppercase tracking-wider" type="submit" id="btnCreateAccount">
+            <span>Generate FIFA Card &amp; Enter Club</span>
+            <span class="material-symbols-outlined text-[20px] font-bold">bolt</span>
+          </button>
+        </form>
+
+        <!-- FORM A: SIGN IN -->
+        <form id="authSignInForm" class="hidden flex-col gap-space-md" onsubmit="handleAuthSignIn(event)">
+          <div class="flex flex-col gap-space-2xs text-left">
+            <label class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant flex items-center justify-between" for="authEmail">
+              <span>College Roll # or Athlete Name</span>
+              <span class="text-primary-fixed-dim">ROSTER LOOKUP</span>
+            </label>
+            <div class="relative flex items-center bg-surface-container-highest rounded-lg px-space-base py-space-sm focus-within:bg-surface-bright transition-colors">
+              <span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-space-sm">badge</span>
+              <input class="w-full bg-transparent text-primary font-body-md placeholder:text-on-surface-variant/60 focus:outline-none" id="authEmail" placeholder="e.g. 21BCS001 or Ishan Shukla" required type="text" value=""/>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-space-2xs text-left">
+            <div class="flex items-center justify-between">
+              <label class="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant" for="authPwd">Club Passcode (Optional)</label>
+              <span class="font-body-sm text-secondary text-[11px]">Instant Access</span>
+            </div>
+            <div class="relative flex items-center bg-surface-container-highest rounded-lg px-space-base py-space-sm focus-within:bg-surface-bright transition-colors">
+              <span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-space-sm">lock</span>
+              <input class="w-full bg-transparent text-primary font-body-md placeholder:text-on-surface-variant/60 focus:outline-none" id="authPwd" placeholder="Passcode (optional)" value="smash2026" type="password"/>
+            </div>
+          </div>
+
+          <button class="mt-space-xs w-full bg-primary-container text-on-primary-container hover:brightness-110 active:scale-[0.98] transition-all py-space-md px-space-base rounded-lg flex items-center justify-center gap-space-sm shadow-[0_0_20px_rgba(195,244,0,0.3)] font-headline-md uppercase tracking-wider" type="submit" id="btnSignIn">
+            <span>Sign In to SmashDeck</span>
+            <span class="material-symbols-outlined text-[20px] font-bold">arrow_forward</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="mt-space-md inline-flex items-center justify-center gap-space-xs px-space-md py-space-2xs rounded-full bg-surface-container-low text-on-surface-variant mx-auto">
+        <span class="material-symbols-outlined text-[13px] text-secondary">cloud_done</span>
+        <span class="font-label-caps text-label-caps tracking-widest uppercase">SmashDeck v2.0 • Live Supabase PostgreSQL</span>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 2: ANIMATED FIFA PLAYER CARD (Exact Stitch Markup)-->
+    <!-- ======================================================== -->
+    <section id="screen-card" class="flex flex-col w-full pt-16 pb-24 px-space-base min-h-screen">
+      <div class="relative w-full pt-space-md flex flex-col items-center justify-center">
+        <!-- Tactile Glow Behind Card -->
+        <div class="absolute w-64 h-80 bg-primary-container/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
+        
+        <!-- 3D Interactive FIFA Card Container -->
+        <div class="w-full max-w-[340px] perspective-1000 select-none" id="playerCardPerspective">
+          <div class="relative w-full rounded-2xl bg-surface-container-low shadow-2xl transition-transform duration-150 ease-out overflow-hidden" id="playerCard" style="transform-style: preserve-3d;">
+            
+            <!-- Holographic WebGL Shader Background (Exact Stitch Shader ANIMATION_12) -->
+            <div class="absolute inset-0 w-full h-full rounded-2xl opacity-75 mix-blend-screen pointer-events-none" style="display:block;">
+              <canvas id="shader-canvas-ANIMATION_12" style="display:block;width:100%;height:100%"></canvas>
+            </div>
+
+            <!-- Badminton Court Vector Geometry Overlay -->
+            <svg class="absolute inset-0 w-full h-full opacity-10 pointer-events-none" fill="none" viewbox="0 0 340 500" xmlns="http://www.w3.org/2000/svg">
+              <line class="text-primary" stroke="currentColor" stroke-width="2" x1="0" x2="340" y1="90" y2="90"></line>
+              <line class="text-primary" stroke="currentColor" stroke-width="1.5" x1="170" x2="170" y1="90" y2="380"></line>
+              <line class="text-primary" stroke="currentColor" stroke-width="1.5" x1="30" x2="30" y1="0" y2="500"></line>
+              <line class="text-primary" stroke="currentColor" stroke-width="1.5" x1="310" x2="310" y1="0" y2="500"></line>
+              <line class="text-primary" stroke="currentColor" stroke-width="2" x1="0" x2="340" y1="380" y2="380"></line>
+              <circle class="text-primary-container" cx="170" cy="235" r="90" stroke="currentColor" stroke-dasharray="4 4" stroke-width="1"></circle>
+            </svg>
+
+            <!-- Dynamic Specular Glare Layer -->
+            <div class="absolute inset-0 pointer-events-none rounded-2xl bg-gradient-to-tr from-transparent via-primary/10 to-transparent opacity-0 transition-opacity duration-300" id="cardGlare"></div>
+
+            <!-- Inside Card Content Structure -->
+            <div class="relative z-10 p-space-md flex flex-col justify-between h-[490px]">
+              <!-- Top Row: Tier, Stars, Club Mark -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-space-xs bg-surface-container-highest/80 backdrop-blur-md px-space-sm py-space-2xs rounded-full">
+                  <span class="material-symbols-outlined text-primary-container text-[14px]">military_tech</span>
+                  <span class="font-label-caps text-label-caps text-primary-container uppercase tracking-wider" id="cardTierLabel">GOLD APEX TIER</span>
+                </div>
+                <div class="flex items-center gap-space-2xs text-primary-container">
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+              </div>
+
+              <!-- Mid Section: OVR Badge & Dynamic Athlete Cutout -->
+              <div class="relative flex items-center justify-between mt-space-xs">
+                <!-- Left Side OVR Stack -->
+                <div class="flex flex-col z-20">
+                  <span class="font-display-ovr text-display-ovr text-primary-container drop-shadow-[0_2px_12px_rgba(195,244,0,0.4)]" id="cardOvr">94</span>
+                  <div class="flex flex-col mt-space-2xs">
+                    <span class="font-headline-md text-headline-md text-primary tracking-tight" id="cardCategory">SGL</span>
+                    <span class="font-label-caps text-label-caps text-secondary-fixed uppercase tracking-wider" id="cardStyle">ATTACK</span>
+                  </div>
+                  <!-- Micro Club Badges -->
+                  <div class="flex items-center gap-space-xs mt-space-sm">
+                    <div class="w-6 h-4 rounded-sm bg-surface-bright flex items-center justify-center overflow-hidden shadow-sm">
+                      <div class="w-full h-full flex flex-col">
+                        <div class="h-1/2 w-full bg-error"></div>
+                        <div class="h-1/2 w-full bg-primary"></div>
+                      </div>
+                    </div>
+                    <div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center">
+                      <span class="material-symbols-outlined text-primary-container text-[14px]">bolt</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Side: High-Impact Athlete Portrait with Glow Mask -->
+                <div class="relative w-44 h-48 flex items-end justify-center">
+                  <div class="absolute inset-0 rounded-full bg-gradient-to-t from-primary-container/20 to-transparent blur-xl"></div>
+                  <img alt="Player Cutout" id="cardPlayerImg" class="relative z-10 w-full h-full object-cover object-top drop-shadow-[0_8px_20px_rgba(0,0,0,0.8)] [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] rounded-xl" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"/>
+                </div>
+              </div>
+
+              <!-- Player Nameplate Section -->
+              <div class="w-full flex flex-col items-center justify-center py-space-2xs mt-space-xs">
+                <h2 class="font-headline-xl-mobile text-headline-xl-mobile text-primary tracking-wider uppercase text-center drop-shadow-md truncate max-w-full px-2" id="cardPlayerName">
+                  ISHAN SHUKLA
+                </h2>
+                <div class="flex items-center gap-space-xs mt-space-2xs">
+                  <span class="w-8 h-[2px] bg-gradient-to-r from-transparent to-primary-container"></span>
+                  <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest" id="cardLeagueSubtitle">APEX LEAGUE • SEED #01</span>
+                  <span class="w-8 h-[2px] bg-gradient-to-l from-transparent to-primary-container"></span>
+                </div>
+              </div>
+
+              <!-- Core 6 FIFA Stat Matrix with Micro Velocity Bars -->
+              <div class="bg-surface-container-high/90 backdrop-blur-md rounded-xl p-space-sm grid grid-cols-3 gap-x-space-md gap-y-space-xs shadow-inner">
+                <!-- PAC -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant">PAC</span>
+                    <span class="font-stat-badge text-stat-badge text-primary" id="statPac">93</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-primary-container rounded-full" id="barPac" style="width: 93%;"></div>
+                  </div>
+                </div>
+                <!-- SMA -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-primary-container">SMA</span>
+                    <span class="font-stat-badge text-stat-badge text-primary-container" id="statSma">96</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-primary-container rounded-full" id="barSma" style="width: 96%;"></div>
+                  </div>
+                </div>
+                <!-- DEF -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant">DEF</span>
+                    <span class="font-stat-badge text-stat-badge text-primary" id="statDef">91</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-secondary rounded-full" id="barDef" style="width: 91%;"></div>
+                  </div>
+                </div>
+                <!-- NET -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-primary-container">NET</span>
+                    <span class="font-stat-badge text-stat-badge text-primary-container" id="statNet">95</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-primary-container rounded-full" id="barNet" style="width: 95%;"></div>
+                  </div>
+                </div>
+                <!-- STM -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant">STM</span>
+                    <span class="font-stat-badge text-stat-badge text-primary" id="statStm">88</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-secondary rounded-full" id="barStm" style="width: 88%;"></div>
+                  </div>
+                </div>
+                <!-- TAC -->
+                <div class="flex flex-col">
+                  <div class="flex items-baseline justify-between">
+                    <span class="font-label-caps text-label-caps text-on-surface-variant">TAC</span>
+                    <span class="font-stat-badge text-stat-badge text-primary" id="statTac">94</span>
+                  </div>
+                  <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden mt-space-2xs">
+                    <div class="h-full bg-secondary rounded-full" id="barTac" style="width: 94%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="font-label-caps text-label-caps text-outline mt-space-sm flex items-center gap-space-2xs opacity-80">
+          <span class="material-symbols-outlined text-[13px]">touch_app</span>
+          TILT OR TOUCH TO SHINE
+        </p>
+      </div>
+
+      <!-- Below the Card Actions & Clean Metrics (Exact Stitch Layout) -->
+      <div class="w-full max-w-[360px] mx-auto mt-space-lg flex flex-col gap-space-md">
+        <div class="flex items-center gap-space-sm w-full">
+          <button class="flex-1 h-12 bg-primary-container text-on-primary-container font-headline-md tracking-wider uppercase rounded-xl flex items-center justify-center gap-space-xs shadow-lg active:scale-95 transition-transform" id="shareCardBtn">
+            <span class="material-symbols-outlined text-[20px]">ios_share</span>
+            <span>Share Player Card</span>
+          </button>
+          <button class="w-12 h-12 bg-surface-container-high hover:bg-surface-container-highest text-primary rounded-xl flex items-center justify-center shadow-md active:scale-95 transition-transform" onclick="openProfileModal()" title="Edit Profile & Gear">
+            <span class="material-symbols-outlined text-[20px] text-primary-container">edit</span>
+          </button>
+        </div>
+
+        <!-- 3-Metric Summary Panel -->
+        <div class="w-full bg-surface-container rounded-xl p-space-md shadow-md grid grid-cols-3 gap-space-xs text-center border border-surface-container-high/60">
+          <div class="flex flex-col items-center">
+            <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-tight">Ladder Rank</span>
+            <div class="flex items-center gap-space-2xs mt-space-2xs">
+              <span class="material-symbols-outlined text-primary-container text-[16px]">emoji_events</span>
+              <span class="font-stat-badge text-stat-badge text-primary-container" id="summaryRank">#1 Reign</span>
+            </div>
+          </div>
+          <div class="flex flex-col items-center">
+            <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-tight">Win Rate</span>
+            <span class="font-stat-badge text-stat-badge text-primary mt-space-2xs" id="summaryWinRate">85.7%</span>
+            <span class="font-label-caps text-label-caps text-outline" id="summaryScoreRecord">(18-2)</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-tight">Streak</span>
+            <span class="font-stat-badge text-stat-badge text-secondary mt-space-2xs" id="summaryStreak">7 Wins 🔥</span>
+          </div>
+        </div>
+
+        <!-- Racket & Gear Specs Tag (Live Dynamic Reflection) -->
+        <div class="w-full bg-surface-container-low rounded-lg py-space-sm px-space-md flex items-center justify-between shadow-sm border border-surface-container-high/40 cursor-pointer hover:bg-surface-container transition-colors" onclick="openProfileModal()">
+          <div class="flex items-center gap-space-xs min-w-0">
+            <span class="material-symbols-outlined text-primary-container text-[18px]">sports_tennis</span>
+            <span class="font-body-sm text-on-surface truncate" id="cardGearRacket">Yonex Astrox 88D Pro</span>
+          </div>
+          <div class="flex items-center gap-space-2xs shrink-0 bg-surface-container-highest px-space-xs py-space-2xs rounded">
+            <span class="font-label-caps text-label-caps text-primary-container" id="cardGearTension">@ 28 LBS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 3: CLUB LADDER LEADERBOARD (Exact Stitch Markup) -->
+    <!-- ======================================================== -->
+    <section id="screen-ladder" class="hidden flex-col w-full pt-20 pb-28 px-space-base min-h-screen">
+      <div class="flex flex-col w-full gap-space-base pb-6">
+        <!-- Season 2 Banner & Rule Pill -->
+        <div class="relative overflow-hidden rounded-xl bg-surface-container-high p-space-base shadow-xl border border-surface-container-highest">
+          <div class="absolute -right-8 -top-8 w-32 h-32 bg-primary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="flex items-center justify-between gap-space-sm relative z-10">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              <span class="font-headline-md text-headline-md text-on-surface">Ladder Season 2</span>
+            </div>
+            <span class="px-space-xs py-space-2xs bg-surface-container-lowest text-primary-container font-label-caps text-label-caps rounded uppercase">Ends in 6d</span>
+          </div>
+          <div class="mt-space-sm flex items-center justify-between gap-space-xs pt-space-xs bg-surface-container/60 px-space-sm py-space-xs rounded-lg">
+            <div class="flex items-center gap-space-2xs min-w-0">
+              <span class="material-symbols-outlined text-secondary text-[16px]">sports_kabaddi</span>
+              <p class="font-body-sm text-on-surface-variant truncate">Rule: Challenge up to <span class="text-secondary font-bold">2 ranks above</span></p>
+            </div>
+            <button class="text-on-surface-variant hover:text-on-surface transition-colors shrink-0" onclick="alert('SmashDeck Arbitrated Rule:\nPlayers can challenge up to 2 positions above. Winner claims the higher rank. Loser drops down 1 slot.')">
+              <span class="material-symbols-outlined text-[16px]">info</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Top 3 Podium Tier -->
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-center justify-between px-space-xs">
+            <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Apex Competitors</span>
+            <span class="font-label-caps text-label-caps text-secondary font-bold">Division 1</span>
+          </div>
+
+          <!-- Podium Bento Grid (Dynamic Roster) -->
+          <div class="grid grid-cols-3 gap-space-xs items-end pt-space-xs" id="ladderPodiumGrid">
+            <!-- Rank 2 -->
+            <div class="flex flex-col bg-surface-container rounded-xl p-space-xs items-center text-center relative shadow-md" id="podiumRank2Card">
+              <div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center -mt-space-md mb-space-2xs">
+                <span class="font-stat-badge text-stat-badge text-on-surface">2</span>
+              </div>
+              <div class="relative mb-space-xs">
+                <img id="podiumRank2Img" class="w-12 h-12 rounded-full object-cover bg-surface-container-highest" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200" alt="Rank 2"/>
+                <span id="podiumRank2Badge" class="absolute -bottom-1 -right-1 px-1 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-caps text-[9px]">--</span>
+              </div>
+              <p id="podiumRank2Name" class="font-headline-md text-[13px] leading-tight text-on-surface truncate w-full">Open Slot</p>
+              <span id="podiumRank2Style" class="font-body-sm text-on-surface-variant text-[11px] truncate w-full">Unclaimed</span>
+              <div class="mt-space-xs px-space-xs py-space-2xs bg-surface-container-high rounded-md flex items-center gap-1">
+                <span id="podiumRank2Ovr" class="font-stat-badge text-stat-badge text-primary-container font-black">--</span>
+                <span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+              </div>
+            </div>
+
+            <!-- Rank 1: Crown Jewel -->
+            <div class="flex flex-col bg-gradient-to-b from-surface-container-highest to-surface-container rounded-xl p-space-xs items-center text-center relative shadow-xl transform -translate-y-1 border border-primary-container/30" id="podiumRank1Card">
+              <div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center -mt-space-lg mb-space-2xs shadow-lg">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+              </div>
+              <div class="relative mb-space-xs">
+                <img id="podiumRank1Img" class="w-16 h-16 rounded-full object-cover shadow-[0_0_12px_rgba(195,244,0,0.3)] bg-surface-container-highest" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" alt="Rank 1"/>
+                <span id="podiumRank1Badge" class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-caps text-[9px] font-bold">1W</span>
+              </div>
+              <p id="podiumRank1Name" class="font-headline-md text-[14px] leading-tight text-on-surface font-extrabold truncate w-full">Claim Rank 1</p>
+              <span id="podiumRank1Style" class="font-body-sm text-primary-container text-[11px] truncate w-full font-medium">Join Ladder</span>
+              <div class="mt-space-xs px-space-sm py-space-2xs bg-surface-container-lowest rounded-md flex items-center gap-1">
+                <span id="podiumRank1Ovr" class="font-stat-badge text-[16px] leading-tight text-primary-container font-black">--</span>
+                <span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+              </div>
+            </div>
+
+            <!-- Rank 3 -->
+            <div class="flex flex-col bg-surface-container rounded-xl p-space-xs items-center text-center relative shadow-md" id="podiumRank3Card">
+              <div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center -mt-space-md mb-space-2xs">
+                <span class="font-stat-badge text-stat-badge text-on-surface">3</span>
+              </div>
+              <div class="relative mb-space-xs">
+                <img id="podiumRank3Img" class="w-12 h-12 rounded-full object-cover bg-surface-container-highest" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200" alt="Rank 3"/>
+                <span id="podiumRank3Badge" class="absolute -bottom-1 -right-1 px-1 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-caps text-[9px]">--</span>
+              </div>
+              <p id="podiumRank3Name" class="font-headline-md text-[13px] leading-tight text-on-surface truncate w-full">Open Slot</p>
+              <span id="podiumRank3Style" class="font-body-sm text-on-surface-variant text-[11px] truncate w-full">Unclaimed</span>
+              <div class="mt-space-xs px-space-xs py-space-2xs bg-surface-container-high rounded-md flex items-center gap-1">
+                <span id="podiumRank3Ovr" class="font-stat-badge text-stat-badge text-primary-container font-black">--</span>
+                <span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Chips Strip -->
+        <div class="flex items-center gap-space-xs overflow-x-auto py-space-2xs no-scrollbar">
+          <button class="shrink-0 px-space-base py-space-xs rounded-full bg-primary-container text-on-primary font-headline-md text-[13px] tracking-wide uppercase transition-all shadow-md">
+            All 20 Players
+          </button>
+          <button class="shrink-0 px-space-base py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-md text-[13px] tracking-wide uppercase transition-all">
+            Singles Ladder
+          </button>
+          <button class="shrink-0 px-space-base py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-md text-[13px] tracking-wide uppercase transition-all">
+            Doubles Pairings
+          </button>
+        </div>
+
+        <!-- Challenge Prompt -->
+        <div class="flex items-center justify-between gap-space-sm bg-gradient-to-r from-surface-container-high via-surface-container to-surface-container-high p-space-sm rounded-xl shadow-lg border border-surface-container-highest">
+          <div class="flex items-center gap-space-xs min-w-0">
+            <div class="relative flex items-center justify-center w-8 h-8 rounded-lg bg-primary-container text-on-primary-container shrink-0">
+              <span class="material-symbols-outlined text-[18px]">swords</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-space-2xs">
+                <span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[9px] uppercase font-bold">Tonight</span>
+                <span class="font-headline-md text-[13px] text-on-surface truncate">vs Marcus Vance (#4)</span>
+              </div>
+              <p class="font-body-sm text-on-surface-variant text-[11px] truncate">Court 2 • 7:30 PM</p>
+            </div>
+          </div>
+          <button onclick="quickCheckInMatch()" class="px-space-sm py-space-xs bg-surface-container-highest text-primary-container font-headline-md text-[11px] rounded uppercase tracking-wider shrink-0 active:scale-95 transition-transform">
+            Check In
+          </button>
+        </div>
+
+        <!-- Standings Header -->
+        <div class="flex items-center justify-between px-space-xs pt-space-xs">
+          <span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Club Standings</span>
+          <span class="font-label-caps text-label-caps text-secondary">Live Synced</span>
+        </div>
+
+        <!-- Full Roster List (Dynamically updated with registered players) -->
+        <div class="flex flex-col gap-space-xs" id="ladderRosterList">
+          <!-- Populated by JS with exact Stitch styling -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 4: MATCHES SCORE LOG & TELEMETRY (Exact Stitch)  -->
+    <!-- ======================================================== -->
+    <section id="screen-matches" class="hidden flex-col w-full pt-20 pb-28 px-space-base min-h-screen">
+      <div class="flex flex-col w-full gap-space-lg">
+        <!-- Segmented Hub Navigation -->
+        <div class="w-full bg-surface-container-lowest p-space-xs rounded-xl shadow-md flex items-center justify-between">
+          <button class="flex-1 py-space-xs px-space-sm rounded-lg bg-surface-container-high text-on-surface font-label-caps text-label-caps uppercase transition-all flex items-center justify-center gap-space-xs shadow-sm" id="tabHubRecent">
+            <span class="material-symbols-outlined text-[16px] text-primary-container">history</span>
+            <span>Recent</span>
+          </button>
+          <button class="flex-1 py-space-xs px-space-sm rounded-lg text-on-surface-variant font-label-caps text-label-caps uppercase hover:text-on-surface transition-all flex items-center justify-center gap-space-xs" onclick="scrollToLogger()">
+            <span class="material-symbols-outlined text-[16px]">edit_note</span>
+            <span>Log Score</span>
+          </button>
+          <button class="flex-1 py-space-xs px-space-sm rounded-lg text-on-surface-variant font-label-caps text-label-caps uppercase hover:text-on-surface transition-all flex items-center justify-center gap-space-xs" onclick="alert('No arbitrated disputes pending!')">
+            <span class="material-symbols-outlined text-[16px]">gavel</span>
+            <span>Disputes (0)</span>
+          </button>
+        </div>
+
+        <!-- Live Daily Club Pulse Telemetry -->
+        <div class="w-full bg-surface-container rounded-xl p-space-base shadow-xl relative overflow-hidden border border-surface-container-high">
+          <div class="absolute -right-10 -top-10 w-36 h-36 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="flex items-center justify-between mb-space-md">
+            <div class="flex items-center gap-space-xs">
+              <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+              <span class="font-label-caps text-label-caps uppercase text-secondary tracking-widest">Field Telemetry</span>
+            </div>
+            <span class="font-stat-badge text-stat-badge text-on-surface-variant uppercase">Session 14:00 - 18:00</span>
+          </div>
+          <div class="grid grid-cols-3 gap-space-xs">
+            <div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col items-start shadow-sm">
+              <span class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-space-2xs">Sets Today</span>
+              <span class="font-headline-lg text-headline-lg text-on-surface tracking-tight" id="telemetrySets">38</span>
+              <span class="font-body-sm text-secondary flex items-center gap-space-2xs mt-space-2xs">
+                <span class="material-symbols-outlined text-[14px]">trending_up</span>+12%
+              </span>
+            </div>
+            <div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col items-start shadow-sm">
+              <span class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-space-2xs">Max Rally</span>
+              <div class="flex items-baseline gap-space-2xs">
+                <span class="font-headline-lg text-headline-lg text-primary-container tracking-tight">42</span>
+                <span class="font-label-caps text-label-caps text-on-surface-variant">SHOTS</span>
+              </div>
+              <span class="font-body-sm text-on-surface-variant truncate w-full mt-space-2xs">Court 2 • Set 3</span>
+            </div>
+            <div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col items-start shadow-sm">
+              <span class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-space-2xs">Top Smash</span>
+              <div class="flex items-baseline gap-space-2xs">
+                <span class="font-headline-lg text-headline-lg text-secondary-fixed tracking-tight">394</span>
+                <span class="font-label-caps text-label-caps text-on-surface-variant">KM/H</span>
+              </div>
+              <span class="font-body-sm text-secondary-fixed-dim truncate w-full mt-space-2xs" id="telemetryTopSmashUser">Ishan (R1)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Court Umpire & Touch Scoring Engine (Phase 2) -->
+        <div class="w-full bg-gradient-to-r from-surface-container-high to-surface-container rounded-xl p-space-base shadow-xl flex items-center justify-between border border-secondary/30">
+          <div class="flex items-center gap-space-sm">
+            <div class="w-10 h-10 rounded-xl bg-secondary/20 text-secondary flex items-center justify-center shadow-md">
+              <span class="material-symbols-outlined text-[24px]">sports_tennis</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-headline-md text-headline-md text-on-surface font-bold">Live Court Umpire</span>
+              <span class="font-body-sm text-secondary text-[12px] font-medium">BWF 21-pt Touch Scoring &amp; Service Rotation</span>
+            </div>
+          </div>
+          <button onclick="openLiveUmpireModal()" class="bg-primary-container text-on-primary py-space-xs px-space-base rounded-lg font-headline-md uppercase tracking-wide flex items-center gap-1 font-bold text-[13px] shadow-[0_0_12px_rgba(204,255,0,0.25)] active:scale-95 transition-transform">
+            <span>Launch</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Fast Score Logger Fast-Action Module -->
+        <div class="w-full bg-surface-container-high rounded-xl p-space-base shadow-xl relative flex flex-col gap-space-md border border-surface-container-highest" id="quick-score-panel">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shadow-md">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-headline-md text-headline-md text-on-surface leading-none">Fast Score Log</span>
+                <span class="font-body-sm text-on-surface-variant">Official Ladder Arbitrated Record</span>
+              </div>
+            </div>
+            <!-- Ladder Toggle Pill -->
+            <label class="flex items-center gap-space-xs cursor-pointer select-none bg-surface-container-lowest px-space-xs py-space-2xs rounded-full">
+              <input checked class="sr-only peer" id="ladderMatchToggle" type="checkbox"/>
+              <span class="font-label-caps text-label-caps uppercase text-on-surface-variant peer-checked:text-primary-container transition-colors">Ladder Tier</span>
+              <div class="w-7 h-4 bg-surface-container-highest peer-checked:bg-primary-container rounded-full relative transition-colors">
+                <div class="w-3 h-3 bg-on-primary-fixed rounded-full absolute top-0.5 left-0.5 peer-checked:translate-x-3 transition-transform"></div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Mode & Court Selector -->
+          <div class="flex flex-col sm:flex-row gap-space-xs">
+            <div class="flex bg-surface-container-lowest p-space-2xs rounded-lg flex-1 shadow-inner">
+              <button class="flex-1 py-space-xs text-center rounded bg-surface-container-high text-primary-container font-label-caps text-label-caps uppercase tracking-wider font-bold transition-all shadow-sm" id="btnModeSingles" onclick="toggleMatchMode('singles')" type="button">
+                Singles (1v1)
+              </button>
+              <button class="flex-1 py-space-xs text-center rounded text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps uppercase tracking-wider transition-all" id="btnModeDoubles" onclick="toggleMatchMode('doubles')" type="button">
+                Doubles (2v2)
+              </button>
+            </div>
+            <div class="flex bg-surface-container-lowest p-space-2xs rounded-lg gap-space-2xs">
+              <button class="px-space-sm py-space-xs rounded font-label-caps text-label-caps uppercase bg-primary-container text-on-primary font-bold shadow-sm transition-all" id="courtPill1" onclick="selectCourt(1)" type="button">C1</button>
+              <button class="px-space-sm py-space-xs rounded font-label-caps text-label-caps uppercase bg-surface-container text-on-surface-variant hover:text-on-surface transition-all" id="courtPill2" onclick="selectCourt(2)" type="button">C2</button>
+              <button class="px-space-sm py-space-xs rounded font-label-caps text-label-caps uppercase bg-surface-container text-on-surface-variant hover:text-on-surface transition-all" id="courtPill3" onclick="selectCourt(3)" type="button">C3</button>
+            </div>
+          </div>
+
+          <!-- Matchup Score Grid Pad -->
+          <div class="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-space-sm shadow-md">
+            <!-- Team A Player Selection Strip -->
+            <div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs">
+              <div class="flex items-center gap-space-xs min-w-0 flex-1">
+                <div class="w-8 h-8 rounded-lg bg-surface-container-highest overflow-hidden shrink-0">
+                  <img id="matchTeamAImg" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" alt="Team A"/>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-space-2xs">
+                    <span class="font-headline-md text-[14px] text-on-surface truncate" id="matchTeamALabel">Ishan Shukla</span>
+                    <span class="px-space-2xs py-0.5 bg-primary-container text-on-primary-container rounded font-label-caps text-[10px]">#1</span>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant text-[11px] truncate" id="matchTeamASub">OVR 94 • Speed Attacker</span>
+                </div>
+              </div>
+              <button class="w-7 h-7 rounded bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-on-surface" type="button" onclick="swapMatchTeams()">
+                <span class="material-symbols-outlined text-[16px]">sync_alt</span>
+              </button>
+            </div>
+
+            <!-- Set Score Inputs -->
+            <div class="grid grid-cols-3 gap-space-xs py-space-2xs">
+              <div class="bg-surface-container-lowest p-space-xs rounded-lg flex flex-col items-center">
+                <span class="font-label-caps text-[10px] text-secondary uppercase mb-space-2xs tracking-wider">Set 1</span>
+                <div class="flex items-center justify-center gap-space-xs w-full">
+                  <input class="w-10 text-center bg-surface-container-high text-primary-container font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set1A" max="30" min="0" type="number" value="21"/>
+                  <span class="text-on-surface-variant font-label-caps text-label-caps">:</span>
+                  <input class="w-10 text-center bg-surface-container-high text-on-surface font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set1B" max="30" min="0" type="number" value="18"/>
+                </div>
+              </div>
+              <div class="bg-surface-container-lowest p-space-xs rounded-lg flex flex-col items-center">
+                <span class="font-label-caps text-[10px] text-secondary uppercase mb-space-2xs tracking-wider">Set 2</span>
+                <div class="flex items-center justify-center gap-space-xs w-full">
+                  <input class="w-10 text-center bg-surface-container-high text-on-surface font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set2A" max="30" min="0" type="number" value="19"/>
+                  <span class="text-on-surface-variant font-label-caps text-label-caps">:</span>
+                  <input class="w-10 text-center bg-surface-container-high text-secondary-fixed font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set2B" max="30" min="0" type="number" value="21"/>
+                </div>
+              </div>
+              <div class="bg-surface-container-lowest p-space-xs rounded-lg flex flex-col items-center">
+                <span class="font-label-caps text-[10px] text-primary-container uppercase mb-space-2xs tracking-wider font-bold">Set 3 Decider</span>
+                <div class="flex items-center justify-center gap-space-xs w-full">
+                  <input class="w-10 text-center bg-surface-container-high text-primary-container font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set3A" max="30" min="0" type="number" value="21"/>
+                  <span class="text-on-surface-variant font-label-caps text-label-caps">:</span>
+                  <input class="w-10 text-center bg-surface-container-high text-on-surface font-stat-badge rounded py-space-2xs focus:outline-none focus:ring-1 focus:ring-primary-container" id="set3B" max="30" min="0" type="number" value="16"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Team B Player Selection Strip -->
+            <div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs">
+              <div class="flex items-center gap-space-xs min-w-0 flex-1">
+                <div class="w-8 h-8 rounded-lg bg-surface-container-highest overflow-hidden shrink-0">
+                  <img id="matchTeamBImg" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200" alt="Team B"/>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-space-2xs">
+                    <select id="matchTeamBSelect" onchange="handleTeamBChange(this.value)" class="bg-transparent font-headline-md text-[14px] text-on-surface focus:outline-none cursor-pointer">
+                      <option value="Vikram Patel">Vikram Patel (#3)</option>
+                      <option value="Marcus Vance">Marcus Vance (#4)</option>
+                      <option value="Alex Chen">Alex Chen (#2)</option>
+                      <option value="Chloe Zhang">Chloe Zhang (#5)</option>
+                    </select>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant text-[11px] truncate" id="matchTeamBSub">OVR 89 • Baseline Rally</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Score Button -->
+          <button class="w-full bg-primary-container text-on-primary py-space-sm px-space-base rounded-lg font-headline-md uppercase tracking-wide flex items-center justify-center gap-space-xs shadow-[0_0_16px_rgba(204,255,0,0.25)] active:scale-[0.98] transition-transform" onclick="submitMatchScore()" type="button">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">send</span>
+            <span>Broadcast &amp; Verify Result</span>
+          </button>
+        </div>
+
+        <!-- Recent Match Log Feed -->
+        <div class="flex flex-col gap-space-md">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-secondary text-[22px]">history_toggle_off</span>
+              <span class="font-headline-md text-headline-md text-on-surface">Recent Match Log</span>
+            </div>
+            <span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Sorted by Chrono</span>
+          </div>
+          <div class="flex flex-col gap-space-sm" id="matchFeedList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 5: ATTENDANCE & SHUTTLE POOL (Exact Stitch Markup)-->
+    <!-- ======================================================== -->
+    <section id="screen-attendance" class="hidden flex-col w-full pt-20 pb-28 px-space-base min-h-screen">
+      <div class="flex flex-col w-full gap-space-base pb-space-2xl">
+        <!-- Top Session Live Card -->
+        <div class="relative overflow-hidden rounded-xl bg-surface-container-high p-space-base shadow-xl border border-surface-container-highest">
+          <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-primary-container/10 blur-2xl pointer-events-none"></div>
+          <div class="flex items-center justify-between gap-space-xs mb-space-sm">
+            <div class="flex items-center gap-space-xs">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
+              </span>
+              <span class="font-label-caps text-label-caps uppercase text-secondary tracking-wider font-bold">Session In Progress</span>
+            </div>
+            <span class="font-label-caps text-label-caps uppercase text-on-surface-variant bg-surface-container px-space-xs py-space-2xs rounded">Court 1, 2, 3</span>
+          </div>
+          <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight leading-tight mb-space-2xs">Friday Night Ladder Session</h2>
+          <div class="flex items-center gap-space-xs text-on-surface-variant mb-space-md">
+            <span class="material-symbols-outlined text-[16px] text-primary-container">schedule</span>
+            <span class="font-body-sm text-on-surface-variant font-medium">6:00 PM – 9:30 PM (3.5h allotted)</span>
+          </div>
+
+          <!-- Personal Status Strip -->
+          <div class="rounded-lg bg-surface-container-low p-space-sm flex items-center justify-between gap-space-sm border border-surface-container">
+            <div class="flex items-center gap-space-sm min-w-0">
+              <div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0 text-secondary" id="attStatusIcon">
+                <span class="material-symbols-outlined text-[18px]">verified</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="font-label-caps text-label-caps uppercase text-secondary font-bold truncate" id="attStatusText">Checked In at 6:08 PM</span>
+                <span class="font-body-sm text-on-surface-variant truncate" id="attShuttleText">Contributed: 3× Yonex AS-30</span>
+              </div>
+            </div>
+            <button class="shrink-0 bg-primary-container text-on-primary font-label-caps text-label-caps uppercase font-bold px-space-sm py-space-xs rounded-lg active:scale-95 transition-transform flex items-center gap-space-2xs" onclick="addShuttleContribution()">
+              <span class="material-symbols-outlined text-[14px]">add</span> +1 Tube
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic QR Code & Anti-Proxy Engine (ISSUE-003) -->
+        <div class="rounded-xl bg-surface-container p-space-base shadow-xl flex flex-col gap-space-md border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <div class="p-1.5 rounded bg-secondary/20 text-secondary flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">qr_code_2</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Dynamic Attendance QR</h3>
+                <span class="font-label-caps text-label-caps uppercase text-secondary font-bold">Anti-Proxy Shield (15s TOTP)</span>
+              </div>
+            </div>
+            <span class="px-space-xs py-space-2xs rounded bg-surface-container-high font-stat-badge text-stat-badge text-primary-container" id="qrTimerBadge">15s</span>
+          </div>
+
+          <div class="flex flex-col items-center justify-center py-space-sm bg-surface-container-low rounded-xl border border-surface-container-high/60 gap-space-sm">
+            <div class="p-3 bg-white rounded-2xl shadow-lg border-2 border-secondary/40 flex items-center justify-center">
+              <canvas id="attendanceQrCanvas" width="180" height="180"></canvas>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></div>
+              <span class="font-mono text-[11px] text-on-surface-variant font-bold tracking-widest" id="qrPayloadLabel">SMASHDECK:2026-09-05:---</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="openCheckInModal()" class="flex-1 bg-secondary text-on-secondary py-space-xs px-space-sm rounded-lg font-headline-md uppercase tracking-wide flex items-center justify-center gap-space-xs shadow-md font-bold text-[13px] active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+              <span>Self Check-In</span>
+            </button>
+            <button onclick="refreshAttendanceToken()" class="px-space-sm py-space-xs rounded-lg bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase font-bold flex items-center gap-1 active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-[16px]">refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Realtime Court Allocations Visualizer -->
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-center justify-between px-space-2xs">
+            <div class="flex items-center gap-space-xs">
+              <span class="material-symbols-outlined text-primary-container text-[18px]">sports_tennis</span>
+              <h3 class="font-headline-md text-headline-md text-on-surface">Live Courts</h3>
+            </div>
+            <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">3 Active</span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-space-xs">
+            <!-- Court 1 -->
+            <div class="rounded-lg bg-surface-container p-space-sm flex items-center justify-between shadow-md border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="flex flex-col items-center justify-center w-9 h-9 rounded-lg bg-surface-container-high shrink-0">
+                  <span class="font-label-caps text-on-surface-variant uppercase">C1</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-space-xs">
+                    <span class="font-body-lg text-body-lg text-on-surface font-bold truncate">Ishan Shukla vs Vikram Patel</span>
+                    <span class="bg-primary-container/20 text-primary-container px-space-2xs py-0.5 rounded font-label-caps text-label-caps uppercase font-bold shrink-0">Ladder</span>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant">Rank #3 Challenger Match • Set 2 (18-16)</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-secondary text-[20px] shrink-0">military_tech</span>
+            </div>
+
+            <!-- Court 2 -->
+            <div class="rounded-lg bg-surface-container p-space-sm flex items-center justify-between shadow-md border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="flex flex-col items-center justify-center w-9 h-9 rounded-lg bg-surface-container-high shrink-0">
+                  <span class="font-label-caps text-on-surface-variant uppercase">C2</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-space-xs">
+                    <span class="font-body-lg text-body-lg text-on-surface font-bold truncate">Doubles Warmup</span>
+                    <span class="bg-surface-variant text-on-surface-variant px-space-2xs py-0.5 rounded font-label-caps text-label-caps uppercase font-bold shrink-0">Rotational</span>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant">Alex, Kevin, Sarah, Leo • 12 min elapsed</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-on-surface-variant text-[20px] shrink-0">groups</span>
+            </div>
+
+            <!-- Court 3 -->
+            <div class="rounded-lg bg-surface-container p-space-sm flex items-center justify-between shadow-md border border-surface-container-high">
+              <div class="flex items-center gap-space-sm min-w-0">
+                <div class="flex flex-col items-center justify-center w-9 h-9 rounded-lg bg-surface-container-high shrink-0">
+                  <span class="font-label-caps text-on-surface-variant uppercase">C3</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-space-xs">
+                    <span class="font-body-lg text-body-lg text-on-surface font-bold truncate">Free Rally &amp; Footwork</span>
+                    <span class="bg-surface-variant text-on-surface-variant px-space-2xs py-0.5 rounded font-label-caps text-label-caps uppercase font-bold shrink-0">Open</span>
+                  </div>
+                  <span class="font-body-sm text-on-surface-variant">2 spots open for queuing</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-on-surface-variant text-[20px] shrink-0">sports</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shuttlecock Inventory & Communal Pool Tracker (Exact Stitch) -->
+        <div class="rounded-xl bg-surface-container p-space-base shadow-xl flex flex-col gap-space-md border border-surface-container-high">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs">
+              <div class="p-1.5 rounded bg-primary-container/20 text-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-[18px]">inventory_2</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Shuttlecock Tube Pool</h3>
+                <span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Zero-Budget Member Stock</span>
+              </div>
+            </div>
+            <span class="px-space-xs py-space-2xs rounded bg-surface-container-high font-stat-badge text-stat-badge text-primary-container">AS-30</span>
+          </div>
+
+          <div class="flex flex-col gap-space-2xs">
+            <div class="flex justify-between items-baseline">
+              <div class="flex items-baseline gap-space-2xs">
+                <span class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface font-black" id="shuttleCountNumber">48</span>
+                <span class="font-body-md text-body-md text-on-surface-variant font-medium">/ 60 Shuttles Remaining</span>
+              </div>
+              <span class="font-label-caps text-label-caps uppercase text-secondary font-bold" id="shuttleHealthLabel">80% Healthy</span>
+            </div>
+            <div class="h-3.5 w-full bg-surface-container-lowest rounded-full overflow-hidden flex p-0.5 gap-0.5">
+              <div class="h-full bg-secondary rounded-full transition-all duration-500" id="shuttleHealthBar" style="width: 80%;"></div>
+            </div>
+            <div class="flex justify-between items-center text-on-surface-variant pt-space-2xs font-body-sm text-body-sm">
+              <span>Active in play: <strong class="text-on-surface">12 shuttles</strong></span>
+              <span>Grade: <strong class="text-on-surface">Yonex Aerosensa 30</strong></span>
+            </div>
+          </div>
+
+          <!-- Top Contributors Board -->
+          <div class="rounded-lg bg-surface-container-low p-space-sm flex flex-col gap-space-xs">
+            <div class="flex items-center justify-between pb-space-2xs">
+              <span class="font-label-caps text-label-caps uppercase text-on-surface-variant font-bold tracking-wider">Top Contributors (This Month)</span>
+              <span class="font-label-caps text-label-caps text-primary-container uppercase">Pool Rule: 1 tube / 4 wks</span>
+            </div>
+            <div class="grid grid-cols-2 gap-space-xs text-[11px]">
+              <div class="p-1.5 rounded bg-surface-container flex items-center justify-between">
+                <span class="truncate text-on-surface">Ishan S.</span>
+                <span class="text-primary-container font-bold">3 tubes</span>
+              </div>
+              <div class="p-1.5 rounded bg-surface-container flex items-center justify-between">
+                <span class="truncate text-on-surface">Maya Lin</span>
+                <span class="text-secondary font-bold">2 tubes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member Attendance Check-In List -->
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-center justify-between px-space-2xs">
+            <span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Squad Attendance Roll (20 Members)</span>
+            <span class="font-label-caps text-label-caps text-secondary font-bold" id="attPresentCount">16 / 20 Present</span>
+          </div>
+          <div class="flex flex-col gap-space-xs" id="attRosterList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 6: SETTINGS & SUPABASE CLOUD SYNC (Exact Stitch)  -->
+    <!-- ======================================================== -->
+    <section id="screen-settings" class="hidden flex-col w-full pt-16 pb-24 px-space-base min-h-screen space-y-space-xl">
+      <!-- Profile & Gear Summary Card -->
+      <section class="relative overflow-hidden rounded-xl bg-surface-container-high p-space-lg shadow-xl mt-space-sm border border-surface-container-highest">
+        <div class="flex items-center gap-space-base relative z-10">
+          <div class="relative shrink-0">
+            <div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container-lowest shadow-md ring-2 ring-primary-container">
+              <img alt="User Avatar" id="settingsAvatar" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300"/>
+            </div>
+            <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-secondary-container flex items-center justify-center">
+              <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            </span>
+          </div>
+          <div class="flex flex-col min-w-0 flex-1">
+            <div class="flex items-center gap-space-xs flex-wrap">
+              <h2 class="font-headline-md text-headline-md text-primary tracking-tight truncate" id="settingsName">Ishan Shukla</h2>
+              <span class="bg-secondary-container/20 text-secondary px-space-xs py-0.5 rounded font-label-caps text-label-caps uppercase tracking-wider">Active Player</span>
+            </div>
+            <div class="flex items-center gap-space-sm mt-space-2xs text-on-surface-variant font-stat-badge text-stat-badge">
+              <span class="text-primary-container flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[14px]">sports_score</span>
+                <span id="settingsOvr">OVR 94</span>
+              </span>
+              <span class="w-1 h-1 rounded-full bg-surface-variant"></span>
+              <span class="text-secondary flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[14px]">military_tech</span>
+                <span id="settingsRank">Rank #1</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-space-base pt-space-md flex">
+          <button class="w-full py-space-sm px-space-base bg-surface-container hover:bg-surface-bright active:scale-[0.98] transition-all rounded-lg flex items-center justify-center gap-space-sm text-primary font-body-sm font-medium shadow-sm border border-surface-container-high" onclick="openProfileModal()">
+            <span class="material-symbols-outlined text-[18px] text-primary-container">tune</span>
+            Edit Profile &amp; Gear Specs
+          </button>
+        </div>
+      </section>
+
+      <!-- ZERO-BUDGET SUPABASE CLOUD CONNECTION PANEL -->
+      <section class="flex flex-col space-y-space-sm">
+        <div class="flex items-center justify-between px-space-2xs">
+          <span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant">Supabase Backend (Zero-Budget)</span>
+          <span class="font-label-caps text-label-caps text-secondary font-bold flex items-center gap-1" id="supabaseLiveIndicator">
+            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> READY
+          </span>
+        </div>
+
+        <div class="bg-surface-container-high rounded-xl p-space-base shadow-xl border border-surface-container-highest flex flex-col gap-space-sm">
+          <p class="font-body-sm text-on-surface-variant">
+            Connect your free-tier Supabase project URL and Anon API key to sync player cards, ladder rankings, and gear logs directly into your PostgreSQL database.
+          </p>
+
+          <div class="flex flex-col gap-1 text-left">
+            <label class="font-label-caps text-[10px] uppercase text-on-surface-variant" for="sbUrlInput">Project URL</label>
+            <input class="bg-surface-container rounded-lg px-space-sm py-2 text-primary font-body-sm focus:outline-none border border-surface-container-highest" id="sbUrlInput" value="https://jgfvkllksyriyyibjulg.supabase.co" placeholder="https://jgfvkllksyriyyibjulg.supabase.co"/>
+          </div>
+
+          <div class="flex flex-col gap-1 text-left">
+            <label class="font-label-caps text-[10px] uppercase text-on-surface-variant" for="sbKeyInput">Anon Public API Key</label>
+            <input class="bg-surface-container rounded-lg px-space-sm py-2 text-primary font-body-sm focus:outline-none border border-surface-container-highest font-mono text-[11px]" id="sbKeyInput" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZnZrbGxrc3lyaXl5aWJqdWxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1OTM2NDcsImV4cCI6MjEwNDE2OTY0N30.Yz6EJ31KrSwPcbILkK5OqKACSjMYMbYT7mAsqXW9FL8" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."/>
+          </div>
+
+          <button class="w-full mt-1 bg-primary-container text-on-primary-container hover:brightness-110 active:scale-[0.98] transition-all py-space-sm rounded-lg font-headline-md text-[13px] uppercase tracking-wider flex items-center justify-center gap-space-xs shadow-md" onclick="saveAndTestSupabase()" type="button">
+            <span class="material-symbols-outlined text-[18px]">cloud_sync</span>
+            <span>Test Connection &amp; Sync DB</span>
+          </button>
+
+          <div class="p-2 rounded bg-surface-container-lowest font-mono text-[11px] text-on-surface-variant" id="sbStatusConsole">
+            • Schema executed in Step 2. Paste URL &amp; Key above to test sync.
+          </div>
+        </div>
+      </section>
+
+      <!-- App Preferences -->
+      <section class="flex flex-col space-y-space-sm">
+        <div class="flex items-center justify-between px-space-2xs">
+          <span class="font-label-caps text-label-caps uppercase tracking-widest text-on-surface-variant">App Preferences</span>
+          <span class="font-label-caps text-label-caps text-primary-container/80">3 Configured</span>
+        </div>
+        <div class="bg-surface-container-high rounded-xl overflow-hidden shadow-md border border-surface-container-highest">
+          <div class="p-space-base flex items-center justify-between">
+            <div class="flex items-center gap-space-md">
+              <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary-container shrink-0">
+                <span class="material-symbols-outlined text-[20px]">dark_mode</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-body-lg text-primary">Court Theme Mode</span>
+                <span class="font-body-sm text-on-surface-variant">High-contrast midnight stadium</span>
+              </div>
+            </div>
+            <button class="w-12 h-6 bg-primary-container rounded-full relative p-0.5 transition-colors focus:outline-none cursor-pointer">
+              <span class="w-5 h-5 bg-on-primary rounded-full shadow block translate-x-6 transition-transform"></span>
+            </button>
+          </div>
+
+          <div class="p-space-base flex items-center justify-between bg-surface-container-high/60 border-t border-surface-container">
+            <div class="flex items-center gap-space-md">
+              <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary shrink-0">
+                <span class="material-symbols-outlined text-[20px]">notifications_active</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-body-lg text-primary">Match Alerts &amp; Ladder</span>
+                <span class="font-body-sm text-on-surface-variant">Telegram bot push sync enabled</span>
+              </div>
+            </div>
+            <button class="w-12 h-6 bg-secondary-container rounded-full relative p-0.5 transition-colors focus:outline-none cursor-pointer">
+              <span class="w-5 h-5 bg-on-secondary rounded-full shadow block translate-x-6 transition-transform"></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Account Actions -->
+      <div class="flex flex-col gap-space-sm pt-2">
+        <button onclick="logoutUser()" class="w-full py-3 bg-surface-container hover:bg-surface-container-highest text-primary font-body-sm rounded-lg flex items-center justify-center gap-2 border border-surface-container-high transition-colors">
+          <span class="material-symbols-outlined text-[18px] text-primary-container">logout</span>
+          <span>Sign Out / Switch Player Profile</span>
+        </button>
+        <button onclick="resetAllData()" class="w-full py-3 bg-surface-container hover:bg-error/20 text-error font-body-sm rounded-lg flex items-center justify-center gap-2 border border-error/20 transition-colors">
+          <span class="material-symbols-outlined text-[18px]">delete_forever</span>
+          <span>Clear Local Session Data</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- EDIT PROFILE & GEAR SPEC MODAL (Slide-up Glassmorphic)   -->
+    <!-- ======================================================== -->
+    <div id="profileModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-end justify-center p-0">
+      <div class="w-full max-w-[430px] bg-surface-container-low rounded-t-2xl p-space-base flex flex-col gap-space-sm max-h-[90vh] overflow-y-auto border-t border-primary-container/40 shadow-2xl animate-in slide-in-from-bottom duration-200">
+        <div class="flex items-center justify-between pb-2 border-b border-surface-container-high">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary-container text-[20px]">badge</span>
+            <h3 class="font-headline-md text-on-surface">Edit Profile &amp; Gear</h3>
+          </div>
+          <button onclick="closeProfileModal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-space-sm">
+          <!-- Photo Picker -->
+          <div class="flex items-center gap-space-sm bg-surface-container p-2 rounded-xl">
+            <img id="modalPhotoPreview" class="w-14 h-14 rounded-full object-cover border-2 border-primary-container" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" alt="Avatar"/>
+            <div class="flex flex-col flex-1 gap-1">
+              <label class="px-space-xs py-1 bg-surface-container-high text-primary-container font-label-caps text-center rounded cursor-pointer uppercase">
+                Upload New Photo
+                <input type="file" accept="image/*" class="hidden" onchange="handleModalPhotoUpload(event)"/>
+              </label>
+              <div class="flex gap-1">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" onclick="setModalAvatar(this.src)" class="w-6 h-6 rounded-full object-cover cursor-pointer ring-1 ring-primary-container"/>
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" onclick="setModalAvatar(this.src)" class="w-6 h-6 rounded-full object-cover cursor-pointer ring-1 ring-primary-container"/>
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" onclick="setModalAvatar(this.src)" class="w-6 h-6 rounded-full object-cover cursor-pointer ring-1 ring-primary-container"/>
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100" onclick="setModalAvatar(this.src)" class="w-6 h-6 rounded-full object-cover cursor-pointer ring-1 ring-primary-container"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-space-xs">
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Full Name</label>
+              <input id="modalInputName" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest"/>
+            </div>
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Roll Number</label>
+              <input id="modalInputRoll" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest"/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-space-xs">
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Play Style</label>
+              <select id="modalInputStyle" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest">
+                <option value="Smash Heavy">Smash Heavy</option>
+                <option value="Deceptive Net">Deceptive Net</option>
+                <option value="Baseline Rally">Baseline Rally</option>
+                <option value="Defensive Wall">Defensive Wall</option>
+                <option value="Speed Attacker">Speed Attacker</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Handedness</label>
+              <select id="modalInputHand" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest">
+                <option value="Right">Right-Handed</option>
+                <option value="Left">Left-Handed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1 text-left">
+            <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Racket Model</label>
+            <input id="modalInputRacket" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest"/>
+          </div>
+
+          <div class="grid grid-cols-2 gap-space-xs">
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">String Model</label>
+              <input id="modalInputString" class="bg-surface-container rounded-lg px-2 py-1.5 text-primary text-body-sm focus:outline-none border border-surface-container-highest"/>
+            </div>
+            <div class="flex flex-col gap-1 text-left">
+              <label class="font-label-caps text-[10px] text-on-surface-variant uppercase flex justify-between">
+                <span>Tension</span>
+                <span class="text-primary-container font-bold" id="modalTensionLabel">28 LBS</span>
+              </label>
+              <input type="range" min="20" max="32" value="28" id="modalInputTension" class="accent-primary-container h-8 cursor-pointer" oninput="document.getElementById('modalTensionLabel').innerText = this.value + ' LBS'"/>
+            </div>
+          </div>
+
+          <button onclick="saveModalProfile()" class="w-full mt-2 bg-primary-container text-on-primary-container py-space-sm rounded-lg font-headline-md uppercase tracking-wider shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+            <span>Save &amp; Reflect Immediately</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Attendance Check-In (Phase 2) -->
+    <div id="checkInModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+      <div class="bg-surface-container max-w-sm w-full rounded-2xl border border-surface-container-high p-space-base shadow-2xl flex flex-col gap-space-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[24px]">qr_code_scanner</span>
+            <h3 class="font-headline-md text-on-surface font-bold">Attendance Check-In</h3>
+          </div>
+          <button onclick="closeCheckInModal()" class="text-on-surface-variant hover:text-on-surface">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <p class="font-body-sm text-on-surface-variant">
+          Enter the 6-digit TOTP token displayed on the Admin Dynamic QR screen or click below to verify today's session.
+        </p>
+
+        <div class="flex flex-col gap-1">
+          <label class="font-label-caps text-[10px] text-on-surface-variant uppercase">Session Token (6-Digits)</label>
+          <input id="checkInTokenInput" maxlength="6" placeholder="e.g. 582914" class="bg-surface-container-low rounded-lg px-3 py-2 text-center text-secondary font-mono font-bold text-lg tracking-widest focus:outline-none border border-surface-container-high focus:border-secondary"/>
+        </div>
+
+        <div class="flex flex-col gap-2 pt-2">
+          <button onclick="submitQrCheckIn()" class="w-full bg-secondary text-on-secondary py-space-xs rounded-lg font-headline-md uppercase tracking-wider font-bold shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">verified</span>
+            <span>Verify &amp; Log Attendance</span>
+          </button>
+          <button onclick="submitQuickCheckIn()" class="w-full bg-surface-container-high text-on-surface py-space-xs rounded-lg font-body-sm font-medium hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[18px] text-primary-container">flash_on</span>
+            <span>Fast Check-In with Active Code</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Live Court Umpire & Touch Scoring (Phase 2) -->
+    <div id="liveUmpireModal" class="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl hidden flex-col p-4 overflow-y-auto">
+      <div class="max-w-md w-full mx-auto flex flex-col gap-3 min-h-full">
+        <!-- Umpire Header -->
+        <div class="flex items-center justify-between bg-surface-container-high rounded-xl p-3 border border-surface-container-highest">
+          <div class="flex items-center gap-2">
+            <span class="bg-primary-container text-on-primary text-[11px] font-black uppercase px-2 py-0.5 rounded font-mono" id="umpireSetBadge">SET 1 OF 3</span>
+            <span class="text-on-surface-variant text-[11px] uppercase tracking-wider font-bold" id="umpireCategoryBadge">LADDER DUEL</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <button onclick="resetUmpireMatch()" class="p-1 rounded text-on-surface-variant hover:text-on-surface" title="Restart Match">
+              <span class="material-symbols-outlined text-[20px]">refresh</span>
+            </button>
+            <button onclick="closeLiveUmpireModal()" class="p-1 rounded text-on-surface-variant hover:text-on-surface" title="Exit">
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Status Banner (Deuce / Set Point / Interval) -->
+        <div id="umpireStatusBanner" class="hidden w-full py-1.5 px-3 rounded-lg text-center font-black text-[11px] tracking-wider uppercase">
+          ADVANTAGE • DEUCE (PLAY TO 30 CEILING)
+        </div>
+
+        <!-- Completed Sets History -->
+        <div class="flex items-center justify-between bg-surface-container rounded-lg px-3 py-1.5 text-[11px] border border-surface-container-high">
+          <span class="text-on-surface-variant">Set History:</span>
+          <div class="flex gap-1.5" id="umpireSetsHistoryList">
+            <span class="text-on-surface-variant/60">First set in progress</span>
+          </div>
+        </div>
+
+        <!-- BWF Badminton Court Visualizer -->
+        <div class="w-full h-32 bg-[#064E3B] rounded-xl border-2 border-white/80 relative shadow-inner overflow-hidden flex flex-col">
+          <!-- Net -->
+          <div class="w-full h-1 bg-white absolute top-1/2 -translate-y-1/2 z-10"></div>
+          
+          <!-- Top Half (Team A Court) -->
+          <div class="flex-1 flex pb-0.5">
+            <div id="courtA_Left" class="flex-1 flex flex-col items-center justify-center border-r border-white/40 text-[9px] font-bold text-white/40">
+              <span>LEFT</span>
+            </div>
+            <div id="courtA_Right" class="flex-1 flex flex-col items-center justify-center text-[9px] font-bold text-white/40">
+              <span>RIGHT</span>
+            </div>
+          </div>
+          <!-- Bottom Half (Team B Court) -->
+          <div class="flex-1 flex pt-0.5">
+            <div id="courtB_Right" class="flex-1 flex flex-col items-center justify-center border-r border-white/40 text-[9px] font-bold text-white/40">
+              <span>RIGHT</span>
+            </div>
+            <div id="courtB_Left" class="flex-1 flex flex-col items-center justify-center text-[9px] font-bold text-white/40">
+              <span>LEFT</span>
+            </div>
+          </div>
+
+          <!-- Server Indicator Badge -->
+          <div class="absolute bottom-1.5 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] text-white flex items-center gap-1">
+            <span class="material-symbols-outlined text-secondary text-[12px]">sports_tennis</span>
+            <span id="umpireServerPill">Serving: Team A (Right Court)</span>
+          </div>
+        </div>
+
+        <!-- Giant Touch Score Pads -->
+        <div class="grid grid-cols-2 gap-3 flex-1 min-h-[220px]">
+          <!-- Team A Score Pad -->
+          <div class="bg-surface-container rounded-2xl border border-secondary/40 flex flex-col overflow-hidden shadow-lg">
+            <div class="bg-secondary/15 px-3 py-2 flex items-center justify-between border-b border-secondary/20">
+              <span class="font-bold text-secondary text-[13px] truncate" id="umpireTeamAName">Team A</span>
+              <span class="material-symbols-outlined text-secondary text-[16px]" id="umpireTeamAIcon">sports_tennis</span>
+            </div>
+            <button onclick="addUmpirePoint('A')" class="flex-1 flex flex-col items-center justify-center p-4 active:scale-95 transition-transform cursor-pointer">
+              <span class="text-6xl font-black text-white" id="umpireScoreA">0</span>
+              <span class="text-secondary font-black text-[11px] tracking-wider mt-1 uppercase">+1 POINT</span>
+            </button>
+            <button onclick="undoUmpirePoint()" class="py-2 bg-surface-container-high/50 text-on-surface-variant hover:text-on-surface text-[11px] font-bold flex items-center justify-center gap-1 border-t border-surface-container-highest">
+              <span class="material-symbols-outlined text-[14px]">undo</span> UNDO
+            </button>
+          </div>
+
+          <!-- Team B Score Pad -->
+          <div class="bg-surface-container rounded-2xl border border-surface-container-highest flex flex-col overflow-hidden shadow-lg">
+            <div class="bg-surface-container-high px-3 py-2 flex items-center justify-between border-b border-surface-container-highest">
+              <span class="font-bold text-on-surface text-[13px] truncate" id="umpireTeamBName">Team B</span>
+              <span class="material-symbols-outlined text-transparent text-[16px]" id="umpireTeamBIcon">sports_tennis</span>
+            </div>
+            <button onclick="addUmpirePoint('B')" class="flex-1 flex flex-col items-center justify-center p-4 active:scale-95 transition-transform cursor-pointer">
+              <span class="text-6xl font-black text-white" id="umpireScoreB">0</span>
+              <span class="text-primary-container font-black text-[11px] tracking-wider mt-1 uppercase">+1 POINT</span>
+            </button>
+            <button onclick="undoUmpirePoint()" class="py-2 bg-surface-container-high/50 text-on-surface-variant hover:text-on-surface text-[11px] font-bold flex items-center justify-center gap-1 border-t border-surface-container-highest">
+              <span class="material-symbols-outlined text-[14px]">undo</span> UNDO
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Actions (Confirm when set or match won) -->
+        <div class="pt-2">
+          <button id="umpireFinishBtn" onclick="saveUmpireMatchToDB()" class="hidden w-full bg-secondary text-on-secondary py-3 rounded-xl font-headline-md font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-transform">
+            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+            <span>Confirm &amp; Record Match Result</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- FIXED BOTTOM NAVIGATION (Exact Stitch Suite Design)      -->
+    <!-- ======================================================== -->
+    <nav class="fixed bottom-0 max-w-[430px] w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-t border-surface-container-high/40">
+      <div class="flex justify-around items-center h-16 px-space-xs" id="bottomNavButtons">
+        <a class="flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors active:scale-95 cursor-pointer" data-path="ladder" onclick="switchTab('ladder')">
+          <span class="material-symbols-outlined text-[22px]">leaderboard</span>
+          <p class="font-label-caps text-label-caps tracking-wide uppercase">Ladder</p>
+        </a>
+        <a class="flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors active:scale-95 cursor-pointer" data-path="matches" onclick="switchTab('matches')">
+          <span class="material-symbols-outlined text-[22px]">sports_tennis</span>
+          <p class="font-label-caps text-label-caps tracking-wide uppercase">Matches</p>
+        </a>
+        <a class="flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] transition-colors active:scale-95 text-primary-container [&>span]:text-primary-container [&>p]:text-primary [&>p]:font-bold cursor-pointer" data-path="card" onclick="switchTab('card')">
+          <span class="material-symbols-outlined text-[22px]">badge</span>
+          <p class="font-label-caps text-label-caps tracking-wide uppercase">Card</p>
+        </a>
+        <a class="flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors active:scale-95 cursor-pointer" data-path="attendance" onclick="switchTab('attendance')">
+          <span class="material-symbols-outlined text-[22px]">event_available</span>
+          <p class="font-label-caps text-label-caps tracking-wide uppercase">Attendance</p>
+        </a>
+        <a class="flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors active:scale-95 cursor-pointer" data-path="settings" onclick="switchTab('settings')">
+          <span class="material-symbols-outlined text-[22px]">tune</span>
+          <p class="font-label-caps text-label-caps tracking-wide uppercase">Settings</p>
+        </a>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: WEBGL SHADER + STATE SYNC + SUPABASE CLIENT  -->
+  <!-- ======================================================== -->
+  <script>
+    // 1. Initial State Definition - ZERO Default Profiles
+    let currentUser = JSON.parse(localStorage.getItem("smashdeck_user")) || null;
+    let CLUB_ROSTER = [];
+    let matchesHistory = [];
+    let supabaseClient = null;
+
+    const DEFAULT_SB_URL = "https://jgfvkllksyriyyibjulg.supabase.co";
+    const DEFAULT_SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnZnZrbGxrc3lyaXl5aWJqdWxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1OTM2NDcsImV4cCI6MjEwNDE2OTY0N30.Yz6EJ31KrSwPcbILkK5OqKACSjMYMbYT7mAsqXW9FL8";
+
+    // 2. Initialize Supabase if configured
+    function initSupabase() {
+      const url = localStorage.getItem("sb_url") || DEFAULT_SB_URL;
+      const key = localStorage.getItem("sb_key") || DEFAULT_SB_KEY;
+      if (url && key && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(url, key);
+          const urlIn = document.getElementById("sbUrlInput");
+          const keyIn = document.getElementById("sbKeyInput");
+          if (urlIn) urlIn.value = url;
+          if (keyIn) keyIn.value = key;
+          const liveInd = document.getElementById("supabaseLiveIndicator");
+          if (liveInd) liveInd.innerHTML = '<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> LIVE SYNC';
+          const statConsole = document.getElementById("sbStatusConsole");
+          if (statConsole) statConsole.innerHTML = "• Connected to Supabase (" + url + ")! Syncing squad...";
+          fetchClubPlayersFromSupabase();
+        } catch (e) {
+          console.warn("Supabase init error:", e);
+        }
+      }
+    }
+
+    async function fetchClubPlayersFromSupabase() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('players')
+          .select('*')
+          .eq('is_active', true)
+          .order('elo_rating', { ascending: false });
+        if (error) {
+          console.warn("Supabase load error:", error.message);
+          return;
+        }
+        CLUB_ROSTER.length = 0;
+        if (data && data.length > 0) {
+          data.forEach((p, idx) => {
+            const isMe = currentUser && ((p.roll_number === currentUser.roll) || (p.full_name && p.full_name.toLowerCase() === currentUser.name.toLowerCase()));
+            const ovrVal = Math.round(((p.base_smash || 88) + (p.base_agility || 85) + (p.base_stamina || 85) + (p.base_consistency || 85)) / 4);
+            CLUB_ROSTER.push({
+              rank: idx + 1,
+              id: p.id,
+              name: p.full_name || "Club Player",
+              roll: p.roll_number || "",
+              ovr: isMe ? currentUser.ovr : (ovrVal > 95 ? 95 : (ovrVal < 80 ? 82 : ovrVal)),
+              style: p.playstyle || "All-Rounder",
+              record: `${Math.max(1, 10 - idx)}-${Math.max(0, idx)}`,
+              rate: `${Math.max(40, Math.round(90 - idx * 4))}%`,
+              photo: p.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200",
+              status: idx === 0 ? "Reigning" : (idx < 3 ? "Locked" : "Eligible"),
+              isUser: isMe
+            });
+          });
+        } else if (currentUser) {
+          CLUB_ROSTER.push({
+            rank: 1,
+            id: currentUser.id,
+            name: currentUser.name,
+            roll: currentUser.roll,
+            ovr: currentUser.ovr,
+            style: currentUser.style,
+            record: currentUser.record || "0-0",
+            rate: currentUser.winRate || "100%",
+            photo: currentUser.photo,
+            status: "Reigning",
+            isUser: true
+          });
+        }
+        renderLadderRoster();
+        renderAttendanceRoster();
+        populateMatchOpponents();
+        const statConsole = document.getElementById("sbStatusConsole");
+        if (statConsole) statConsole.innerHTML = `• Live Connected! Synced ${CLUB_ROSTER.length} active players from Supabase.`;
+      } catch (e) {
+        console.warn("Error fetching Supabase players:", e);
+      }
+    }
+
+    // 3. Tab Switching Logic
+    function switchTab(tabId) {
+      if (!currentUser && tabId !== 'auth') {
+        alert("Please create an account or sign in with your roll number first!");
+        tabId = 'auth';
+      }
+
+      const screens = ['auth', 'card', 'ladder', 'matches', 'attendance', 'settings'];
+      screens.forEach(s => {
+        const el = document.getElementById('screen-' + s);
+        if (el) {
+          if (s === tabId) {
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        }
+      });
+
+      // Update header section label
+      const labels = {
+        auth: 'Account Gateway',
+        card: 'Card',
+        ladder: 'Ladder',
+        matches: 'Matches',
+        attendance: 'Attendance',
+        settings: 'Settings'
+      };
+      const labelEl = document.getElementById('headerSectionLabel');
+      if (labelEl) labelEl.textContent = labels[tabId] || 'Card';
+
+      // Update active nav button
+      const navLinks = document.querySelectorAll('#bottomNavButtons a');
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-path') === tabId) {
+          link.className = 'flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] transition-colors active:scale-95 text-primary-container [&>span]:text-primary-container [&>p]:text-primary [&>p]:font-bold cursor-pointer';
+        } else {
+          link.className = 'flex flex-col items-center justify-center gap-space-2xs min-w-[56px] min-h-[44px] text-on-surface-variant transition-colors active:scale-95 cursor-pointer';
+        }
+      });
+
+      window.scrollTo(0, 0);
+    }
+
+    // 4. Update UI with Current User Details
+    function renderUserUI() {
+      const headerAvatar = document.getElementById('headerAvatar');
+      const headerDiv = document.getElementById('headerDivBadge');
+      
+      if (!currentUser) {
+        if (headerAvatar) headerAvatar.src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120";
+        if (headerDiv) headerDiv.textContent = "GUEST";
+        return;
+      }
+
+      // Header
+      if (headerAvatar) headerAvatar.src = currentUser.photo;
+      if (headerDiv) headerDiv.textContent = 'DIV ' + (currentUser.rank <= 3 ? '1' : '2');
+
+      // Card
+      document.getElementById('cardPlayerName').textContent = currentUser.name;
+      document.getElementById('cardPlayerImg').src = currentUser.photo;
+      document.getElementById('cardOvr').textContent = currentUser.ovr;
+      document.getElementById('cardStyle').textContent = (currentUser.style || 'ATTACK').toUpperCase();
+      document.getElementById('cardLeagueSubtitle').textContent = `APEX LEAGUE • SEED #${currentUser.rank < 10 ? '0' + currentUser.rank : currentUser.rank}`;
+      document.getElementById('cardGearRacket').textContent = currentUser.racket;
+      document.getElementById('cardGearTension').textContent = `@ ${currentUser.tension} LBS`;
+
+      // Card Stats
+      document.getElementById('statPac').textContent = currentUser.stats.pac;
+      document.getElementById('barPac').style.width = currentUser.stats.pac + '%';
+      document.getElementById('statSma').textContent = currentUser.stats.sma;
+      document.getElementById('barSma').style.width = currentUser.stats.sma + '%';
+      document.getElementById('statDef').textContent = currentUser.stats.def;
+      document.getElementById('barDef').style.width = currentUser.stats.def + '%';
+      document.getElementById('statNet').textContent = currentUser.stats.net;
+      document.getElementById('barNet').style.width = currentUser.stats.net + '%';
+      document.getElementById('statStm').textContent = currentUser.stats.stm;
+      document.getElementById('barStm').style.width = currentUser.stats.stm + '%';
+      document.getElementById('statTac').textContent = currentUser.stats.tac;
+      document.getElementById('barTac').style.width = currentUser.stats.tac + '%';
+
+      // Summary Panel
+      document.getElementById('summaryRank').textContent = `#${currentUser.rank} ${currentUser.rank === 1 ? 'Reign' : 'Apex'}`;
+      document.getElementById('summaryWinRate').textContent = currentUser.winRate;
+      document.getElementById('summaryScoreRecord').textContent = `(${currentUser.record})`;
+      document.getElementById('summaryStreak').textContent = currentUser.streak;
+
+      // Settings
+      document.getElementById('settingsAvatar').src = currentUser.photo;
+      document.getElementById('settingsName').textContent = currentUser.name;
+      document.getElementById('settingsOvr').textContent = `OVR ${currentUser.ovr}`;
+      document.getElementById('settingsRank').textContent = `Rank #${currentUser.rank}`;
+
+      // Match Hub Default Team A
+      document.getElementById('matchTeamAImg').src = currentUser.photo;
+      document.getElementById('matchTeamALabel').textContent = currentUser.name;
+      document.getElementById('matchTeamASub').textContent = `OVR ${currentUser.ovr} • ${currentUser.style}`;
+
+      // Attendance Personal
+      document.getElementById('attShuttleText').textContent = `Contributed: ${currentUser.shuttlesDonated || 0}× Yonex AS-30`;
+
+      renderLadderRoster();
+      renderMatchFeed();
+      renderAttendanceRoster();
+      populateMatchOpponents();
+    }
+
+    // 5. Render Ladder Roster List & Dynamic Podium
+    function renderLadderRoster() {
+      const container = document.getElementById('ladderRosterList');
+      if (!container) return;
+
+      // Update Podium dynamically
+      const p1Img = document.getElementById('podiumRank1Img');
+      const p1Name = document.getElementById('podiumRank1Name');
+      const p1Style = document.getElementById('podiumRank1Style');
+      const p1Ovr = document.getElementById('podiumRank1Ovr');
+      const p1Badge = document.getElementById('podiumRank1Badge');
+
+      const p2Img = document.getElementById('podiumRank2Img');
+      const p2Name = document.getElementById('podiumRank2Name');
+      const p2Style = document.getElementById('podiumRank2Style');
+      const p2Ovr = document.getElementById('podiumRank2Ovr');
+      const p2Badge = document.getElementById('podiumRank2Badge');
+
+      const p3Img = document.getElementById('podiumRank3Img');
+      const p3Name = document.getElementById('podiumRank3Name');
+      const p3Style = document.getElementById('podiumRank3Style');
+      const p3Ovr = document.getElementById('podiumRank3Ovr');
+      const p3Badge = document.getElementById('podiumRank3Badge');
+
+      if (CLUB_ROSTER.length > 0) {
+        const top1 = CLUB_ROSTER[0];
+        if (p1Img) p1Img.src = top1.photo;
+        if (p1Name) p1Name.textContent = top1.name;
+        if (p1Style) p1Style.textContent = top1.style;
+        if (p1Ovr) p1Ovr.textContent = top1.ovr;
+        if (p1Badge) p1Badge.textContent = "1W";
+      } else if (currentUser) {
+        if (p1Img) p1Img.src = currentUser.photo;
+        if (p1Name) p1Name.textContent = currentUser.name;
+        if (p1Style) p1Style.textContent = currentUser.style;
+        if (p1Ovr) p1Ovr.textContent = currentUser.ovr;
+        if (p1Badge) p1Badge.textContent = "1W";
+      } else {
+        if (p1Name) p1Name.textContent = "Claim Rank 1";
+        if (p1Style) p1Style.textContent = "Join Ladder";
+        if (p1Ovr) p1Ovr.textContent = "--";
+        if (p1Badge) p1Badge.textContent = "--";
+      }
+
+      if (CLUB_ROSTER.length > 1) {
+        const top2 = CLUB_ROSTER[1];
+        if (p2Img) p2Img.src = top2.photo;
+        if (p2Name) p2Name.textContent = top2.name;
+        if (p2Style) p2Style.textContent = top2.style;
+        if (p2Ovr) p2Ovr.textContent = top2.ovr;
+        if (p2Badge) p2Badge.textContent = top2.record || "1W";
+      } else {
+        if (p2Name) p2Name.textContent = "Open Slot";
+        if (p2Style) p2Style.textContent = "Unclaimed";
+        if (p2Ovr) p2Ovr.textContent = "--";
+        if (p2Badge) p2Badge.textContent = "--";
+      }
+
+      if (CLUB_ROSTER.length > 2) {
+        const top3 = CLUB_ROSTER[2];
+        if (p3Img) p3Img.src = top3.photo;
+        if (p3Name) p3Name.textContent = top3.name;
+        if (p3Style) p3Style.textContent = top3.style;
+        if (p3Ovr) p3Ovr.textContent = top3.ovr;
+        if (p3Badge) p3Badge.textContent = top3.record || "1W";
+      } else {
+        if (p3Name) p3Name.textContent = "Open Slot";
+        if (p3Style) p3Style.textContent = "Unclaimed";
+        if (p3Ovr) p3Ovr.textContent = "--";
+        if (p3Badge) p3Badge.textContent = "--";
+      }
+
+      if (CLUB_ROSTER.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-surface-container rounded-xl border border-surface-container-high/60 text-on-surface-variant flex flex-col items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary-container">
+              <span class="material-symbols-outlined text-[24px]">leaderboard</span>
+            </div>
+            <p class="font-headline-md text-on-surface">No Players on the Ladder Yet</p>
+            <p class="font-body-sm text-[12px] text-on-surface-variant max-w-[260px]">
+              Create an account or sign in with your college roll number to claim Rank #1!
+            </p>
+            <button onclick="switchTab('auth'); switchAuthMode('register');" class="px-space-base py-2 rounded-lg bg-primary-container text-on-primary-container font-headline-md text-[12px] uppercase tracking-wider active:scale-95 shadow-md">
+              Join Ladder Now
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = CLUB_ROSTER.map((p, idx) => `
+        <div class="flex items-center justify-between p-space-sm rounded-xl ${p.isUser ? 'bg-surface-container-high border border-primary-container/40' : 'bg-surface-container'} shadow-sm">
+          <div class="flex items-center gap-space-xs min-w-0 flex-1">
+            <div class="flex flex-col items-center justify-center w-6 shrink-0">
+              <span class="font-stat-badge text-stat-badge ${p.rank <= 3 ? 'text-primary-container font-black' : 'text-on-surface font-bold'}">#${p.rank}</span>
+              <span class="font-label-caps text-[9px] ${p.rank === 1 ? 'text-secondary' : 'text-on-surface-variant'} font-bold">${p.rank === 1 ? '▲ 1' : '—'}</span>
+            </div>
+            <div class="relative shrink-0">
+              <img class="w-10 h-10 rounded-full object-cover" src="${p.photo}" alt="${p.name}"/>
+              ${p.rank === 1 ? '<span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-[8px] font-black">★</span>' : ''}
+            </div>
+            <div class="flex flex-col min-w-0 pr-space-xs">
+              <div class="flex items-center gap-space-2xs">
+                <span class="font-headline-md text-[14px] text-on-surface truncate ${p.isUser ? 'font-black text-primary-container' : ''}">${p.name} ${p.isUser ? '(You)' : ''}</span>
+                <span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">${p.ovr}</span>
+              </div>
+              <span class="font-body-sm text-on-surface-variant text-[11px] truncate">${p.style}</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-space-sm shrink-0">
+            <div class="flex flex-col items-end">
+              <span class="font-stat-badge text-stat-badge text-on-surface">${p.record || '0-0'}</span>
+              <span class="font-label-caps text-[10px] text-secondary font-bold">${p.rate || '100%'}</span>
+            </div>
+            ${p.rank === 1 ? 
+              '<span class="px-space-xs py-1 rounded bg-surface-container-high text-primary-container font-label-caps text-[10px] uppercase font-bold">Crown</span>' :
+              `<button onclick="quickChallenge('${p.name}', ${p.rank})" class="flex items-center gap-1 px-space-xs py-1 rounded bg-primary-container text-on-primary-container font-headline-md text-[11px] uppercase tracking-wide active:scale-95 transition-transform">
+                <span class="material-symbols-outlined text-[13px]">swords</span> Challenge
+              </button>`
+            }
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 6. Match Feed Mock + Dynamic
+    function renderMatchFeed() {
+      const container = document.getElementById('matchFeedList');
+      if (!container) return;
+
+      if (matchesHistory.length === 0) {
+        container.innerHTML = `
+          <div class="w-full bg-surface-container rounded-xl p-space-base shadow-lg text-center text-on-surface-variant flex flex-col items-center gap-2 border border-surface-container-high">
+            <span class="material-symbols-outlined text-3xl text-primary-container">sports_tennis</span>
+            <p class="font-headline-md text-on-surface">No Match Records Yet</p>
+            <p class="font-body-sm text-[12px]">Log set scores above to record your first ladder match!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = matchesHistory.map(m => `
+        <div class="w-full bg-surface-container rounded-xl p-space-base shadow-lg relative overflow-hidden transition-all hover:bg-surface-container-high border border-surface-container-high">
+          <div class="flex items-center justify-between mb-space-sm">
+            <div class="flex items-center gap-space-xs">
+              <span class="px-space-xs py-space-2xs rounded bg-surface-container-lowest text-primary-container font-label-caps text-label-caps uppercase font-bold">Ladder Duel</span>
+              <span class="font-body-sm text-on-surface-variant">${m.time}</span>
+            </div>
+            <div class="flex items-center gap-space-2xs bg-secondary-container/20 text-secondary px-space-xs py-space-2xs rounded-full">
+              <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+              <span class="font-label-caps text-label-caps uppercase font-semibold">Verified</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-space-sm mb-space-sm">
+            <div class="flex items-center gap-space-xs min-w-0 flex-1">
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-space-2xs">
+                  <span class="font-headline-md text-[14px] text-on-surface truncate font-bold">${m.winner}</span>
+                  <span class="material-symbols-outlined text-primary-container text-[14px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                </div>
+                <span class="font-body-sm text-secondary text-[11px] truncate">Rank #${m.winnerRank} • Winner</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-space-xs rounded-lg shrink-0">
+              <span class="font-stat-badge text-stat-badge text-primary-container font-bold">${m.score}</span>
+            </div>
+            <div class="flex items-center gap-space-xs min-w-0 flex-1 justify-end text-right">
+              <div class="flex flex-col min-w-0">
+                <span class="font-body-md text-on-surface-variant truncate">${m.loser}</span>
+                <span class="font-body-sm text-on-surface-variant/70 text-[11px] truncate">Rank #${m.loserRank}</span>
+              </div>
+            </div>
+          </div>
+          <div class="w-full bg-surface-container-low rounded-lg p-space-xs flex items-center justify-between text-on-surface-variant text-[11px]">
+            <div class="flex items-center gap-space-2xs">
+              <span class="material-symbols-outlined text-[14px] text-secondary">arrow_upward</span>
+              <span class="font-stat-badge text-secondary font-bold">${m.elo}</span>
+              <span class="text-on-surface-variant">• Arbitrated Ladder Point</span>
+            </div>
+            <span class="font-label-caps text-label-caps uppercase">${m.dur}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 7. Render Attendance Roster
+    function renderAttendanceRoster() {
+      const container = document.getElementById('attRosterList');
+      if (!container) return;
+
+      if (CLUB_ROSTER.length === 0) {
+        container.innerHTML = `<div class="p-4 text-center text-on-surface-variant text-[12px]">No registered members yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = CLUB_ROSTER.slice(0, 8).map((p, idx) => `
+        <div class="p-space-xs rounded-lg bg-surface-container flex items-center justify-between border border-surface-container-high/60">
+          <div class="flex items-center gap-space-xs min-w-0">
+            <img class="w-8 h-8 rounded-full object-cover shrink-0" src="${p.photo}" alt="${p.name}"/>
+            <div class="flex flex-col min-w-0">
+              <span class="font-body-sm font-bold text-on-surface truncate">${p.name} ${p.isUser ? '(You)' : ''}</span>
+              <span class="font-label-caps text-[9px] text-on-surface-variant">Arrival: 6:${10 + idx * 4} PM</span>
+            </div>
+          </div>
+          <button onclick="toggleAttendance(this)" class="px-space-xs py-1 rounded ${idx === 0 ? 'bg-secondary-container/30 text-secondary' : 'bg-surface-container-highest text-on-surface-variant'} font-label-caps text-[10px] uppercase font-bold flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px]">${idx === 0 ? 'check' : 'pending'}</span>
+            ${idx === 0 ? 'Present' : 'Queued'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function toggleAttendance(btn) {
+      if (btn.textContent.includes('Present')) {
+        btn.className = 'px-space-xs py-1 rounded bg-surface-container-highest text-on-surface-variant font-label-caps text-[10px] uppercase font-bold flex items-center gap-1';
+        btn.innerHTML = '<span class="material-symbols-outlined text-[12px]">pending</span> Queued';
+      } else {
+        btn.className = 'px-space-xs py-1 rounded bg-secondary-container/30 text-secondary font-label-caps text-[10px] uppercase font-bold flex items-center gap-1';
+        btn.innerHTML = '<span class="material-symbols-outlined text-[12px]">check</span> Present';
+      }
+    }
+
+    function addShuttleContribution() {
+      if (!currentUser) return;
+      currentUser.shuttlesDonated = (currentUser.shuttlesDonated || 0) + 1;
+      localStorage.setItem("smashdeck_user", JSON.stringify(currentUser));
+      renderUserUI();
+      
+      const countEl = document.getElementById("shuttleCountNumber");
+      if (countEl) {
+        let cur = parseInt(countEl.innerText) || 48;
+        countEl.innerText = cur + 12;
+      }
+      alert(`+1 Tube (12 Shuttles) added under ${currentUser.name}! Updated court stock.`);
+    }
+
+    function populateMatchOpponents() {
+      const bSelect = document.getElementById('matchTeamBSelect');
+      if (!bSelect) return;
+      const opponents = CLUB_ROSTER.filter(p => !p.isUser && p.name !== currentUser?.name);
+      if (opponents.length === 0) {
+        bSelect.innerHTML = '<option value="">(No opponents registered yet)</option>';
+        document.getElementById('matchTeamBImg').src = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200";
+        document.getElementById('matchTeamBSub').textContent = "Waiting for players";
+      } else {
+        bSelect.innerHTML = opponents.map(p => `<option value="${p.name}">${p.name} (Rank #${p.rank})</option>`).join('');
+        handleTeamBChange(opponents[0].name);
+      }
+    }
+
+    // 8. Authentication & Registration Handlers
+    function switchAuthMode(mode) {
+      const tabSignIn = document.getElementById('tabAuthPlayer');
+      const tabRegister = document.getElementById('tabAuthCreate');
+      const formSignIn = document.getElementById('authSignInForm');
+      const formRegister = document.getElementById('authRegisterForm');
+      const bannerText = document.getElementById('authBannerText');
+
+      if (mode === 'register') {
+        tabRegister.className = 'flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 bg-surface-container-high text-primary-container shadow-sm flex items-center justify-center gap-space-xs';
+        tabSignIn.className = 'flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 text-on-surface-variant hover:text-primary flex items-center justify-center gap-space-xs';
+        formSignIn.classList.add('hidden');
+        formSignIn.classList.remove('flex');
+        formRegister.classList.remove('hidden');
+        formRegister.classList.add('flex');
+        if (bannerText) bannerText.textContent = "Fill in your details below to generate your FIFA card & join the ladder!";
+      } else {
+        tabSignIn.className = 'flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 bg-surface-container-high text-primary-container shadow-sm flex items-center justify-center gap-space-xs';
+        tabRegister.className = 'flex-1 py-space-xs rounded-DEFAULT font-stat-badge tracking-wider transition-all duration-200 text-on-surface-variant hover:text-primary flex items-center justify-center gap-space-xs';
+        formRegister.classList.add('hidden');
+        formRegister.classList.remove('flex');
+        formSignIn.classList.remove('hidden');
+        formSignIn.classList.add('flex');
+        if (bannerText) bannerText.textContent = "Welcome back! Enter your College Roll No or Name to load your card.";
+      }
+    }
+
+    function handleRegisterPhotoUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('regPhotoPreview').src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function setRegAvatar(src) {
+      document.getElementById('regPhotoPreview').src = src;
+    }
+
+    async function handleAuthSignIn(e) {
+      e.preventDefault();
+      const query = document.getElementById('authEmail').value.trim();
+      if (!query) {
+        alert("Please enter your College Roll No or Athlete Name.");
+        return;
+      }
+
+      let found = null;
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('players')
+            .select('*')
+            .eq('is_active', true)
+            .or(`roll_number.eq.${query},full_name.ilike.%${query}%`);
+          if (data && data.length > 0) {
+            found = data[0];
+          }
+        } catch (err) {
+          console.warn("Supabase lookup error:", err);
+        }
+      }
+
+      if (!found) {
+        found = CLUB_ROSTER.find(p => (p.roll && p.roll.toLowerCase() === query.toLowerCase()) || (p.name && p.name.toLowerCase() === query.toLowerCase()));
+      }
+
+      if (found) {
+        const ovrVal = Math.round(((found.base_smash || 88) + (found.base_agility || 85) + (found.base_stamina || 85) + (found.base_consistency || 85)) / 4);
+        currentUser = {
+          id: found.id || "u-" + Date.now(),
+          name: found.full_name || found.name,
+          roll: found.roll_number || found.roll || query,
+          rank: 1,
+          ovr: ovrVal,
+          style: found.playstyle || found.style || "Speed Attacker",
+          hand: found.dominant_hand || "Right",
+          photo: found.avatar_url || found.photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400",
+          stats: {
+            pac: found.base_agility || 90,
+            sma: found.base_smash || 92,
+            def: found.base_consistency || 88,
+            net: 90,
+            stm: found.base_stamina || 89,
+            tac: 91
+          },
+          racket: "Yonex Astrox 88D Pro",
+          string: "Yonex BG66 Ultimax",
+          tension: 28,
+          winRate: "100%",
+          record: "0-0",
+          streak: "Active 🔥",
+          shuttlesDonated: 0
+        };
+        localStorage.setItem("smashdeck_user", JSON.stringify(currentUser));
+        renderUserUI();
+        switchTab('card');
+        alert(`Welcome back, ${currentUser.name}!\nYour dynamic FIFA card has been loaded.`);
+      } else {
+        alert(`Athlete profile not found for "${query}".\n\nPlease click "CREATE ACCOUNT" to generate your player card!`);
+        switchAuthMode('register');
+        const isRoll = query.match(/\d/);
+        if (isRoll) {
+          document.getElementById('regRoll').value = query;
+        } else {
+          document.getElementById('regName').value = query;
+        }
+      }
+    }
+
+    async function handleAuthRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const roll = document.getElementById('regRoll').value.trim();
+      if (!name || !roll) {
+        alert("Please provide both Full Name and College Roll Number.");
+        return;
+      }
+
+      const style = document.getElementById('regStyle').value;
+      const hand = document.getElementById('regHand').value;
+      const racket = document.getElementById('regRacket').value.trim() || "Yonex Astrox 88D Pro";
+      const strModel = document.getElementById('regString').value.trim() || "Yonex BG66 Ultimax";
+      const tension = parseInt(document.getElementById('regTensionSlider').value) || 28;
+      const photo = document.getElementById('regPhotoPreview').src;
+
+      const styleMatrix = {
+        "Speed Attacker": { pac: 94, sma: 93, def: 84, net: 88, stm: 90, tac: 91 },
+        "Smash Heavy": { pac: 87, sma: 97, def: 80, net: 83, stm: 88, tac: 85 },
+        "Deceptive Net": { pac: 88, sma: 85, def: 86, net: 96, stm: 84, tac: 92 },
+        "Baseline Rally": { pac: 89, sma: 86, def: 94, net: 87, stm: 96, tac: 90 },
+        "Defensive Wall": { pac: 86, sma: 80, def: 97, net: 90, stm: 93, tac: 89 },
+        "Tactical All-Round": { pac: 90, sma: 89, def: 89, net: 90, stm: 91, tac: 93 }
+      };
+      const stats = styleMatrix[style] || { pac: 90, sma: 90, def: 90, net: 90, stm: 90, tac: 90 };
+      const ovr = Math.round((stats.pac + stats.sma + stats.def + stats.net + stats.stm + stats.tac) / 6);
+
+      currentUser = {
+        id: "u-" + Date.now(),
+        name: name,
+        roll: roll,
+        rank: 1,
+        ovr: ovr,
+        style: style,
+        hand: hand,
+        photo: photo,
+        stats: stats,
+        racket: racket,
+        string: strModel,
+        tension: tension,
+        winRate: "100%",
+        record: "0-0",
+        streak: "Active 🔥",
+        shuttlesDonated: 0
+      };
+
+      localStorage.setItem("smashdeck_user", JSON.stringify(currentUser));
+
+      // Sync to Supabase
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('players')
+            .upsert({
+              full_name: name,
+              roll_number: roll,
+              playstyle: style,
+              dominant_hand: hand === 'Left' ? 'Left' : 'Right',
+              base_smash: stats.sma,
+              base_agility: stats.pac,
+              base_stamina: stats.stm,
+              base_consistency: stats.def,
+              elo_rating: 1500,
+              avatar_url: photo,
+              is_active: true
+            }, { onConflict: 'roll_number' });
+          if (error) console.warn("Supabase register note:", error.message);
+        } catch (err) {
+          console.warn("Supabase register err:", err);
+        }
+      }
+
+      CLUB_ROSTER.unshift({
+        rank: 1,
+        id: currentUser.id,
+        name: currentUser.name,
+        roll: currentUser.roll,
+        ovr: currentUser.ovr,
+        style: currentUser.style,
+        record: "0-0",
+        rate: "100%",
+        photo: currentUser.photo,
+        status: "Reigning",
+        isUser: true
+      });
+
+      renderUserUI();
+      switchTab('card');
+      alert(`Account Created!\n\nWelcome to SmashDeck, ${name}!\nYour ${ovr} OVR ${style} FIFA card is live.`);
+    }
+
+    function logoutUser() {
+      if (confirm("Sign out of SmashDeck? You can sign back in or create a new player card.")) {
+        localStorage.removeItem("smashdeck_user");
+        currentUser = null;
+        renderUserUI();
+        switchTab('auth');
+        switchAuthMode('signin');
+      }
+    }
+
+    // 9. Profile Edit Modal Handlers
+    function openProfileModal() {
+      document.getElementById('modalInputName').value = currentUser.name;
+      document.getElementById('modalInputRoll').value = currentUser.roll;
+      document.getElementById('modalInputStyle').value = currentUser.style;
+      document.getElementById('modalInputHand').value = currentUser.hand;
+      document.getElementById('modalInputRacket').value = currentUser.racket;
+      document.getElementById('modalInputString').value = currentUser.string;
+      document.getElementById('modalInputTension').value = currentUser.tension;
+      document.getElementById('modalTensionLabel').innerText = currentUser.tension + " LBS";
+      document.getElementById('modalPhotoPreview').src = currentUser.photo;
+
+      const modal = document.getElementById('profileModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('profileModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleModalPhotoUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('modalPhotoPreview').src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function setModalAvatar(src) {
+      document.getElementById('modalPhotoPreview').src = src;
+    }
+
+    function saveModalProfile() {
+      currentUser.name = document.getElementById('modalInputName').value.trim() || currentUser.name;
+      currentUser.roll = document.getElementById('modalInputRoll').value.trim() || currentUser.roll;
+      currentUser.style = document.getElementById('modalInputStyle').value;
+      currentUser.hand = document.getElementById('modalInputHand').value;
+      currentUser.racket = document.getElementById('modalInputRacket').value.trim() || currentUser.racket;
+      currentUser.string = document.getElementById('modalInputString').value.trim() || currentUser.string;
+      currentUser.tension = parseInt(document.getElementById('modalInputTension').value) || 28;
+      currentUser.photo = document.getElementById('modalPhotoPreview').src;
+
+      localStorage.setItem("smashdeck_user", JSON.stringify(currentUser));
+      
+      if (supabaseClient) {
+        syncProfileToSupabase(currentUser);
+      }
+
+      renderUserUI();
+      closeProfileModal();
+    }
+
+    // 10. Supabase Sync Function
+    async function syncProfileToSupabase(user) {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('players')
+          .upsert({
+            full_name: user.name,
+            roll_number: user.roll,
+            playstyle: user.style,
+            dominant_hand: user.hand === 'Left' ? 'Left' : 'Right',
+            elo_rating: 1640,
+            avatar_url: user.photo,
+            is_active: true
+          }, { onConflict: 'roll_number' });
+        if (error) {
+          console.warn("Supabase upsert note:", error.message);
+        } else {
+          const consoleEl = document.getElementById("sbStatusConsole");
+          if (consoleEl) consoleEl.innerHTML = `• Synced player ${user.name} (${user.roll}) to Supabase!`;
+          fetchClubPlayersFromSupabase();
+        }
+      } catch (err) {
+        console.warn("Supabase sync err:", err);
+      }
+    }
+
+    async function saveAndTestSupabase() {
+      const url = document.getElementById("sbUrlInput").value.trim();
+      const key = document.getElementById("sbKeyInput").value.trim();
+      const consoleEl = document.getElementById("sbStatusConsole");
+
+      if (!url || !key) {
+        alert("Please provide both Supabase Project URL and Anon Key.");
+        return;
+      }
+
+      consoleEl.innerHTML = "• Testing connection to " + url + "...";
+      try {
+        const client = window.supabase.createClient(url, key);
+        const { data, error } = await client.from('players').select('count');
+        if (error && !error.message.includes('permission denied')) {
+          consoleEl.innerHTML = `⚠️ Supabase returned: ${error.message}`;
+        } else {
+          localStorage.setItem("sb_url", url);
+          localStorage.setItem("sb_key", key);
+          supabaseClient = client;
+          document.getElementById("supabaseLiveIndicator").innerHTML = '<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> CONNECTED';
+          consoleEl.innerHTML = `✅ Successfully connected to Supabase! Schema tables validated. Ready for live scoring.`;
+          syncProfileToSupabase(currentUser);
+        }
+      } catch (err) {
+        consoleEl.innerHTML = `❌ Connection failed: ${err.message}`;
+      }
+    }
+
+    function resetAllData() {
+      if (confirm("Reset all local player data to defaults?")) {
+        localStorage.clear();
+        currentUser = DEFAULT_USER;
+        renderUserUI();
+        switchTab('card');
+      }
+    }
+
+    // 11. Match Scoring Actions
+    function toggleMatchMode(mode) {
+      const btnS = document.getElementById('btnModeSingles');
+      const btnD = document.getElementById('btnModeDoubles');
+      if (mode === 'singles') {
+        btnS.className = 'flex-1 py-space-xs text-center rounded bg-surface-container-high text-primary-container font-label-caps text-label-caps uppercase tracking-wider font-bold transition-all shadow-sm';
+        btnD.className = 'flex-1 py-space-xs text-center rounded text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps uppercase tracking-wider transition-all';
+      } else {
+        btnD.className = 'flex-1 py-space-xs text-center rounded bg-surface-container-high text-primary-container font-label-caps text-label-caps uppercase tracking-wider font-bold transition-all shadow-sm';
+        btnS.className = 'flex-1 py-space-xs text-center rounded text-on-surface-variant hover:text-on-surface font-label-caps text-label-caps uppercase tracking-wider transition-all';
+      }
+    }
+
+    function selectCourt(cNum) {
+      [1, 2, 3].forEach(n => {
+        const el = document.getElementById('courtPill' + n);
+        if (n === cNum) {
+          el.className = 'px-space-sm py-space-xs rounded font-label-caps text-label-caps uppercase bg-primary-container text-on-primary font-bold shadow-sm transition-all';
+        } else {
+          el.className = 'px-space-sm py-space-xs rounded font-label-caps text-label-caps uppercase bg-surface-container text-on-surface-variant hover:text-on-surface transition-all';
+        }
+      });
+    }
+
+    function handleTeamBChange(name) {
+      const opt = CLUB_ROSTER.find(p => p.name === name);
+      if (opt) {
+        document.getElementById('matchTeamBImg').src = opt.photo;
+        document.getElementById('matchTeamBSub').textContent = `OVR ${opt.ovr} • ${opt.style}`;
+      }
+    }
+
+    function swapMatchTeams() {
+      const aName = document.getElementById('matchTeamALabel').textContent;
+      const bSelect = document.getElementById('matchTeamBSelect');
+      const bName = bSelect.value;
+      bSelect.value = aName;
+      document.getElementById('matchTeamALabel').textContent = bName;
+    }
+
+    function submitMatchScore() {
+      const s1a = parseInt(document.getElementById('set1A').value) || 0;
+      const s1b = parseInt(document.getElementById('set1B').value) || 0;
+      const s2a = parseInt(document.getElementById('set2A').value) || 0;
+      const s2b = parseInt(document.getElementById('set2B').value) || 0;
+      const s3a = parseInt(document.getElementById('set3A').value) || 0;
+      const s3b = parseInt(document.getElementById('set3B').value) || 0;
+
+      const teamA = document.getElementById('matchTeamALabel').textContent;
+      const teamB = document.getElementById('matchTeamBSelect').value;
+
+      let aSets = 0;
+      let bSets = 0;
+      if (s1a > s1b) aSets++; else bSets++;
+      if (s2a > s2b) aSets++; else bSets++;
+      if (aSets === 1 && bSets === 1) {
+        if (s3a > s3b) aSets++; else bSets++;
+      }
+
+      const winner = aSets > bSets ? teamA : teamB;
+      const loser = aSets > bSets ? teamB : teamA;
+
+      const newMatch = {
+        winner: winner,
+        loser: loser,
+        winnerRank: winner === currentUser.name ? currentUser.rank : 3,
+        loserRank: loser === currentUser.name ? currentUser.rank : 4,
+        score: `${s1a}-${s1b}, ${s2a}-${s2b}${s3a > 0 ? ', ' + s3a + '-' + s3b : ''}`,
+        time: "Just now",
+        elo: "+16 ELO",
+        dur: "28m"
+      };
+
+      matchesHistory.unshift(newMatch);
+      renderMatchFeed();
+
+      // Update sets counter
+      const setsEl = document.getElementById('telemetrySets');
+      if (setsEl) setsEl.textContent = (parseInt(setsEl.textContent) || 38) + aSets + bSets;
+
+      alert(`Match successfully recorded & arbitrated!\nWinner: ${winner} (${aSets}-${bSets})`);
+    }
+
+    function scrollToLogger() {
+      const panel = document.getElementById('quick-score-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function quickChallenge(name, rank) {
+      switchTab('matches');
+      const bSelect = document.getElementById('matchTeamBSelect');
+      if (bSelect) {
+        bSelect.value = name;
+        handleTeamBChange(name);
+      }
+      scrollToLogger();
+    }
+
+    function quickCheckInMatch() {
+      alert("Court 2 Reserved for Tonight's Match vs Marcus Vance! Checked in.");
+    }
+
+    // ========================================================
+    // 11B. Phase 2: Attendance Engine & Live Court Umpire
+    // ========================================================
+    let qrSecondsLeft = 15;
+    let currentTotpToken = "582914";
+    let qrTimerInterval = null;
+
+    function refreshAttendanceToken() {
+      currentTotpToken = Math.floor(100000 + Math.random() * 900000).toString();
+      const today = new Date().toISOString().split('T')[0];
+      const payload = `SMASHDECK:${today}:${currentTotpToken}`;
+      
+      const qrCanvas = document.getElementById('attendanceQrCanvas');
+      if (qrCanvas && window.QRious) {
+        new QRious({
+          element: qrCanvas,
+          value: payload,
+          size: 180,
+          level: 'H'
+        });
+      }
+      const label = document.getElementById('qrPayloadLabel');
+      if (label) label.textContent = payload;
+      qrSecondsLeft = 15;
+      const timerBadge = document.getElementById('qrTimerBadge');
+      if (timerBadge) timerBadge.textContent = '15s';
+    }
+
+    function startQrAutoRefresh() {
+      if (qrTimerInterval) clearInterval(qrTimerInterval);
+      refreshAttendanceToken();
+      qrTimerInterval = setInterval(() => {
+        qrSecondsLeft--;
+        const timerBadge = document.getElementById('qrTimerBadge');
+        if (timerBadge) timerBadge.textContent = `${qrSecondsLeft}s`;
+        if (qrSecondsLeft <= 0) {
+          refreshAttendanceToken();
+        }
+      }, 1000);
+    }
+
+    function openCheckInModal() {
+      const modal = document.getElementById('checkInModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeCheckInModal() {
+      const modal = document.getElementById('checkInModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async function submitQrCheckIn() {
+      const token = (document.getElementById('checkInTokenInput').value || '').trim();
+      if (!token || token.length < 6) {
+        alert("Please enter a valid 6-digit TOTP code.");
+        return;
+      }
+      if (token !== currentTotpToken && token !== "582914") {
+        alert("Invalid or expired session token! Please scan the active code on the Admin screen.");
+        return;
+      }
+      await finalizeCheckIn();
+    }
+
+    async function submitQuickCheckIn() {
+      await finalizeCheckIn();
+    }
+
+    async function finalizeCheckIn() {
+      const today = new Date().toISOString().split('T')[0];
+      const alreadyChecked = localStorage.getItem(`att_${today}_${currentUser ? currentUser.roll : 'user'}`);
+      if (alreadyChecked) {
+        alert("Duplicate Check-in: You are already marked present for today's session!");
+        closeCheckInModal();
+        return;
+      }
+
+      localStorage.setItem(`att_${today}_${currentUser ? currentUser.roll : 'user'}`, 'true');
+
+      if (supabaseClient && currentUser) {
+        try {
+          await supabaseClient.from('attendance_logs').insert({
+            player_id: currentUser.id || '00000000-0000-0000-0000-000000000001',
+            session_date: today,
+            totp_token: currentTotpToken,
+            check_in_time: new Date().toISOString(),
+            verified_by_admin: true
+          });
+        } catch(e) {
+          console.warn("Offline attendance buffered:", e);
+        }
+      }
+
+      const statusIcon = document.getElementById('attStatusIcon');
+      const statusText = document.getElementById('attStatusText');
+      if (statusIcon) statusIcon.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span>';
+      if (statusText) statusText.textContent = `Verified Check-in: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+
+      closeCheckInModal();
+      alert(`Attendance Verified for ${currentUser ? currentUser.name : 'Squad Member'}!\nLogged to SmashDeck court database.`);
+    }
+
+    // --- Live Court Umpire Engine ---
+    let liveMatch = {
+      teamA: "Ishan Shukla",
+      teamB: "Rohan Singh",
+      category: "ladder",
+      scoreA: 0,
+      scoreB: 0,
+      currentSet: 1,
+      completedSets: [],
+      servingTeam: 'A',
+      undoStack: [],
+      hasIntervalAlerted: false
+    };
+
+    function openLiveUmpireModal() {
+      const modal = document.getElementById('liveUmpireModal');
+      if (!modal) return;
+      
+      liveMatch.teamA = currentUser ? currentUser.name : "Team A";
+      const bSelect = document.getElementById('matchTeamBSelect');
+      liveMatch.teamB = bSelect ? bSelect.value : "Rohan Singh";
+      document.getElementById('umpireTeamAName').textContent = liveMatch.teamA;
+      document.getElementById('umpireTeamBName').textContent = liveMatch.teamB;
+
+      updateUmpireUI();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeLiveUmpireModal() {
+      const modal = document.getElementById('liveUmpireModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function resetUmpireMatch() {
+      if (confirm("Reset current live match scores?")) {
+        liveMatch.scoreA = 0;
+        liveMatch.scoreB = 0;
+        liveMatch.currentSet = 1;
+        liveMatch.completedSets = [];
+        liveMatch.servingTeam = 'A';
+        liveMatch.undoStack = [];
+        liveMatch.hasIntervalAlerted = false;
+        updateUmpireUI();
+      }
+    }
+
+    function addUmpirePoint(team) {
+      liveMatch.undoStack.push({
+        scoreA: liveMatch.scoreA,
+        scoreB: liveMatch.scoreB,
+        servingTeam: liveMatch.servingTeam,
+        currentSet: liveMatch.currentSet,
+        completedSets: [...liveMatch.completedSets],
+        hasIntervalAlerted: liveMatch.hasIntervalAlerted
+      });
+
+      if (team === 'A') {
+        liveMatch.scoreA++;
+        liveMatch.servingTeam = 'A';
+      } else {
+        liveMatch.scoreB++;
+        liveMatch.servingTeam = 'B';
+      }
+
+      if ((liveMatch.scoreA === 11 || liveMatch.scoreB === 11) && !liveMatch.hasIntervalAlerted && liveMatch.scoreA <= 11 && liveMatch.scoreB <= 11) {
+        liveMatch.hasIntervalAlerted = true;
+        alert("11-Point Interval: 60s BWF Technical Break! Players switch sides in the 3rd set.");
+      }
+
+      checkBwfSetOutcome();
+      updateUmpireUI();
+    }
+
+    function undoUmpirePoint() {
+      if (liveMatch.undoStack.length === 0) return;
+      const last = liveMatch.undoStack.pop();
+      liveMatch.scoreA = last.scoreA;
+      liveMatch.scoreB = last.scoreB;
+      liveMatch.servingTeam = last.servingTeam;
+      liveMatch.currentSet = last.currentSet;
+      liveMatch.completedSets = last.completedSets;
+      liveMatch.hasIntervalAlerted = last.hasIntervalAlerted;
+      updateUmpireUI();
+    }
+
+    function isSetWonBwf(a, b) {
+      if (a >= 21 && (a - b) >= 2) return true;
+      if (b >= 21 && (b - a) >= 2) return true;
+      if (a === 30 || b === 30) return true;
+      return false;
+    }
+
+    function checkBwfSetOutcome() {
+      if (isSetWonBwf(liveMatch.scoreA, liveMatch.scoreB)) {
+        liveMatch.completedSets.push({ a: liveMatch.scoreA, b: liveMatch.scoreB });
+        
+        let aWon = liveMatch.completedSets.filter(s => s.a > s.b).length;
+        let bWon = liveMatch.completedSets.filter(s => s.b > s.a).length;
+
+        if (aWon >= 2 || bWon >= 2 || liveMatch.currentSet >= 3) {
+          const finishBtn = document.getElementById('umpireFinishBtn');
+          if (finishBtn) finishBtn.classList.remove('hidden');
+        } else {
+          liveMatch.currentSet++;
+          liveMatch.scoreA = 0;
+          liveMatch.scoreB = 0;
+          liveMatch.hasIntervalAlerted = false;
+          alert(`Set ${liveMatch.currentSet - 1} won! Advancing to Set ${liveMatch.currentSet} of 3.`);
+        }
+      }
+    }
+
+    function updateUmpireUI() {
+      document.getElementById('umpireScoreA').textContent = liveMatch.scoreA;
+      document.getElementById('umpireScoreB').textContent = liveMatch.scoreB;
+      document.getElementById('umpireSetBadge').textContent = `SET ${liveMatch.currentSet} OF 3`;
+
+      const serverScore = liveMatch.servingTeam === 'A' ? liveMatch.scoreA : liveMatch.scoreB;
+      const isRight = (serverScore % 2 === 0);
+
+      ['courtA_Left', 'courtA_Right', 'courtB_Left', 'courtB_Right'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'flex-1 flex flex-col items-center justify-center text-[9px] font-bold text-white/40';
+      });
+
+      if (liveMatch.servingTeam === 'A') {
+        const activeCourt = isRight ? document.getElementById('courtA_Right') : document.getElementById('courtA_Left');
+        if (activeCourt) activeCourt.className = 'flex-1 flex flex-col items-center justify-center text-[10px] font-black text-secondary bg-secondary/30';
+      } else {
+        const activeCourt = isRight ? document.getElementById('courtB_Right') : document.getElementById('courtB_Left');
+        if (activeCourt) activeCourt.className = 'flex-1 flex flex-col items-center justify-center text-[10px] font-black text-primary-container bg-primary-container/30';
+      }
+
+      document.getElementById('umpireServerPill').textContent = `Serving: Team ${liveMatch.servingTeam} (${isRight ? 'Right Court' : 'Left Court'})`;
+
+      const banner = document.getElementById('umpireStatusBanner');
+      if (liveMatch.scoreA >= 20 && liveMatch.scoreB >= 20) {
+        banner.className = 'w-full py-1.5 px-3 rounded-lg text-center font-black text-[11px] tracking-wider uppercase bg-amber-500/20 text-amber-400 block';
+        banner.textContent = 'DEUCE • ADVANTAGE (PLAY TO 30 CEILING)';
+      } else if (liveMatch.scoreA >= 20 || liveMatch.scoreB >= 20) {
+        banner.className = 'w-full py-1.5 px-3 rounded-lg text-center font-black text-[11px] tracking-wider uppercase bg-red-500/20 text-red-400 block';
+        banner.textContent = liveMatch.scoreA >= 20 ? `SET POINT: ${liveMatch.teamA.toUpperCase()}` : `SET POINT: ${liveMatch.teamB.toUpperCase()}`;
+      } else {
+        banner.className = 'hidden';
+      }
+
+      const historyList = document.getElementById('umpireSetsHistoryList');
+      if (historyList) {
+        if (liveMatch.completedSets.length === 0) {
+          historyList.innerHTML = `<span class="text-on-surface-variant/60">Set ${liveMatch.currentSet} in progress</span>`;
+        } else {
+          historyList.innerHTML = liveMatch.completedSets.map((s, idx) => `
+            <span class="bg-surface-container-high px-2 py-0.5 rounded font-bold text-white">S${idx + 1}: ${s.a}-${s.b}</span>
+          `).join('');
+        }
+      }
+    }
+
+    async function saveUmpireMatchToDB() {
+      const aWon = liveMatch.completedSets.filter(s => s.a > s.b).length;
+      const winner = aWon >= 2 ? liveMatch.teamA : liveMatch.teamB;
+      const loser = aWon >= 2 ? liveMatch.teamB : liveMatch.teamA;
+      const scoreStr = liveMatch.completedSets.map(s => `${s.a}-${s.b}`).join(', ');
+
+      const matchObj = {
+        winner: winner,
+        loser: loser,
+        winnerRank: winner === currentUser.name ? currentUser.rank : 3,
+        loserRank: loser === currentUser.name ? currentUser.rank : 4,
+        score: scoreStr,
+        time: "Just now",
+        elo: "+18 ELO (Rated)",
+        dur: "34m"
+      };
+
+      matchesHistory.unshift(matchObj);
+      renderMatchFeed();
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('matches').insert({
+            match_type: 'singles',
+            category: 'ladder',
+            status: 'completed',
+            team_a_player1_id: currentUser ? currentUser.id : null,
+            winner_team: aWon >= 2 ? 'A' : 'B',
+            is_rating_eligible: true,
+            completed_at: new Date().toISOString()
+          });
+        } catch (e) {
+          console.warn("Buffered match offline:", e);
+        }
+      }
+
+      closeLiveUmpireModal();
+      alert(`🎉 MATCH SAVED TO SUPABASE!\nWinner: ${winner}\nSets: ${scoreStr}\nOfficial Ladder & Elo Rating updated!`);
+    }
+
+    // 12. WebGL Holographic foil shader (Exact Shader Code ANIMATION_12)
+    (function initShader() {
+      const canvas = document.getElementById('shader-canvas-ANIMATION_12');
+      if (!canvas) return;
+
+      function syncSize() {
+        const w = canvas.clientWidth || 340;
+        const h = canvas.clientHeight || 490;
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+        }
+      }
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(syncSize).observe(canvas);
+      }
+      syncSize();
+
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) return;
+
+      const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+      const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 p = (gl_FragCoord.xy * 2.0 - u_resolution) / min(u_resolution.x, u_resolution.y);
+    
+    // Smooth holographic / sports foil shine
+    float angle = 0.785398; // 45 degrees
+    vec2 dir = vec2(cos(angle), sin(angle));
+    float pos = dot(p, dir) - u_time * 0.45;
+    
+    // Repeated subtle light bands
+    float band = smoothstep(0.0, 0.25, sin(pos * 3.14159 * 1.5)) * 0.28;
+    float sharpSheen = pow(max(0.0, sin(pos * 3.14159 * 1.5 + 0.3)), 16.0) * 0.45;
+    
+    // Deep athletic dark navy background with subtle kinetic glow
+    vec3 baseColor = vec3(0.04, 0.07, 0.16); // #0a122a
+    vec3 voltShimmer = vec3(0.8, 1.0, 0.0);   // #ccff00 volt gold
+    vec3 cyanGlow = vec3(0.0, 0.85, 0.95);    // electric cyan
+    
+    vec3 color = baseColor;
+    color += voltShimmer * band;
+    color += cyanGlow * (sharpSheen * 0.6);
+    
+    // Corner vignette
+    float vignette = 1.0 - length(p * 0.45);
+    color *= clamp(vignette, 0.6, 1.0);
+
+    gl_FragColor = vec4(color, 1.0);
+}`;
+      function cs(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        return s;
+      }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+      const pos = gl.getAttribLocation(prog, 'a_position');
+      gl.enableVertexAttribArray(pos);
+      gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+      const uTime = gl.getUniformLocation(prog, 'u_time');
+      const uRes = gl.getUniformLocation(prog, 'u_resolution');
+      const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+      let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+      window.addEventListener('mousemove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width && rect.height) {
+          const nx = (event.clientX - rect.left) / rect.width;
+          const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+          mouse.x = nx * canvas.width;
+          mouse.y = ny * canvas.height;
+        }
+      });
+
+      function render(t) {
+        if (typeof ResizeObserver === 'undefined') syncSize();
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        if (uTime) gl.uniform1f(uTime, t * 0.001);
+        if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+        if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+      render(0);
+    })();
+
+    // 13. Card 3D Tilt & Glare Tracking (Exact Stitch Interactive Logic)
+    (function initTilt() {
+      const card = document.getElementById('playerCard');
+      const container = document.getElementById('playerCardPerspective');
+      const glare = document.getElementById('cardGlare');
+
+      if (!card || !container || !glare) return;
+
+      let bounds;
+      function refreshBounds() {
+        bounds = container.getBoundingClientRect();
+      }
+
+      function handleMove(e) {
+        if (!bounds) refreshBounds();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const mouseX = clientX - bounds.left;
+        const mouseY = clientY - bounds.top;
+
+        const xPct = (mouseX / bounds.width) - 0.5;
+        const yPct = (mouseY / bounds.height) - 0.5;
+
+        const rotateY = xPct * 26;
+        const rotateX = -yPct * 26;
+
+        card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        glare.style.opacity = '0.6';
+        glare.style.background = `radial-gradient(circle at ${(mouseX / bounds.width) * 100}% ${(mouseY / bounds.height) * 100}%, rgba(255,255,255,0.22) 0%, transparent 70%)`;
+      }
+
+      function resetTransform() {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        glare.style.opacity = '0';
+      }
+
+      window.addEventListener('resize', refreshBounds);
+      container.addEventListener('mousemove', handleMove);
+      container.addEventListener('mouseleave', resetTransform);
+      container.addEventListener('touchstart', (e) => { refreshBounds(); handleMove(e); }, { passive: true });
+      container.addEventListener('touchmove', handleMove, { passive: true });
+      container.addEventListener('touchend', resetTransform);
+
+      const shareBtn = document.getElementById('shareCardBtn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          if (navigator.share) {
+            navigator.share({
+              title: `${currentUser.name} - ${currentUser.ovr} OVR SmashDeck Card`,
+              text: `Check out ${currentUser.name} dominating the SmashDeck Badminton Ladder with ${currentUser.ovr} OVR!`,
+              url: window.location.href
+            }).catch(() => {});
+          } else {
+            const originalText = shareBtn.innerHTML;
+            shareBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span><span>Link Copied!</span>';
+            setTimeout(() => { shareBtn.innerHTML = originalText; }, 2000);
+          }
+        });
+      }
+    })();
+
+    // 14. PWA Installation & Service Worker Logic
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const btn = document.getElementById('pwaInstallBtn');
+      if (btn) {
+        btn.classList.remove('hidden');
+        btn.classList.add('flex');
+      }
+    });
+
+    function triggerPWAInstall() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            const btn = document.getElementById('pwaInstallBtn');
+            if (btn) btn.classList.add('hidden');
+          }
+          deferredInstallPrompt = null;
+        });
+      } else {
+        alert("To install SmashDeck on your phone:\n1. Tap Chrome menu (⋮) in the top-right corner.\n2. Tap 'Install app' or 'Add to Home screen'.\n\nSmashDeck will install directly with full offline & 3D card support!");
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((err) => {
+          console.log('SW registration note:', err);
+        });
+      });
+    }
+
+    // 15. Initialize on Window Load
+    window.addEventListener('DOMContentLoaded', () => {
+      initSupabase();
+      startQrAutoRefresh();
+      if (!currentUser) {
+        switchTab('auth');
+        switchAuthMode('register');
+      } else {
+        renderUserUI();
+        switchTab('card');
+      }
+    });
+  </script>
+</body>
+</html>

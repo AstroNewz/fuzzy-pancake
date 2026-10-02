@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,700;0,800;0,900;1,900&amp;family=JetBrains+Mono:wght@600;700&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#0a122a;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary-fixed": "#6ffbbe", "surface-container": "#171e37", "surface-dim": "#0a122a", "on-tertiary": "#002e69", "background": "#0a122a", "on-background": "#dbe1ff", "inverse-surface": "#dbe1ff", "tertiary-fixed-dim": "#adc6ff", "surface-container-high": "#212942", "on-tertiary-fixed": "#001a41", "on-primary-fixed-variant": "#3c4d00", "surface": "#0a122a", "on-secondary-fixed-variant": "#005236", "outline-variant": "#444933", "on-primary": "#283500", "on-primary-container": "#556d00", "outline": "#8e9379", "on-error-container": "#ffdad6", "on-secondary-fixed": "#002113", "primary-fixed-dim": "#abd600", "inverse-on-surface": "#282f49", "secondary-fixed-dim": "#4edea3", "surface-container-low": "#131a33", "secondary-container": "#00a572", "inverse-primary": "#506600", "on-tertiary-fixed-variant": "#004494", "tertiary-fixed": "#d8e2ff", "error-container": "#93000a", "surface-variant": "#2c344d", "tertiary-container": "#d8e2ff", "primary-container": "#c3f400", "primary-fixed": "#c3f400", "on-secondary-container": "#00311f", "on-error": "#690005", "secondary": "#4edea3", "on-secondary": "#003824", "on-tertiary-container": "#0060cd", "surface-container-highest": "#2c344d", "surface-container-lowest": "#050d25", "on-primary-fixed": "#161e00", "tertiary": "#ffffff", "on-surface": "#dbe1ff", "surface-tint": "#abd600", "primary": "#ffffff", "error": "#ffb4ab", "on-surface-variant": "#c4c9ac", "surface-bright": "#313852" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-tablet": "2rem", "gutter-tablet": "1.5rem", "margin-mobile": "1rem", "space-xl": "1.5rem", "space-lg": "1.25rem", "space-base": "1rem", "space-3xl": "3rem", "space-sm": "0.5rem", "space-2xs": "0.125rem", "gutter-mobile": "1rem", "space-2xl": "2rem", "space-md": "0.75rem", "space-xs": "0.25rem" }, fontFamily: { "headline-lg": ["Chivo"], "headline-md": ["Chivo"], "label-caps": ["JetBrains Mono"], "body-lg": ["Space Grotesk"], "stat-badge": ["JetBrains Mono"], "headline-xl": ["Chivo"], "headline-xl-mobile": ["Chivo"], "body-md": ["Space Grotesk"], "display-ovr": ["Chivo"], "body-sm": ["Space Grotesk"] }, fontSize: { "headline-lg": ["24px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "24px", "fontWeight": "700" }], "label-caps": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }], "stat-badge": ["14px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "700" }], "headline-xl": ["36px", { "lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-xl-mobile": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-ovr": ["56px", { "lineHeight": "56px", "letterSpacing": "-0.04em", "fontWeight": "900" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen antialiased"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl pt-safe shadow-[0_4px_20px_rgba(5,13,37,0.6)]"><div class="h-20 px-space-base flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="SmashDeck Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPKUjx_o-0HIUpXkDrHIsOxLNeq2LaBo8woIflvoBkjYwMeuXHMWvrLGGKYiIBM9PcDhA3KoqDqFdaF8QA4tYGIwzSgEbKptyhn9d2T7zEMHXUEUDOX7YwKYkZbB6azcdOlALJ0YJ4IjTZPdMpstJjr8Exeuv0WT0ILaC7Yqwm5ogHQHziUFQWT1MmeJadNtowNO2_B4HzL85yM3brbMlgEwyLbqfHj56eErZDPwtj3kaOlVe2G8ca"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-headline-md text-on-surface tracking-tight truncate">SmashDeck</span><span class="px-space-xs py-space-2xs rounded bg-surface-container-high text-secondary font-label-caps text-label-caps uppercase shrink-0">Court 4 LIVE</span></div><span class="font-body-sm text-body-sm text-on-surface-variant truncate">UC Badminton Club • 20 Active</span></div></div><div class="flex items-center gap-space-xs shrink-0"><div class="flex items-center bg-surface-container px-space-xs py-space-2xs rounded-lg"><span class="font-stat-badge text-stat-badge text-primary-container mr-space-xs font-black">89</span><span class="font-label-caps text-label-caps text-on-surface-variant">OVR</span></div><div class="relative flex items-center justify-center p-0.5 rounded-full bg-surface-container-high"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqMIEnMbKbyEme-B7eCssEDB0ACkETfE2p3dcbGg7W67pxW0xMfbOlmiyHrmqISgFbEplfKi0IxazGOqyKZyhSMcG4Cfy0vlmGOx5HylkIPKb_ZC-yH0z26-h5LBH02jw2I67N2CiTbr6IiubZwCmm-amCBJ8U74__jONyFgbi0TMao52AkcdV-EY6VD-dG7ZTFzGjMF8h5i3FpEprh2uBBTdc_F6rFWdanhIUJbhIEh-90mrq3RUj"/><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 px-space-base bg-surface min-h-screen"><div class="flex flex-col w-full gap-space-base pb-6">
+<!-- Season 2 Banner & Rule Pill -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-high p-space-base shadow-xl">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary-container/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between gap-space-sm relative z-10">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<span class="font-headline-md text-headline-md text-on-surface">Ladder Season 2</span>
+</div>
+<span class="px-space-xs py-space-2xs bg-surface-container-lowest text-primary-container font-label-caps text-label-caps rounded uppercase">Ends in 6d</span>
+</div>
+<div class="mt-space-sm flex items-center justify-between gap-space-xs pt-space-xs bg-surface-container/60 px-space-sm py-space-xs rounded-lg">
+<div class="flex items-center gap-space-2xs min-w-0">
+<span class="material-symbols-outlined text-secondary text-[16px]">sports_kabaddi</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Rule: Challenge up to <span class="text-secondary font-bold">2 ranks above</span></p>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors shrink-0" id="ruleInfoBtn">
+<span class="material-symbols-outlined text-[16px]">info</span>
+</button>
+</div>
+</div>
+<!-- Top 3 Podium Tier -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Apex Competitors</span>
+<span class="font-label-caps text-label-caps text-secondary font-bold">Division 1</span>
+</div>
+<!-- Podium Bento Grid -->
+<div class="grid grid-cols-3 gap-space-xs items-end pt-space-xs">
+<!-- Rank 2: Alex Chen -->
+<div class="flex flex-col bg-surface-container rounded-xl p-space-xs items-center text-center relative shadow-md">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center -mt-space-md mb-space-2xs">
+<span class="font-stat-badge text-stat-badge text-on-surface">2</span>
+</div>
+<div class="relative mb-space-xs">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Athletic collegiate badminton player Alex Chen intense focused expression stadium lighting cool tones dark jersey high detail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLgYUFAj0S1wzremX368YmmjL8AIT6D9lwT756xRmTj3qLL_giG4fmEB9JM4dsT8CLx2b60dEoRTSI8dyJJPk6K16PJr5pxYDIxlJeVizNpRZl4gHvJRbr9ZANcsLUuJWMp7sK5zew7T10Wb6Wpd_0gcsaO3qVpEw891os-7znyBOOPuFw6y5y71XGsaKz2X3CwH5Q9F-6VKtfKYUYpAVaZNt7-GhEp8aaTLzxWBuLbnG19piUdCbc"/>
+<span class="absolute -bottom-1 -right-1 px-1 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-caps text-label-caps">4W</span>
+</div>
+<p class="font-headline-md text-[13px] leading-tight text-on-surface truncate w-full">Alex C.</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate w-full">Deceptive Net</span>
+<div class="mt-space-xs px-space-xs py-space-2xs bg-surface-container-high rounded-md flex items-center gap-1">
+<span class="font-stat-badge text-stat-badge text-primary-container font-black">91</span>
+<span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+</div>
+</div>
+<!-- Rank 1: Maya Lin (Crown Jewel) -->
+<div class="flex flex-col bg-gradient-to-b from-surface-container-highest to-surface-container rounded-xl p-space-xs items-center text-center relative shadow-xl transform -translate-y-1">
+<div class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center -mt-space-lg mb-space-2xs shadow-lg">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div class="relative mb-space-xs">
+<img class="w-16 h-16 rounded-full object-cover shadow-[0_0_12px_rgba(195,244,0,0.3)]" data-alt="Elite female badminton champion Maya Lin with championship headband intense tactical eyes dramatic stadium backlighting gold reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkvM8_rdr_2b5GZmNrTJRLEpjo1XVcxRQqJ-0VLM2y4G1AayMg5xLqh7vo85Bn7KRzwrYFx3QiODct1Vz62ugXPgj_DzDFB4QQKm3wPBIS6CRLSHjVrMM71FYS7VtzmY68vIgG3aFomAy_hHUyWQmIcd2yKQevO8Dp77_SyKmoK-8KE9Ef03yI2skyYWR3hg-ie6UC1hsimjNC_kgT2BKX4xokAlV4BpOBi27l9eCEOgFqXevAvzWj"/>
+<span class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps font-bold">7W</span>
+</div>
+<p class="font-headline-md text-[14px] leading-tight text-on-surface font-extrabold truncate w-full">Maya Lin</p>
+<span class="font-body-sm text-body-sm text-primary-container text-[11px] truncate w-full font-medium">Smash Heavy</span>
+<div class="mt-space-xs px-space-sm py-space-2xs bg-surface-container-lowest rounded-md flex items-center gap-1">
+<span class="font-stat-badge text-[16px] leading-tight text-primary-container font-black">94</span>
+<span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+</div>
+</div>
+<!-- Rank 3: Vikram Patel -->
+<div class="flex flex-col bg-surface-container rounded-xl p-space-xs items-center text-center relative shadow-md">
+<div class="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center -mt-space-md mb-space-2xs">
+<span class="font-stat-badge text-stat-badge text-on-surface">3</span>
+</div>
+<div class="relative mb-space-xs">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Dynamic varsity badminton player Vikram Patel ready stance dynamic court reflection blue cyan lighting portrait close-up" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzdQzZypfyGa_UE5kQbfX4EVfGtVFK05XjRFOaipuW8tZu2JXwJpAtwaygzsIAI4-WRyMdHkyyD7kafiWY4X131APZLcOZv8US-ycgHWelAqooqfi1gGu38BN9PRbRe4vFcJWV3siO_iftENSLbyxmVIeuNz_Tc9Aui-3ral9IZsDbkCSv_L2owKUzWFqqxq0YawW2Jlp-0t3x5qTyK0yW8ZP_xBGoM0VBoWgoQIN3PFkkxTVyOyKY"/>
+<span class="absolute -bottom-1 -right-1 px-1 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-caps text-label-caps">2W</span>
+</div>
+<p class="font-headline-md text-[13px] leading-tight text-on-surface truncate w-full">Vikram P.</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate w-full">Baseline Rally</span>
+<div class="mt-space-xs px-space-xs py-space-2xs bg-surface-container-high rounded-md flex items-center gap-1">
+<span class="font-stat-badge text-stat-badge text-primary-container font-black">89</span>
+<span class="font-label-caps text-[9px] text-on-surface-variant">OVR</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Chips Strip -->
+<div class="flex items-center gap-space-xs overflow-x-auto py-space-2xs no-scrollbar">
+<button class="ladder-filter active shrink-0 px-space-base py-space-xs rounded-full bg-primary-container text-on-primary font-headline-md text-[13px] tracking-wide uppercase transition-all shadow-md">
+      All 20 Players
+    </button>
+<button class="ladder-filter shrink-0 px-space-base py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-md text-[13px] tracking-wide uppercase transition-all">
+      Singles Ladder
+    </button>
+<button class="ladder-filter shrink-0 px-space-base py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface font-headline-md text-[13px] tracking-wide uppercase transition-all">
+      Doubles Pairings
+    </button>
+</div>
+<!-- Sticky In-Progress Challenge Prompt -->
+<div class="flex items-center justify-between gap-space-sm bg-gradient-to-r from-surface-container-high via-surface-container to-surface-container-high p-space-sm rounded-xl shadow-lg">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="relative flex items-center justify-center w-8 h-8 rounded-lg bg-primary-container text-on-primary-container shrink-0">
+<span class="material-symbols-outlined text-[18px]">swords</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-2xs">
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[9px] uppercase font-bold">Tonight</span>
+<span class="font-headline-md text-[13px] text-on-surface truncate">vs Marcus Vance (#4)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Court 2 • 7:30 PM</p>
+</div>
+</div>
+<button class="px-space-sm py-space-xs bg-surface-container-highest text-primary-container font-headline-md text-[11px] rounded uppercase tracking-wider shrink-0 active:scale-95 transition-transform">
+      Check In
+    </button>
+</div>
+<!-- Ladder Table Header -->
+<div class="flex items-center justify-between px-space-xs pt-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Current Standings (1 - 10)</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Eligible: #5 &amp; #4</span>
+</div>
+<!-- Ranking Table List -->
+<div class="flex flex-col gap-space-xs">
+<!-- Rank 1: Maya Lin -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-primary-container font-black">#1</span>
+<span class="font-label-caps text-[9px] text-secondary font-bold">▲ 1</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Female badminton player Maya Lin close-up portrait dynamic energetic face with focused look court lighting dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU7tEFJSOyE0rAxkBbvgIDmAmITiXyh49tgd14HQqjUUhMHv-6szTaA4yccyu6bvJSZamOkDLPKeUqn2Nq97gZuhJBdzt0FH0F0iNiHd-F8mAv4YRKQR2V9DBmNZ6wDCQnZHs30StZ3hfPDZ8c50i2vSNEmvjbXfxY6F5EcH_U9FOBjGu877SnUSG_HQV1Al6MYGu9gI5xZQ-pZ0pH5qaXXdci4kROVQ4Z8KkWvbrlNbbhkJvrM7ub"/>
+<span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-[8px] font-black">★</span>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Maya Lin</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">94</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Smash Heavy</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">18-2</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">90.0%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Reigning</span>
+</div>
+</div>
+<!-- Rank 2: Alex Chen -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#2</span>
+<span class="font-label-caps text-[9px] text-error font-bold">▼ 1</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Male collegiate badminton athlete Alex Chen portrait intense athletic expression dark uniform studio rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPU7Dnpf24zrwi-im6UNeRDzh8528zSozUtwDPCKz9vxNrdVfJL4ZcSxAJbXo-mJ2zOyVVR8DqKOGtLLzdIVsZpJUd2pq0SAC5Jtms5QEHejzp_kdKb8HcomKRZVBvvx62V3tgdnz4gtl2ywYPCHyMOeoSSHr39yAVh2BIWeC_JNYMYmHRQTlVVPvUyTZ5akzsBIgliMU3mfduRbc-TVHv8Tc4TdAPPoN4xu4uBhYtmCMFMPT5BXay"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Alex Chen</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">91</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Deceptive Net</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">15-4</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">78.9%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Locked</span>
+</div>
+</div>
+<!-- Rank 3: Vikram Patel -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#3</span>
+<span class="font-label-caps text-[9px] text-on-surface-variant font-bold">—</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="South Asian badminton player Vikram Patel headshot sharp court lighting athletic sweat bands focused expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvAry3mgEws09xjZJTinVGndh5dTu2WaU3bAf65UWXe19ceulh0GjIAGaJQqIo57kfqLK4czuwdqyU6PyJPBhBHU4ZWH9_8Kw_3zyJ7L-0cDrhJMVfCqIqrjRKklGv28xxWjoohhotuPDmcglck2T3VYr3wEWznaUeVTRKAs0W2xQivMGCm8z6S49c6z249IgIZpihGoaYGNa7ndzqF1UIYfaPMpzXnW8goGl_6wFsLrIeXZzCFfJg"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Vikram Patel</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">89</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Baseline Rally</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">13-5</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">72.2%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Locked</span>
+</div>
+</div>
+<!-- Rank 4: Marcus Vance (Current Opponent) -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-high shadow-md">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-primary-container font-black">#4</span>
+<span class="font-label-caps text-[9px] text-secondary font-bold">▲ 2</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Confident athlete Marcus Vance ready to serve tournament badminton dark gymnasium blue cyan lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBggSuRcEBuaib7w_Q7rDxVXztGYNlGlOjYt7GMmcuUusTz7tHHO-LaOvOKLaS65ZFPNt4VpInB_i9ZEoLoKAmfhCOQs-ZXWYw4szLMrkWeWMHFltS8FipnHo1ruy0HTG1wD1H51vc6T_YAfnOYH_BmijtxigpChCg84WkZzyJj4ESYSxT8xQI-pFA-tq3Mb6mFM04Xkfe7GPezrghC6eHG3EXTz_72N_5AXW0CSwJFoKw9FmuTjYS9"/>
+<span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-secondary"></span>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Marcus Vance</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">88</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Power Drive</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">11-6</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">64.7%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-secondary-container text-on-secondary-container font-label-caps text-[10px] uppercase font-bold">Booked</span>
+</div>
+</div>
+<!-- Rank 5: Chloe Zhang (Eligible to Challenge) -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#5</span>
+<span class="font-label-caps text-[9px] text-secondary font-bold">▲ 1</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Athletic female badminton player Chloe Zhang quick footwork posture crisp lighting dynamic court scene portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcQnt4_oFNnTi3LB1Q1KqCGo6t_GsA-Fo9OBGfDF95TSODMitEG5cih-AFb7X1gARzv3kjANTI6NOoDl_xgVdG0u_qsrQt9ri4O9HV0NHcp0nIfgTmPhZ9NrwwG5ogGZIbbViQJP0ai1csEnKPC6lRmtqiRU5tPPpdOOMtd2YIKoJEK1Ancn72g5HYh1Ztr6skX0qQVU4DJ6o61aPzL2wU7n6riSSiNkVpOq55yJlialP9UOU-dp0h"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Chloe Zhang</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">86</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Deceptive Net</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">10-7</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">58.8%</span>
+</div>
+<button class="challenge-btn flex items-center gap-1 px-space-xs py-1 rounded bg-primary-container text-on-primary-container font-headline-md text-[11px] uppercase tracking-wide active:scale-95 transition-transform" data-player="Chloe Zhang" data-rank="5">
+<span class="material-symbols-outlined text-[13px]">swords</span>
+<span>Challenge</span>
+</button>
+</div>
+</div>
+<!-- Rank 6: YOU (Jordan Lee) -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-highest shadow-md">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-primary-container font-black">#6</span>
+<span class="font-label-caps text-[9px] text-secondary font-bold">▲ 2</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Collegiate badminton player Jordan Lee energetic portrait dark cyan theme intense focus stadium lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG2uzVTRLzzz3svvsclxuRQIkG00g2ZL74O4RY3WEFt5Q2cQcw69sV7xeiJ-3dzV7H7tJ9DEh_5cQ7eKC2f6V-dZYdZxvqkWAty1I5zRkUL1wQBImPHhlDHpKU6wmu8POF-dlL0-QBHeGtlOe7FoX-GXqAPiCLDBLhfnk6Tvy7aatw2fCGQSwKhy4Y6KMciQ308ZEOlG2PAfAmgILeZFg8FQQxxkrA96iV1mQa1spFxuNe7miq6wpX"/>
+<span class="absolute -bottom-1 -right-1 px-1 rounded bg-primary-container text-on-primary-container font-label-caps text-[8px] font-bold">YOU</span>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-primary-container truncate font-bold">Jordan Lee</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">89</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Tactical All-Court</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">12-5</span>
+<span class="font-label-caps text-[10px] text-secondary font-bold">70.5%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-low text-primary-container font-label-caps text-[10px] uppercase font-bold">Your Rank</span>
+</div>
+</div>
+<!-- Rank 7: Daniel Sato -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#7</span>
+<span class="font-label-caps text-[9px] text-error font-bold">▼ 2</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Japanese collegiate badminton athlete Daniel Sato ready stance high speed court reflection dynamic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR7vxC0jL_k9cDLst14dH8vEzT_UpbLXRJqhNB2L37wgFVrT0VrEOZwKoB-ic0YVOINt4Zg-TffBQn3j2g5ueYE__ltPb7896yh4gwker5R4B5ooOS-v7bhWNkP3pwvbWuq8G_oC3iY-_cC5nVt6olutb8jhmZarx2UK-RK4HjJhjoJrvd5NxBFmr-uL8MYihot_jmeExiGFW-FOakBNPskU-gtb5mfxQlfB-SBTMCR1lofapKaSv0"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Daniel Sato</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">84</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Baseline Rally</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">9-8</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant font-bold">52.9%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Behind</span>
+</div>
+</div>
+<!-- Rank 8: Priya Nair -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#8</span>
+<span class="font-label-caps text-[9px] text-secondary font-bold">▲ 1</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Athletic female badminton player Priya Nair intense focused look high contrast studio portrait on dark badminton court background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKtP53B-oRO_UoWQ6cokK8hMfalSYQCbhHomYUvGOeNynCGWTDvwehwxfXVfVkvc4vFS8CsNkxRTWqkLdyAw_-0XFlAlovoLP813IztK3f616tGESVEm_xzT88I-BZiCvZwhE3XRAsDiQTbICfp_GrYUoRWVuDOWErwmka5MNw8YaC8p6aD8vb2PCRRuA5MAi5fyfwMqO-SoUU-NwA3wEQwFj_1r31iE-g0oQg1yRn0fdCGXMsI59h"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Priya Nair</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">83</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Smash Heavy</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">8-8</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant font-bold">50.0%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Behind</span>
+</div>
+</div>
+<!-- Rank 9: Lucas Meyer -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#9</span>
+<span class="font-label-caps text-[9px] text-error font-bold">▼ 1</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="European badminton athlete Lucas Meyer athletic profile portrait in stadium lighting deep dark tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf6Myc1EiUQziR8_pAj47AeTexMWRZ45kQJpQNjTRHdiQa21DBRS4pdtsuui6LvQDVUHQCWlvbiK6TfOAavDHfg2s1cWpQJ_cow0f6wvv_IT8F1kgcN_-fgdDONiww89vl2OtTcxklp4WKcGIx4yYlkY4ELwgDJvUqhAUr4Md-2M5Bxy1K9xJhn9xHm48HXO6s3wULS-2mgO2FbATetWlNIIY1lvbbsGfNxV-oa9Xngl520RHPwMYI"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Lucas Meyer</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">82</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Power Drive</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">7-9</span>
+<span class="font-label-caps text-[10px] text-error font-bold">43.8%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Behind</span>
+</div>
+</div>
+<!-- Rank 10: Sarah Kim -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0 flex-1">
+<div class="flex flex-col items-center justify-center w-6 shrink-0">
+<span class="font-stat-badge text-stat-badge text-on-surface font-bold">#10</span>
+<span class="font-label-caps text-[9px] text-on-surface-variant font-bold">—</span>
+</div>
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Korean varsity badminton player Sarah Kim focused gaze sports headband tournament gym environment portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVHSlWYFtwNDuEUjvSxcZ1C9yXCYgpK9Dmb1G-gstFYlyaLUk0te7gVEASvZfH0-KWtpo3MeJ-mcsI-m9WTgYvureIi6v8r_vFJDWP1swCGtAUggf4NEuqX6U3fGHsGrqdod1zHruLbxRoe5IYtyTKbMPFmSb2LqdzAhBZNevgmLwyNksrlcT0ZoTagjLxoajyTVk97xpi_VxhYgamzk9FFWiJ2d_cOsKp6q7V5RDe0QlhEpnXzxkc"/>
+</div>
+<div class="flex flex-col min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-md text-[14px] text-on-surface truncate">Sarah Kim</span>
+<span class="font-label-caps text-[9px] text-primary-container px-1 rounded bg-surface-container-lowest">80</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] truncate">Deceptive Net</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex flex-col items-end">
+<span class="font-stat-badge text-stat-badge text-on-surface">6-10</span>
+<span class="font-label-caps text-[10px] text-error font-bold">37.5%</span>
+</div>
+<span class="px-space-xs py-1 rounded bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Behind</span>
+</div>
+</div>
+</div>
+<!-- Interactive Modal: Challenge Confirmation (Hidden by Default) -->
+<div class="fixed inset-0 z-50 bg-surface-dim/80 backdrop-blur-sm hidden items-center justify-center px-space-base" id="challengeModal">
+<div class="bg-surface-container-high p-space-lg rounded-xl shadow-2xl max-w-sm w-full flex flex-col gap-space-base">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary-container text-[24px]">swords</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Issue Challenge</h3>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface" id="closeModalBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant" id="modalChallengeText">
+        Challenge <span class="text-on-surface font-bold" id="targetPlayerName">Chloe Zhang</span> (Rank #5) for their position on the ladder?
+      </p>
+<div class="bg-surface-container p-space-sm rounded-lg flex flex-col gap-space-2xs">
+<div class="flex justify-between items-center font-body-sm text-body-sm text-on-surface-variant">
+<span>Stakes:</span>
+<span class="text-primary-container font-bold">+1 Rank if won</span>
+</div>
+<div class="flex justify-between items-center font-body-sm text-body-sm text-on-surface-variant">
+<span>Match Expiry:</span>
+<span class="text-on-surface">48 Hours</span>
+</div>
+</div>
+<div class="flex gap-space-sm pt-space-xs">
+<button class="flex-1 py-space-sm rounded-lg bg-surface-container text-on-surface font-headline-md text-[13px] uppercase tracking-wide" id="cancelModalBtn">
+          Cancel
+        </button>
+<button class="flex-1 py-space-sm rounded-lg bg-primary-container text-on-primary-container font-headline-md text-[13px] uppercase tracking-wide font-bold active:scale-95 transition-transform" id="confirmChallengeBtn">
+          Confirm
+        </button>
+</div>
+</div>
+</div>
+<!-- Toast Notification -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 px-space-base py-space-xs bg-secondary-container text-on-secondary-container rounded-full font-label-caps text-label-caps tracking-wider uppercase shadow-xl hidden transition-all duration-300 z-50" id="toastNotification">
+    Challenge Dispatched via SmashDeck!
+  </div>
+</div>
+<script>
+  // Filter chips selection toggle
+  const filterButtons = document.querySelectorAll('.ladder-filter');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary');
+        b.classList.add('bg-surface-container', 'text-on-surface-variant');
+      });
+      btn.classList.add('bg-primary-container', 'text-on-primary');
+      btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+    });
+  });
+
+  // Challenge modal logic
+  const challengeModal = document.getElementById('challengeModal');
+  const targetPlayerSpan = document.getElementById('targetPlayerName');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const cancelModalBtn = document.getElementById('cancelModalBtn');
+  const confirmChallengeBtn = document.getElementById('confirmChallengeBtn');
+  const toastNotification = document.getElementById('toastNotification');
+
+  document.querySelectorAll('.challenge-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const playerName = btn.getAttribute('data-player');
+      const playerRank = btn.getAttribute('data-rank');
+      targetPlayerSpan.textContent = `${playerName} (Rank #${playerRank})`;
+      challengeModal.classList.remove('hidden');
+      challengeModal.classList.add('flex');
+    });
+  });
+
+  const hideModal = () => {
+    challengeModal.classList.add('hidden');
+    challengeModal.classList.remove('flex');
+  };
+
+  closeModalBtn.addEventListener('click', hideModal);
+  cancelModalBtn.addEventListener('click', hideModal);
+
+  confirmChallengeBtn.addEventListener('click', () => {
+    hideModal();
+    toastNotification.classList.remove('hidden');
+    setTimeout(() => {
+      toastNotification.classList.add('hidden');
+    }, 3000);
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_24px_rgba(5,13,37,0.7)]" data-active-classes="text-primary-container font-headline-md"><div class="flex justify-around items-center h-16 px-space-xs"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs transition-colors text-primary-container font-headline-md" data-path="ladder" href="#"><span class="material-symbols-outlined text-[22px]">military_tech</span><span class="font-label-caps text-label-caps uppercase">Ladder</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="matches" href="#"><span class="material-symbols-outlined text-[22px]">sports_score</span><span class="font-label-caps text-label-caps uppercase">Matches</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="my-card" href="#"><span class="material-symbols-outlined text-[22px]">stars</span><span class="font-label-caps text-label-caps uppercase">My Card</span></a><a class="flex flex-col items-center justify-center min-w-[64px] h-12 gap-space-2xs text-on-surface-variant hover:text-on-surface transition-colors" data-path="attendance-and-gear" href="#"><span class="material-symbols-outlined text-[22px]">calendar_clock</span><span class="font-label-caps text-label-caps uppercase">Gear &amp; Play</span></a></div></nav></body></html>
