@@ -38,6 +38,18 @@ class AppAvatars {
         return 'assets/images/avatars/avatar_8_travel.png';
       case 'SD-0007':
         return 'assets/images/avatars/avatar_9_motivator.png';
+      case 'SD-0008':
+        return 'assets/images/avatars/avatar_5_farmer.png';
+      case 'SD-0009':
+        return 'assets/images/avatars/avatar_10_minimal.png';
+      case 'SD-0010':
+        return 'assets/images/avatars/avatar_7_sleepy.png';
+      case 'SD-0011':
+        return 'assets/images/avatars/avatar_2_serious.png';
+      case 'SD-0012':
+        return 'assets/images/avatars/avatar_3_cool.png';
+      case 'SD-0013':
+        return 'assets/images/avatars/avatar_4_scholar.png';
       default:
         // Hash for other IDs
         final idx = clean.hashCode.abs() % allAvatars.length;

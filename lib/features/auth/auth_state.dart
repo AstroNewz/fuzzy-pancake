@@ -82,8 +82,14 @@ class PlayerProfile {
     );
   }
 
-  bool get isAdmin => role == UserRole.admin;
-  bool get isCaptain => role == UserRole.captain || role == UserRole.admin;
+  bool get isMasterAdmin =>
+      rollNumber.toUpperCase() == 'SD-0002' ||
+      email.toLowerCase().contains('ishan') ||
+      fullName.toLowerCase().contains('ishan');
+
+  bool get isAdmin => role == UserRole.admin || isMasterAdmin;
+  bool get isCaptain =>
+      role == UserRole.captain || role == UserRole.admin || isMasterAdmin;
 }
 
 /// Active Current Player Profile Provider

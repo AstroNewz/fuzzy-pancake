@@ -348,16 +348,59 @@ final userGearLogsProvider =
   return UserGearNotifier();
 });
 
-/// All players from Supabase `players` table — used by Players list, match setup, etc.
+/// All players from Supabase `players` table — with automatic offline/seed fallback
 final allPlayersProvider = FutureProvider<List<PlayerProfile>>((ref) async {
   final supabase = ref.watch(supabaseClientProvider);
-  final response = await supabase
-      .from('players')
-      .select()
-      .eq('is_active', true)
-      .order('elo_rating', ascending: false);
+  List<PlayerProfile> remotePlayers = [];
 
-  return (response as List<dynamic>)
-      .map((item) => PlayerProfile.fromMap(item as Map<String, dynamic>))
-      .toList();
+  try {
+    final response = await supabase
+        .from('players')
+        .select()
+        .eq('is_active', true)
+        .order('elo_rating', ascending: false)
+        .timeout(const Duration(seconds: 5));
+
+    remotePlayers = (response as List<dynamic>)
+        .map((item) => PlayerProfile.fromMap(item as Map<String, dynamic>))
+        .toList();
+  } catch (_) {}
+
+  // Fallback squad profiles
+  final fallbackList = fallbackSquadCards.map((c) {
+    return PlayerProfile(
+      id: c.playerId,
+      rollNumber: c.rollNumber,
+      fullName: c.fullName,
+      email: '${c.rollNumber.toLowerCase()}@smashclub.in',
+      role: c.role == 'captain'
+          ? UserRole.captain
+          : (c.role == 'admin' ? UserRole.admin : UserRole.player),
+      avatarUrl: c.avatarUrl,
+      playstyle: c.playstyle,
+      dominantHand: c.dominantHand,
+      baseSmash: c.smash,
+      baseAgility: c.agility,
+      baseStamina: c.stamina,
+      baseConsistency: c.consistency,
+      eloRating: c.eloRating,
+      isActive: true,
+    );
+  }).toList();
+
+  if (remotePlayers.isEmpty) {
+    return fallbackList;
+  }
+
+  // Merge any missing squad members (e.g. newly added accounts)
+  final existingRolls =
+      remotePlayers.map((p) => p.rollNumber.toUpperCase()).toSet();
+  for (final fb in fallbackList) {
+    if (!existingRolls.contains(fb.rollNumber.toUpperCase())) {
+      remotePlayers.add(fb);
+    }
+  }
+
+  remotePlayers.sort((a, b) => b.eloRating.compareTo(a.eloRating));
+  return remotePlayers;
 });

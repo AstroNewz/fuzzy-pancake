@@ -190,8 +190,22 @@ class AttendanceRepository {
 
     for (final playerId in playerIds) {
       try {
+        String targetId = playerId;
+        if (!RegExp(r'^[0-9a-fA-F-]{36}$').hasMatch(targetId)) {
+          try {
+            final pRow = await _client
+                .from('players')
+                .select('id')
+                .eq('roll_number', playerId)
+                .maybeSingle();
+            if (pRow != null && pRow['id'] != null) {
+              targetId = pRow['id'] as String;
+            }
+          } catch (_) {}
+        }
+
         await _client.from(AppConstants.tableAttendanceLogs).upsert({
-          'player_id': playerId,
+          'player_id': targetId,
           'session_date': dateStr,
           'check_in_time': DateTime.now().toIso8601String(),
           'totp_token': 'MANUAL_ADMIN',

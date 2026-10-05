@@ -2,8 +2,8 @@
 *.class
 *.log
 *.pyc
-*.swp
 *.apk
+!app-release.apk
 .DS_Store
 .atom/
 .build/

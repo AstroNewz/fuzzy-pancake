@@ -1,17 +1,16 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import '../../core/data/mock_squad_data.dart';
+import 'package:intl/intl.dart';
 import '../../core/network/offline_sync_service.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/app_avatars.dart';
 import '../auth/auth_state.dart';
+import '../auth/current_user_notifier.dart';
 import 'attendance_repository.dart';
-import 'attendance_scanner_sheet.dart';
-import 'attendance_state.dart';
 import 'mark_attendance_screen.dart';
 
-/// Dynamic QR Attendance Screen (Admin Generator + Player Scanner + Squad Roll)
+/// Screen: Squad Attendance Dashboard & History
+/// Pure Manual Attendance engine for Captain & Master Admin.
 class AttendanceScreen extends ConsumerStatefulWidget {
   const AttendanceScreen({super.key});
 
@@ -22,35 +21,16 @@ class AttendanceScreen extends ConsumerStatefulWidget {
 class _AttendanceScreenState extends ConsumerState<AttendanceScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Timer? _countdownTimer;
-  int _secondsLeft = 15;
   String _squadFilter = 'all'; // 'all', 'present', 'absent'
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _startTimer();
-  }
-
-  void _startTimer() {
-    _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;
-      setState(() {
-        if (_secondsLeft <= 1) {
-          _secondsLeft = 15;
-          ref.read(adminAttendanceTokenProvider.notifier).refresh();
-        } else {
-          _secondsLeft--;
-        }
-      });
-    });
   }
 
   @override
   void dispose() {
-    _countdownTimer?.cancel();
     _tabController.dispose();
     super.dispose();
   }
@@ -65,7 +45,7 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen>
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: result.isSuccess ? AppTheme.primaryNeon : Colors.amber,
+        backgroundColor: result.isSuccess ? AppTheme.limeNeon : Colors.amber,
         content: Text(
           result.isSuccess
               ? 'Successfully synced ${result.totalSynced} records to Supabase!'
@@ -81,524 +61,461 @@ class _AttendanceScreenState extends ConsumerState<AttendanceScreen>
 
   @override
   Widget build(BuildContext context) {
-    final token = ref.watch(adminAttendanceTokenProvider);
-    final squad = MockSquadData.players;
+    final currentUser = ref.watch(currentUserProvider);
+    final isCaptainOrMaster = currentUser?.isCaptain ?? false;
+    final playersAsync = ref.watch(allPlayersProvider);
     final pendingCountAsync = ref.watch(pendingOfflineCountProvider);
     final todayLogsAsync = ref.watch(todayAttendanceRecordsProvider);
 
-    final todayPresentPlayerIds =
-        todayLogsAsync.value?.map((e) => e.playerId).toSet() ??
-            {
-              // Pre-seed sample active players if Supabase has zero rows
-              'p-01', 'p-02', 'p-03', 'p-04', 'p-07', 'p-10', 'p-12', 'p-15'
-            };
-
     return Scaffold(
+      backgroundColor: AppTheme.bgDark,
       appBar: AppBar(
-        title: const Text('Attendance Engine'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Squad Attendance',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.playlist_add_check,
-                color: AppTheme.primaryBright),
-            tooltip: 'Manual Roster Check',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MarkAttendanceScreen()),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.sync, color: AppTheme.secondaryCyan),
+            icon: const Icon(Icons.sync_rounded, color: AppTheme.limeNeon),
             tooltip: 'Sync Offline Data',
             onPressed: _triggerManualSync,
           ),
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppTheme.primaryNeon,
-          labelColor: AppTheme.primaryNeon,
+          indicatorColor: AppTheme.limeNeon,
+          labelColor: AppTheme.limeNeon,
           unselectedLabelColor: AppTheme.textMuted,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w700),
           tabs: const [
-            Tab(icon: Icon(Icons.qr_code_2), text: 'Dynamic QR (Admin)'),
-            Tab(
-                icon: Icon(Icons.people_alt_outlined),
-                text: 'Squad Roll (Today)'),
+            Tab(text: "Today's Roster"),
+            Tab(text: 'History & Logs'),
           ],
         ),
       ),
-      body: Column(
-        children: [
-          // Offline Pending Banner (if any)
-          pendingCountAsync.when(
-            data: (count) {
-              if (count == 0) return const SizedBox.shrink();
-              return Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                color: Colors.amber.withValues(alpha: 0.2),
-                child: Row(
-                  children: [
-                    const Icon(Icons.cloud_queue,
-                        color: Colors.amber, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '$count offline records pending sync to Supabase',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _triggerManualSync,
-                      child: const Text('SYNC NOW',
-                          style: TextStyle(fontSize: 11)),
-                    ),
-                  ],
-                ),
-              );
-            },
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
+      body: playersAsync.when(
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AppTheme.limeNeon)),
+        error: (e, _) => Center(
+            child: Text('Error: $e',
+                style: const TextStyle(color: Colors.white70))),
+        data: (squad) {
+          final todayLogs = todayLogsAsync.value ?? [];
+          final todayPresentSet =
+              todayLogs.map((e) => e.playerId.toLowerCase()).toSet();
 
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // Tab 1: Admin Dynamic QR Generator (Issue-003 Mitigation)
-                _buildAdminQrTab(token),
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              // Tab 1: Today's Squad Roster
+              _buildTodayRosterTab(
+                context,
+                squad,
+                todayPresentSet,
+                isCaptainOrMaster,
+                pendingCountAsync.value ?? 0,
+              ),
 
-                // Tab 2: Squad Roll & Check-in Verification
-                _buildSquadRollTab(squad, todayPresentPlayerIds),
-              ],
-            ),
-          ),
-        ],
+              // Tab 2: Attendance Records & History
+              _buildHistoryTab(todayLogs, squad),
+            ],
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.primaryNeon,
-        foregroundColor: Colors.black,
-        icon: const Icon(Icons.qr_code_scanner),
-        label: const Text(
-          'SCAN QR CODE',
-          style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.5),
-        ),
-        onPressed: () => AttendanceScannerSheet.show(context),
-      ),
+      floatingActionButton: isCaptainOrMaster
+          ? FloatingActionButton.extended(
+              backgroundColor: AppTheme.limeNeon,
+              foregroundColor: Colors.black,
+              icon: const Icon(Icons.playlist_add_check_rounded, size: 22),
+              label: const Text(
+                'Take Attendance',
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const MarkAttendanceScreen()),
+                );
+              },
+            )
+          : null,
     );
   }
 
-  Widget _buildAdminQrTab(AttendanceToken token) {
-    final progress = _secondsLeft / 15.0;
+  Widget _buildTodayRosterTab(
+    BuildContext context,
+    List<PlayerProfile> squad,
+    Set<String> todayPresentSet,
+    bool isCaptainOrMaster,
+    int pendingCount,
+  ) {
+    // Filter squad
+    final filteredSquad = squad.where((p) {
+      final isPresent = todayPresentSet.contains(p.id.toLowerCase()) ||
+          todayPresentSet.contains(p.rollNumber.toLowerCase());
+      if (_squadFilter == 'present') return isPresent;
+      if (_squadFilter == 'absent') return !isPresent;
+      return true;
+    }).toList();
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        children: [
-          // Security Alert Card
-          Container(
-            padding: const EdgeInsets.all(14),
+    final presentCount = squad.where((p) {
+      return todayPresentSet.contains(p.id.toLowerCase()) ||
+          todayPresentSet.contains(p.rollNumber.toLowerCase());
+    }).length;
+
+    final todayFormatted =
+        DateFormat('EEEE, MMMM d, yyyy').format(DateTime.now());
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+      children: [
+        // Date Banner
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppTheme.cardDark,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppTheme.borderDark),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.event_available_rounded,
+                      color: AppTheme.limeNeon, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    todayFormatted,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textWhite,
+                    ),
+                  ),
+                  const Spacer(),
+                  if (pendingCount > 0)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '$pendingCount Offline',
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.amber,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$presentCount / ${squad.length} Present',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                          color: AppTheme.limeNeon,
+                        ),
+                      ),
+                      Text(
+                        '${squad.length - presentCount} members absent',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (isCaptainOrMaster)
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.limeNeon,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
+                      ),
+                      icon: const Icon(Icons.edit_note_rounded, size: 18),
+                      label: const Text(
+                        'Manual Roll',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const MarkAttendanceScreen()),
+                        );
+                      },
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 14),
+
+        // Filter Pills
+        Row(
+          children: [
+            _buildFilterChip('All Squad (${squad.length})', 'all'),
+            const SizedBox(width: 8),
+            _buildFilterChip('Present ($presentCount)', 'present'),
+            const SizedBox(width: 8),
+            _buildFilterChip(
+                'Absent (${squad.length - presentCount})', 'absent'),
+          ],
+        ),
+
+        const SizedBox(height: 12),
+
+        // Squad Roster List
+        ...filteredSquad.map((player) {
+          final isPresent = todayPresentSet.contains(player.id.toLowerCase()) ||
+              todayPresentSet.contains(player.rollNumber.toLowerCase());
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
-              color: AppTheme.cardDark,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.borderDark),
+              color: isPresent
+                  ? const Color(0xFF0D251A)
+                  : AppTheme.cardDark,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: isPresent
+                    ? AppTheme.limeNeon.withValues(alpha: 0.3)
+                    : AppTheme.borderDark,
+              ),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.shield_outlined,
-                    color: AppTheme.primaryNeon, size: 22),
-                SizedBox(width: 10),
+                AppAvatars.buildAvatar(
+                  rollNumber: player.rollNumber,
+                  size: 40,
+                  border: Border.all(
+                    color: isPresent ? AppTheme.limeNeon : AppTheme.borderDark,
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Anti-Proxy Verification Active (ISSUE-003)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontSize: 13,
-                        ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              player.fullName,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: isPresent
+                                    ? AppTheme.textWhite
+                                    : AppTheme.textMuted,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (player.isMasterAdmin) ...[
+                            const SizedBox(width: 6),
+                            const Icon(Icons.stars_rounded,
+                                size: 14, color: AppTheme.gold),
+                          ] else if (player.isCaptain) ...[
+                            const SizedBox(width: 6),
+                            const Icon(Icons.military_tech_rounded,
+                                size: 14, color: AppTheme.limeNeon),
+                          ],
+                        ],
                       ),
                       Text(
-                        'Dynamic cryptographic token auto-refreshes every 15s. Screenshots are invalid.',
-                        style:
-                            TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                        '${player.rollNumber} • ${player.playstyle}',
+                        style: const TextStyle(
+                            fontSize: 11, color: AppTheme.textMuted),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isPresent
+                        ? AppTheme.limeNeon.withValues(alpha: 0.15)
+                        : Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isPresent
+                          ? AppTheme.limeNeon.withValues(alpha: 0.4)
+                          : AppTheme.borderDark,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isPresent
+                            ? Icons.check_circle_rounded
+                            : Icons.cancel_outlined,
+                        size: 14,
+                        color: isPresent
+                            ? AppTheme.limeNeon
+                            : AppTheme.textMuted,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        isPresent ? 'PRESENT' : 'ABSENT',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: isPresent
+                              ? AppTheme.limeNeon
+                              : AppTheme.textMuted,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 20),
-
-          // Dynamic QR Code Display Frame
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x3300FF87),
-                  blurRadius: 30,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: QrImageView(
-              data: token.payload,
-              version: QrVersions.auto,
-              size: 210.0,
-              eyeStyle: const QrEyeStyle(
-                eyeShape: QrEyeShape.square,
-                color: Colors.black,
-              ),
-              dataModuleStyle: const QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.circle,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(height: 18),
-
-          // Circular 15s Countdown Progress
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 26,
-                height: 26,
-                child: CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 3,
-                  backgroundColor: AppTheme.borderDark,
-                  color: _secondsLeft <= 3
-                      ? AppTheme.errorRed
-                      : AppTheme.primaryNeon,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'Auto-Refreshing in $_secondsLeft seconds',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Token: ${token.totp} • Session Date: ${token.dateString}',
-            style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
-          ),
-          const SizedBox(height: 20),
-
-          // Fast Action Buttons Row
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: const BorderSide(color: AppTheme.borderDark),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  icon: const Icon(Icons.qr_code_scanner,
-                      size: 18, color: AppTheme.primaryNeon),
-                  label: const Text('OPEN SCANNER',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                  onPressed: () => AttendanceScannerSheet.show(context),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF10B981),
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  icon: const Icon(Icons.check_circle_outline, size: 18),
-                  label: const Text('QUICK CHECK-IN',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-                  onPressed: () => _simulatePlayerScan(token),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 50), // Room for FAB
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSquadRollTab(
-      List<PlayerProfile> squad, Set<String> presentPlayerIds) {
-    final presentCount =
-        squad.where((p) => presentPlayerIds.contains(p.id)).length;
-    final totalCount = squad.length;
-
-    final filteredSquad = squad.where((p) {
-      final isPresent = presentPlayerIds.contains(p.id);
-      if (_squadFilter == 'present') return isPresent;
-      if (_squadFilter == 'absent') return !isPresent;
-      return true;
-    }).toList();
-
-    return Column(
-      children: [
-        // Summary Header
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          color: Colors.black26,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Present Today: $presentCount / $totalCount Players',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                  color: AppTheme.primaryNeon,
-                ),
-              ),
-              Text(
-                '${((presentCount / totalCount) * 100).toStringAsFixed(0)}% Turnout',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                  color: AppTheme.secondaryCyan,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Filter Chips Bar
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              _buildFilterChip('all', 'All ($totalCount)'),
-              const SizedBox(width: 8),
-              _buildFilterChip('present', 'Present ($presentCount)'),
-              const SizedBox(width: 8),
-              _buildFilterChip(
-                  'absent', 'Absent (${totalCount - presentCount})'),
-            ],
-          ),
-        ),
-
-        // List of Squad Members
-        Expanded(
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: filteredSquad.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final player = filteredSquad[index];
-              final isPresent = presentPlayerIds.contains(player.id);
-
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppTheme.cardDark,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isPresent
-                        ? AppTheme.primaryNeon.withValues(alpha: 0.4)
-                        : AppTheme.borderDark,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isPresent
-                            ? AppTheme.primaryNeon.withValues(alpha: 0.15)
-                            : Colors.black26,
-                        border: Border.all(
-                          color: isPresent
-                              ? AppTheme.primaryNeon
-                              : AppTheme.borderDark,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          player.fullName
-                              .split(' ')
-                              .map((e) => e[0])
-                              .take(2)
-                              .join(),
-                          style: TextStyle(
-                            color: isPresent
-                                ? AppTheme.primaryNeon
-                                : AppTheme.textMuted,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            player.fullName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            '${player.rollNumber} • ${player.playstyle}',
-                            style: const TextStyle(
-                                fontSize: 11, color: AppTheme.textMuted),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: isPresent
-                            ? AppTheme.primaryNeon.withValues(alpha: 0.15)
-                            : Colors.black26,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        isPresent ? 'PRESENT' : 'ABSENT',
-                        style: TextStyle(
-                          color: isPresent
-                              ? AppTheme.primaryNeon
-                              : AppTheme.textMuted,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildFilterChip(String value, String label) {
-    final isSelected = _squadFilter == value;
+  Widget _buildFilterChip(String label, String value) {
+    final selected = _squadFilter == value;
     return GestureDetector(
       onTap: () => setState(() => _squadFilter = value),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppTheme.primaryNeon.withValues(alpha: 0.2)
+          color: selected
+              ? AppTheme.limeNeon.withValues(alpha: 0.2)
               : AppTheme.cardDark,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? AppTheme.primaryNeon : AppTheme.borderDark,
+            color: selected ? AppTheme.limeNeon : AppTheme.borderDark,
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? AppTheme.primaryNeon : AppTheme.textMuted,
+            fontSize: 12,
+            fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+            color: selected ? AppTheme.limeNeon : AppTheme.textMuted,
           ),
         ),
       ),
     );
   }
 
-  void _simulatePlayerScan(AttendanceToken token) async {
-    final repo = ref.read(attendanceRepositoryProvider);
-    final squad = MockSquadData.players;
-
-    // Pick first player
-    final testPlayer = squad[1]; // Ishan Shukla
-    final result = await repo.processQrCheckIn(
-      playerId: testPlayer.id,
-      qrPayload: token.payload,
-    );
-
-    ref.invalidate(todayAttendanceRecordsProvider);
-
-    if (!mounted) return;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.cardDark,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Icon(
-              result.isSuccess ? Icons.check_circle : Icons.info_outline,
-              color: result.isSuccess ? AppTheme.primaryNeon : Colors.amber,
-            ),
-            const SizedBox(width: 10),
-            Text(result.isSuccess ? 'Check-in Verified!' : 'Check-in Notice'),
-          ],
-        ),
-        content: Column(
+  Widget _buildHistoryTab(
+      List<AttendanceRecord> logs, List<PlayerProfile> squad) {
+    if (logs.isEmpty) {
+      return Center(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              testPlayer.fullName,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Roll No: ${testPlayer.rollNumber}',
-              style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
-            ),
+            const Icon(Icons.history_rounded,
+                size: 48, color: AppTheme.textMuted),
             const SizedBox(height: 12),
-            Text(
-              result.message,
-              style: const TextStyle(fontSize: 13, color: Colors.white70),
+            const Text(
+              'No attendance logs recorded yet today.',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textMuted),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Tap "Take Attendance" to mark present squad members.',
+              style: TextStyle(fontSize: 12, color: AppTheme.textMutedDark),
             ),
           ],
         ),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('CLOSE'),
+      );
+    }
+
+    final playerMap = {for (var p in squad) p.id: p};
+
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 90),
+      itemCount: logs.length,
+      itemBuilder: (context, index) {
+        final record = logs[index];
+        final p = playerMap[record.playerId];
+        final timeStr = DateFormat('hh:mm a').format(record.checkInTime);
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppTheme.cardDark,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppTheme.borderDark),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              const Icon(Icons.verified_rounded,
+                  color: AppTheme.limeNeon, size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      p?.fullName ?? record.playerId,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.textWhite,
+                      ),
+                    ),
+                    Text(
+                      'Session ${record.sessionDate} • Checked in at $timeStr',
+                      style: const TextStyle(
+                          fontSize: 11, color: AppTheme.textMuted),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppTheme.limeNeon.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'MANUAL',
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.limeNeon),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -10,6 +10,9 @@ import '../auth/login_screen.dart';
 import '../gear_tracker/gear_model.dart';
 import '../trump_card/trump_card_model.dart';
 import '../trump_card/trump_card_view.dart';
+import '../attendance/mark_attendance_screen.dart';
+import '../events/squad_common_space_screen.dart';
+import '../admin/master_control_screen.dart';
 
 /// MY CARD tab — Stitch FIFA-style player card
 /// Shows: giant OVR, 6-stat grid, gear status, season record, rival showdown
@@ -123,6 +126,14 @@ class _PlayerProfileScreenState extends ConsumerState<PlayerProfileScreen>
 
                 // ── Share Button ──────────────────────────────────────────────
                 _buildShareButton(),
+
+                // ── Master Admin Hub (Ishan Narayan Shukla) ───────────────────
+                if (p.isMasterAdmin || (activeUser?.isMasterAdmin ?? false))
+                  _buildMasterHubBanner(context),
+
+                // ── Captain Tools: Manual Attendance & Sessions ───────────────
+                if (p.isCaptain || (activeUser?.isCaptain ?? false))
+                  _buildCaptainToolsCard(context, p),
 
                 // ── Gear Status ───────────────────────────────────────────────
                 _buildGearStatus(currentGear),
@@ -635,5 +646,161 @@ class _PlayerProfileScreenState extends ConsumerState<PlayerProfileScreen>
         );
       }
     }
+  }
+
+  Widget _buildMasterHubBanner(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF241C07),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.gold, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.gold.withValues(alpha: 0.25),
+            blurRadius: 16,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.gold.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child:
+                const Icon(Icons.stars_rounded, color: AppTheme.gold, size: 28),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'MASTER CONTROL ACTIVE',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                    color: AppTheme.gold,
+                  ),
+                ),
+                Text(
+                  'Full root access to all squad accounts, APK releases & attendance.',
+                  style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.gold,
+              foregroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MasterControlScreen()),
+            ),
+            child: const Text('Open Hub',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCaptainToolsCard(BuildContext context, PlayerProfile p) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.cardDark,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.limeNeon.withValues(alpha: 0.6)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Icon(Icons.military_tech_rounded,
+                  color: AppTheme.limeNeon, size: 20),
+              SizedBox(width: 8),
+              Text(
+                'CAPTAIN TOOLS • SQUAD DECK',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w900,
+                  color: AppTheme.limeNeon,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Manual attendance roll call and practice session scheduling.',
+            style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.limeNeon,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.playlist_add_check_rounded, size: 18),
+                  label: const Text('Manual Attendance',
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const MarkAttendanceScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.textWhite,
+                    side: const BorderSide(color: AppTheme.borderDark),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.event_note_rounded,
+                      size: 18, color: AppTheme.limeNeon),
+                  label: const Text('Schedule Event',
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const SquadCommonSpaceScreen()),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

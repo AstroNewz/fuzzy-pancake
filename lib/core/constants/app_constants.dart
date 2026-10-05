@@ -3,7 +3,7 @@ class AppConstants {
   // Application Meta
   static const String appName = 'SmashDeck';
   static const String appTagline = 'College Badminton Club & Trump Card Engine';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.1.0';
 
   // Supabase Configuration
   // Note: Populate with your project credentials from the Supabase Dashboard

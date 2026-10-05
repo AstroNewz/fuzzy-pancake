@@ -11,6 +11,8 @@ import '../matches/matches_hub_screen.dart';
 import '../match_engine/match_setup_dialog.dart';
 import '../trump_card/trump_card_view.dart';
 import '../more/more_menu_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../core/services/app_update_service.dart';
 
 class MainNavigationWrapper extends StatefulWidget {
   const MainNavigationWrapper({super.key});
@@ -29,6 +31,17 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper>
     duration: AppMotion.duration,
     value: 1,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final client = Supabase.instance.client;
+        AppUpdateService.checkForUpdates(context, client);
+      }
+    });
+  }
   static const _screens = <Widget>[
     LadderScreen(),
     MatchesHubScreen(),

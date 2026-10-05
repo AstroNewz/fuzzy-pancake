@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/supabase_connect_dialog.dart';
-import '../attendance/attendance_screen.dart';
 import '../gear_tracker/gear_screen.dart';
 import '../ladder/ladder_screen.dart';
 import '../matches/match_details_screen.dart';
@@ -17,6 +16,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/telegram_notification_service.dart';
 import '../auth/current_user_notifier.dart';
 import '../auth/login_screen.dart';
+import '../../core/services/app_update_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../admin/master_control_screen.dart';
+import '../events/squad_common_space_screen.dart';
+import '../attendance/mark_attendance_screen.dart';
 
 /// Screen 10: More Screen Matching Reference Mockup & Stitch Settings
 class MoreMenuScreen extends ConsumerWidget {
@@ -131,6 +135,41 @@ class MoreMenuScreen extends ConsumerWidget {
               ),
               child: Column(
                 children: [
+                  if (currentUser.isMasterAdmin) ...[
+                    _buildMenuItem(
+                      context,
+                      Icons.stars_rounded,
+                      'Master Control Hub',
+                      'Squad accounts, APK releases & master overrides',
+                      () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const MasterControlScreen())),
+                    ),
+                    const Divider(color: AppTheme.borderDark, height: 1),
+                  ],
+                  _buildMenuItem(
+                    context,
+                    Icons.forum_outlined,
+                    'Squad Common Space & Chat',
+                    'Practice sessions, events RSVP & chat room',
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SquadCommonSpaceScreen())),
+                  ),
+                  const Divider(color: AppTheme.borderDark, height: 1),
+                  _buildMenuItem(
+                    context,
+                    Icons.how_to_reg_outlined,
+                    'Manual Squad Attendance',
+                    'Captain roll call & attendance history',
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const MarkAttendanceScreen())),
+                  ),
+                  const Divider(color: AppTheme.borderDark, height: 1),
                   _buildMenuItem(
                       context,
                       Icons.timer_outlined,
@@ -171,17 +210,6 @@ class MoreMenuScreen extends ConsumerWidget {
                         context,
                         MaterialPageRoute(
                             builder: (_) => const MatchDetailsScreen())),
-                  ),
-                  const Divider(color: AppTheme.borderDark, height: 1),
-                  _buildMenuItem(
-                    context,
-                    Icons.qr_code_scanner,
-                    'Attendance History',
-                    'Check your attendance',
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const AttendanceScreen())),
                   ),
                   const Divider(color: AppTheme.borderDark, height: 1),
                   _buildMenuItem(
@@ -234,6 +262,18 @@ class MoreMenuScreen extends ConsumerWidget {
                     'Supabase & Cloud Sync',
                     'Configure database connection',
                     () => SupabaseConnectDialog.show(context),
+                  ),
+                  const Divider(color: AppTheme.borderDark, height: 1),
+                  _buildMenuItem(
+                    context,
+                    Icons.system_update_alt_rounded,
+                    'Check for APK Updates',
+                    'v1.0.0 · Get latest release or download new build',
+                    () => AppUpdateService.checkForUpdates(
+                      context,
+                      Supabase.instance.client,
+                      isManualCheck: true,
+                    ),
                   ),
                   const Divider(color: AppTheme.borderDark, height: 1),
                   _buildMenuItem(

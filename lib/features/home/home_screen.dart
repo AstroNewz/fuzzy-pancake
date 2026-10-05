@@ -7,6 +7,7 @@ import '../auth/current_user_notifier.dart';
 import '../ladder/ladder_screen.dart';
 import '../matches/log_match_screen.dart';
 import '../players/player_profile_screen.dart';
+import '../events/squad_common_space_screen.dart';
 
 /// Screen 3: Home Screen Matching Reference Mockup & Stitch Pulse
 class HomeScreen extends ConsumerWidget {
@@ -70,33 +71,43 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      // Notification Bell
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: AppTheme.cardDark,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppTheme.borderDark),
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Icon(Icons.notifications_none,
-                                color: AppTheme.textWhite, size: 20),
-                            Positioned(
-                              top: 9,
-                              right: 10,
-                              child: Container(
-                                width: 7,
-                                height: 7,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF10B981),
-                                  shape: BoxShape.circle,
+                      // Notification Bell -> opens Squad Common Space
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SquadCommonSpaceScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppTheme.cardDark,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppTheme.borderDark),
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              const Icon(Icons.notifications_none,
+                                  color: AppTheme.textWhite, size: 20),
+                              Positioned(
+                                top: 9,
+                                right: 10,
+                                child: Container(
+                                  width: 7,
+                                  height: 7,
+                                  decoration: const BoxDecoration(
+                                    color: AppTheme.limeNeon,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -206,6 +217,67 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 22),
+
+              // Squad Common Space & Practice Session Banner
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const SquadCommonSpaceScreen()),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF14241B),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                        color: AppTheme.limeNeon.withValues(alpha: 0.4)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppTheme.limeNeon.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.forum_outlined,
+                            color: AppTheme.limeNeon, size: 24),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              'Squad Common Space & Chat',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: AppTheme.textWhite,
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Practice sessions, captain events & squad chat',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AppTheme.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right, color: AppTheme.limeNeon),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
 
               // 4 Action Tiles (2x2 Grid)
               Row(
