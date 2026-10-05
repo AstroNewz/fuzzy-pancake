@@ -17,17 +17,15 @@
 
 ---
 
-## 📥 Download APK
+## 📥 Download New APK (v1.1.0 - Latest)
 
-The official production release APK is hosted under [GitHub Releases](https://github.com/AstroNewz/fuzzy-pancake/releases/tag/v1.0.0).
+The latest build with **Manual Captain Attendance**, **6 New Squad Accounts**, **Squad Common Space & Chat**, **In-App APK Update Popup**, and **Master Control Hub** is available directly in the repository:
 
-| Asset | File Size | Target | Direct Download |
-| :--- | :--- | :--- | :--- |
-| **`SmashDeck.apk`** | **80.1 MB** | Android 6.0+ (Universal) | [⬇️ **Download Latest APK**](https://github.com/AstroNewz/fuzzy-pancake/releases/download/v1.0.0/SmashDeck.apk) |
-| **`SmashDeck-refined.apk`** | **80.1 MB** | Android 6.0+ (Universal) | [⬇️ **Download Refined APK**](https://github.com/AstroNewz/fuzzy-pancake/releases/download/v1.0.0/SmashDeck-refined.apk) |
+| Asset | Version | File Size | Target | Direct Download Link |
+| :--- | :--- | :--- | :--- | :--- |
+| **`app-release.apk`** | **v1.1.0 (Latest)** | **80.7 MB** | Android 6.0+ (Universal) | [⬇️ **Download Latest APK (v1.1.0)**](https://github.com/AstroNewz/fuzzy-pancake/raw/main/app-release.apk) |
 
-> **SHA-256 Checksum**:  
-> `9D9D685486145DE863122C8A9EF66934334BCA1513AA5FA55515B73A7B896BC5`
+> 💡 **For previous releases**: The legacy `v1.0.0` release is archived under [GitHub Releases v1.0.0](https://github.com/AstroNewz/fuzzy-pancake/releases/tag/v1.0.0).
 
 ---
 
