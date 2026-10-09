@@ -48,226 +48,249 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
         : ref.watch(activeChallengesProvider(user.id)).valueOrNull ?? [];
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: RefreshIndicator(
-          onRefresh: _refresh,
-          child: CustomScrollView(
-            key: const PageStorageKey('ladder-scroll'),
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                backgroundColor: AppTheme.bgDark,
-                title: Row(children: [
-                  const SmashDeckLogo(
-                      size: 30, showText: false, showTagline: false),
-                  const SizedBox(width: 10),
-                  Text('SMASHDECK',
-                      style: AppTheme.chivo(
-                          size: 18,
-                          weight: FontWeight.w900,
-                          letterSpacing: -.5)),
-                ]),
-                actions: [
-                  IconButton(
-                      tooltip: 'Refresh standings',
-                      onPressed: _refresh,
-                      icon: const Icon(Icons.refresh, size: 21)),
-                  IconButton(
-                      tooltip: 'Club and account',
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const MoreMenuScreen())),
-                      icon: PlayerAvatar(
-                          name: user?.fullName ?? '',
-                          url: user?.avatarUrl,
-                          size: 32)),
-                  const SizedBox(width: 12),
-                ],
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-                sliver: SliverToBoxAdapter(
-                    child: standings.when(
-                  loading: () => const Padding(
-                      padding: EdgeInsets.all(64),
-                      child: Center(
-                          child: CircularProgressIndicator(strokeWidth: 2))),
-                  error: (_, __) => _empty('The court is reconnecting.',
-                      'We couldn’t load the standings. Check your connection and try again.',
-                      retry: true),
-                  data: (entries) {
-                    if (entries.isEmpty) {
-                      return _empty('A fresh start.',
-                          'Your club ladder will appear here when members join.');
-                    }
-                    final mine = entries
-                        .where((e) => e.playerId == user?.id)
-                        .firstOrNull;
-                    final visible = entries.where((e) {
-                      final match = ('${e.fullName} ${e.rollNumber}')
-                          .toLowerCase()
-                          .contains(_query.toLowerCase());
-                      return match &&
-                          (_filter == 0 ||
-                              (_filter == 1 &&
-                                  mine != null &&
-                                  e.canBeChallengedBy(mine.rank)) ||
-                              (_filter == 2 && e.playerId == user?.id));
-                    }).toList();
-                    return Reveal(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          CourtPanel(
-                              padding: const EdgeInsets.all(18),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
-                                      Expanded(
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                            Text(
-                                                'THE CLUB LADDER / ${entries.length}',
-                                                style: AppTheme.jetBrainsMono(
-                                                    size: 10,
-                                                    letterSpacing: 1.8,
-                                                    color: AppTheme.mintTeal)),
-                                            const SizedBox(height: 8),
-                                            Text('Earn your spot.',
-                                                style: AppTheme.chivo(
-                                                    size: 29,
-                                                    weight: FontWeight.w900,
-                                                    letterSpacing: -1.3)),
-                                          ])),
-                                      IconButton(
-                                          tooltip: 'How the ladder works',
-                                          onPressed: _showRules,
-                                          icon: const Icon(Icons.info_outline,
-                                              size: 20,
-                                              color: AppTheme.textMuted)),
-                                    ]),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                        'Good games. Better rivals. Challenge up to two ranks above you.',
-                                        style: AppTheme.spaceGrotesk(
-                                            size: 13,
-                                            color: AppTheme.textMuted,
-                                            height: 1.5)),
+      body: LayoutBuilder(
+          builder: (context, constraints) => RefreshIndicator(
+              onRefresh: _refresh,
+              child: CustomScrollView(
+                key: const PageStorageKey('ladder-scroll'),
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    backgroundColor: AppTheme.bgDark,
+                    title: Row(children: [
+                      const SmashDeckLogo(
+                          size: 30, showText: false, showTagline: false),
+                      const SizedBox(width: 10),
+                      Flexible(
+                          child: Text('SMASHDECK',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.chivo(
+                                  size: 18,
+                                  weight: FontWeight.w900,
+                                  letterSpacing: -.5))),
+                    ]),
+                    actions: [
+                      IconButton(
+                          tooltip: 'Refresh standings',
+                          onPressed: _refresh,
+                          icon: const Icon(Icons.refresh, size: 21)),
+                      IconButton(
+                          tooltip: 'Club and account',
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const MoreMenuScreen())),
+                          icon: PlayerAvatar(
+                              name: user?.fullName ?? '',
+                              url: user?.avatarUrl,
+                              size: 32)),
+                      const SizedBox(width: 12),
+                    ],
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(
+                        constraints.maxWidth > 1000
+                            ? (constraints.maxWidth - 960) / 2
+                            : 20,
+                        20,
+                        constraints.maxWidth > 1000
+                            ? (constraints.maxWidth - 960) / 2
+                            : 20,
+                        40),
+                    sliver: SliverToBoxAdapter(
+                        child: standings.when(
+                      loading: () => const Padding(
+                          padding: EdgeInsets.all(64),
+                          child: Center(
+                              child:
+                                  CircularProgressIndicator(strokeWidth: 2))),
+                      error: (_, __) => _empty('The court is reconnecting.',
+                          'We couldn’t load the standings. Check your connection and try again.',
+                          retry: true),
+                      data: (entries) {
+                        if (entries.isEmpty) {
+                          return _empty('A fresh start.',
+                              'Your club ladder will appear here when members join.');
+                        }
+                        final mine = entries
+                            .where((e) => e.playerId == user?.id)
+                            .firstOrNull;
+                        final visible = entries.where((e) {
+                          final match = ('${e.fullName} ${e.rollNumber}')
+                              .toLowerCase()
+                              .contains(_query.toLowerCase());
+                          return match &&
+                              (_filter == 0 ||
+                                  (_filter == 1 &&
+                                      mine != null &&
+                                      e.canBeChallengedBy(mine.rank)) ||
+                                  (_filter == 2 && e.playerId == user?.id));
+                        }).toList();
+                        return Reveal(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              CourtPanel(
+                                  padding: const EdgeInsets.all(22),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(children: [
+                                          Expanded(
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                Text(
+                                                    'THE CLUB LADDER / ${entries.length}',
+                                                    style:
+                                                        AppTheme.jetBrainsMono(
+                                                            size: 10,
+                                                            letterSpacing: 1.2,
+                                                            color: AppTheme
+                                                                .limeNeon)),
+                                                const SizedBox(height: 8),
+                                                Text('Earn your spot.',
+                                                    style: AppTheme.chivo(
+                                                        size: 32,
+                                                        weight: FontWeight.w900,
+                                                        letterSpacing: -1.1,
+                                                        height: 1.15)),
+                                              ])),
+                                          IconButton(
+                                              tooltip: 'How the ladder works',
+                                              onPressed: _showRules,
+                                              icon: const Icon(
+                                                  Icons.info_outline,
+                                                  size: 20,
+                                                  color: AppTheme.textMuted)),
+                                        ]),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                            'Good games. Better rivals. Challenge up to two ranks above you.',
+                                            style: AppTheme.spaceGrotesk(
+                                                size: 13,
+                                                color: AppTheme.textMuted,
+                                                height: 1.5)),
+                                      ])),
+                              const SizedBox(height: 28),
+                              Text('APEX COMPETITORS',
+                                  style: AppTheme.labelCaps
+                                      .copyWith(color: AppTheme.textMuted)),
+                              const SizedBox(height: 12),
+                              _podium(entries),
+                              const SizedBox(height: 18),
+                              if (mine != null) ...[
+                                _myPosition(mine),
+                                const SizedBox(height: 14)
+                              ],
+                              Wrap(spacing: 8, runSpacing: 8, children: [
+                                ActionChip(
+                                    avatar: const Icon(Icons.qr_code_scanner,
+                                        size: 16),
+                                    label: const Text('Court check-in'),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const AttendanceScreen()))),
+                                ActionChip(
+                                    avatar: const Icon(Icons.timer_outlined,
+                                        size: 16),
+                                    label: const Text('Training lab'),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const TrainingScreen()))),
+                              ]),
+                              const SizedBox(height: 28),
+                              Text('FIND YOUR NEXT RIVAL',
+                                  style: AppTheme.labelCaps.copyWith(
+                                      color: AppTheme.textMuted,
+                                      letterSpacing: 1.4)),
+                              const SizedBox(height: 12),
+                              TextField(
+                                  controller: _search,
+                                  onChanged: (v) => setState(() => _query = v),
+                                  decoration: InputDecoration(
+                                      hintText: 'Find a player',
+                                      prefixIcon:
+                                          const Icon(Icons.search, size: 20),
+                                      suffixIcon: _query.isEmpty
+                                          ? null
+                                          : IconButton(
+                                              tooltip: 'Clear search',
+                                              onPressed: () {
+                                                _search.clear();
+                                                setState(() => _query = '');
+                                              },
+                                              icon: const Icon(Icons.close,
+                                                  size: 18)),
+                                      isDense: true)),
+                              const SizedBox(height: 14),
+                              Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: List.generate(
+                                      _filters.length,
+                                      (i) => ChoiceChip(
+                                          label: Text(_filters[i]),
+                                          selected: _filter == i,
+                                          showCheckmark: false,
+                                          selectedColor: AppTheme.limeNeon,
+                                          backgroundColor: AppTheme.cardDark,
+                                          side: BorderSide(
+                                              color: _filter == i
+                                                  ? AppTheme.limeNeon
+                                                  : AppTheme.borderDark),
+                                          labelStyle: AppTheme.spaceGrotesk(
+                                              size: 12,
+                                              weight: FontWeight.w700,
+                                              color: _filter == i
+                                                  ? AppTheme.bgDarker
+                                                  : AppTheme.textMuted),
+                                          onSelected: (_) =>
+                                              setState(() => _filter = i)))),
+                              const SizedBox(height: 24),
+                              Row(children: [
+                                Text('STANDINGS',
+                                    style: AppTheme.jetBrainsMono(
+                                        size: 10,
+                                        letterSpacing: 1.5,
+                                        color: AppTheme.textMuted)),
+                                const Spacer(),
+                                Text('${visible.length} shown',
+                                    style: AppTheme.spaceGrotesk(
+                                        size: 11, color: AppTheme.textMuted)),
+                              ]),
+                              const SizedBox(height: 12),
+                              MotionSize(
+                                  duration: AppMotion.durationOf(context),
+                                  alignment: Alignment.topCenter,
+                                  child: Column(children: [
+                                    if (visible.isEmpty)
+                                      _empty(
+                                          'No players here.',
+                                          _filter == 1
+                                              ? 'You’re at the top, or there are no eligible rivals in reach.'
+                                              : 'Try another name or filter.'),
+                                    ...visible.map((entry) => _standing(
+                                        entry,
+                                        mine,
+                                        pending.any((c) =>
+                                            c.challengerId == entry.playerId ||
+                                            c.defenderId == entry.playerId))),
                                   ])),
-                          const SizedBox(height: 22),
-                          Text('APEX COMPETITORS',
-                              style: AppTheme.labelCaps
-                                  .copyWith(color: AppTheme.textMuted)),
-                          const SizedBox(height: 12),
-                          _podium(entries),
-                          const SizedBox(height: 18),
-                          if (mine != null) ...[
-                            _myPosition(mine),
-                            const SizedBox(height: 14)
-                          ],
-                          Wrap(spacing: 8, runSpacing: 8, children: [
-                            ActionChip(
-                                avatar:
-                                    const Icon(Icons.qr_code_scanner, size: 16),
-                                label: const Text('Court check-in'),
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            const AttendanceScreen()))),
-                            ActionChip(
-                                avatar:
-                                    const Icon(Icons.timer_outlined, size: 16),
-                                label: const Text('Training lab'),
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            const TrainingScreen()))),
-                          ]),
-                          const SizedBox(height: 16),
-                          TextField(
-                              controller: _search,
-                              onChanged: (v) => setState(() => _query = v),
-                              decoration: InputDecoration(
-                                  hintText: 'Find a player',
-                                  prefixIcon:
-                                      const Icon(Icons.search, size: 20),
-                                  suffixIcon: _query.isEmpty
-                                      ? null
-                                      : IconButton(
-                                          tooltip: 'Clear search',
-                                          onPressed: () {
-                                            _search.clear();
-                                            setState(() => _query = '');
-                                          },
-                                          icon: const Icon(Icons.close,
-                                              size: 18)),
-                                  isDense: true)),
-                          const SizedBox(height: 14),
-                          Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: List.generate(
-                                  _filters.length,
-                                  (i) => ChoiceChip(
-                                      label: Text(_filters[i]),
-                                      selected: _filter == i,
-                                      showCheckmark: false,
-                                      selectedColor: AppTheme.limeNeon,
-                                      backgroundColor: AppTheme.cardDark,
-                                      side: BorderSide(
-                                          color: _filter == i
-                                              ? AppTheme.limeNeon
-                                              : AppTheme.borderDark),
-                                      labelStyle: AppTheme.spaceGrotesk(
-                                          size: 12,
-                                          weight: FontWeight.w700,
-                                          color: _filter == i
-                                              ? AppTheme.bgDarker
-                                              : AppTheme.textMuted),
-                                      onSelected: (_) =>
-                                          setState(() => _filter = i)))),
-                          const SizedBox(height: 24),
-                          Row(children: [
-                            Text('STANDINGS',
-                                style: AppTheme.jetBrainsMono(
-                                    size: 10,
-                                    letterSpacing: 1.5,
-                                    color: AppTheme.textMuted)),
-                            const Spacer(),
-                            Text('${visible.length} shown',
-                                style: AppTheme.spaceGrotesk(
-                                    size: 11, color: AppTheme.textMuted)),
-                          ]),
-                          const SizedBox(height: 12),
-                          MotionSize(
-                              duration: AppMotion.durationOf(context),
-                              alignment: Alignment.topCenter,
-                              child: Column(children: [
-                                if (visible.isEmpty)
-                                  _empty(
-                                      'No players here.',
-                                      _filter == 1
-                                          ? 'You’re at the top, or there are no eligible rivals in reach.'
-                                          : 'Try another name or filter.'),
-                                ...visible.map((entry) => _standing(
-                                    entry,
-                                    mine,
-                                    pending.any((c) =>
-                                        c.challengerId == entry.playerId ||
-                                        c.defenderId == entry.playerId))),
-                              ])),
-                        ]));
-                  },
-                )),
-              ),
-            ],
-          )),
+                            ]));
+                      },
+                    )),
+                  ),
+                ],
+              ))),
     );
   }
 
@@ -307,25 +330,20 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
                                       end: Alignment.bottomRight,
                                       colors: first
                                           ? [
-                                              const Color(0xFF283923),
+                                              Color.alphaBlend(
+                                                  AppTheme.limeNeon
+                                                      .withValues(alpha: .08),
+                                                  AppTheme.cardMid),
                                               AppTheme.cardDark
                                             ]
                                           : [
                                               AppTheme.cardMid,
                                               AppTheme.cardDark
                                             ]),
-                                  boxShadow: first
-                                      ? [
-                                          BoxShadow(
-                                              color: AppTheme.limeNeon
-                                                  .withValues(alpha: .09),
-                                              blurRadius: 24)
-                                        ]
-                                      : null,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
                                       color: color.withValues(
-                                          alpha: first ? .5 : .18))),
+                                          alpha: first ? .35 : .18))),
                               child: Column(children: [
                                 Icon(
                                     first
@@ -356,16 +374,18 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
                                             ? AppTheme.limeNeon
                                             : AppTheme.textMuted)),
                                 const SizedBox(height: 8),
-                                AnimatedStat(
-                                    value: entry.ovrRating,
-                                    style: AppTheme.chivo(
-                                        size: first ? 28 : 24,
-                                        weight: FontWeight.w900,
-                                        color: color,
-                                        letterSpacing: -1)),
+                                FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: AnimatedStat(
+                                        value: entry.ovrRating,
+                                        style: AppTheme.chivo(
+                                            size: first ? 28 : 24,
+                                            weight: FontWeight.w900,
+                                            color: color,
+                                            letterSpacing: -1))),
                                 Text('#${entry.rank} / OVR',
                                     style: AppTheme.jetBrainsMono(
-                                        size: 8, color: AppTheme.textMuted)),
+                                        size: 9, color: AppTheme.textMuted)),
                               ]),
                             ))))),
           ));
@@ -373,7 +393,7 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
   }
 
   Widget _myPosition(LadderEntry mine) => Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
             color: AppTheme.limeNeon.withValues(alpha: .07),
             borderRadius: BorderRadius.circular(18),
@@ -408,7 +428,7 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
     return Container(
       key: ValueKey(entry.playerId),
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           color: isMe
               ? AppTheme.limeNeon.withValues(alpha: .055)
@@ -459,21 +479,30 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
                         size: 8, color: AppTheme.textMuted)),
               ]),
             ]),
-            const SizedBox(height: 12),
-            Row(children: [
-              Expanded(
-                  child: Text(
+            const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: Divider(height: 1, color: AppTheme.borderDark)),
+            Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 12,
+                runSpacing: 8,
+                children: [
+                  Text(
                       '${entry.matchesPlayed} played  ·  ${entry.winRatePct.toStringAsFixed(0)}% wins',
                       style: AppTheme.spaceGrotesk(
-                          size: 11, color: AppTheme.textMuted))),
-              if (isMe)
-                _pill('YOU', AppTheme.limeNeon)
-              else if (issued)
-                _pill('PENDING', AppTheme.mintTeal)
-              else if (eligible)
-                SizedBox(
-                    height: 36,
-                    child: TextButton(
+                          size: 12, color: AppTheme.textMuted)),
+                  if (isMe)
+                    _pill('YOU', AppTheme.limeNeon)
+                  else if (issued)
+                    _pill('PENDING', AppTheme.mintTeal)
+                  else if (eligible)
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor:
+                                AppTheme.limeNeon.withValues(alpha: .08),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10)),
                         onPressed: _challenging == null
                             ? () => _challenge(mine, entry)
                             : null,
@@ -484,8 +513,8 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
                             style: AppTheme.spaceGrotesk(
                                 size: 12,
                                 weight: FontWeight.w700,
-                                color: AppTheme.limeNeon)))),
-            ]),
+                                color: AppTheme.limeNeon))),
+                ]),
           ])),
     );
   }
@@ -541,8 +570,10 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
                   style: AppTheme.bodyMd.copyWith(color: AppTheme.mintTeal)),
               const SizedBox(height: 20),
               CourtPanel(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Wrap(
+                      alignment: WrapAlignment.spaceAround,
+                      spacing: 28,
+                      runSpacing: 20,
                       children: [
                     for (final stat in [
                       ('RANK', '#${entry.rank}'),
@@ -628,10 +659,21 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
           borderRadius: BorderRadius.circular(30)),
       child: Text(text, style: AppTheme.jetBrainsMono(size: 9, color: color)));
 
-  Widget _empty(String title, String message, {bool retry = false}) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 42, horizontal: 16),
+  Widget _empty(String title, String message, {bool retry = false}) =>
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+        decoration: BoxDecoration(
+            color: AppTheme.cardDark,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppTheme.borderDark)),
         child: Column(children: [
-          const Icon(Icons.sports_tennis, size: 36, color: AppTheme.limeNeon),
+          Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                  color: AppTheme.cardMid, shape: BoxShape.circle),
+              child: Icon(retry ? Icons.wifi_off_rounded : Icons.sports_tennis,
+                  size: 28, color: AppTheme.limeNeon)),
           const SizedBox(height: 18),
           Text(title,
               textAlign: TextAlign.center,

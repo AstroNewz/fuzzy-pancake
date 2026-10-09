@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/theme/app_theme.dart';
@@ -37,11 +39,19 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        final client = Supabase.instance.client;
-        AppUpdateService.checkForUpdates(context, client);
+        // Widget tests and embedded previews can render the shell without
+        // bootstrapping Supabase. The production app always initializes it,
+        // but an unavailable client should not make navigation unusable.
+        try {
+          final client = Supabase.instance.client;
+          AppUpdateService.checkForUpdates(context, client);
+        } catch (_) {
+          // Update checks are non-critical UI enhancement work.
+        }
       }
     });
   }
+
   static const _screens = <Widget>[
     LadderScreen(),
     MatchesHubScreen(),
@@ -113,7 +123,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper>
     );
     return SyncCoordinator(
         child: Scaffold(
-      extendBody: true,
+      extendBody: false,
       body: StitchAppBackground(
           child: Row(children: [
         if (wide) _rail(),
@@ -129,55 +139,74 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper>
   }
 
   Widget _rail() => Container(
-        width: 204,
+        width: 216 +
+            (MediaQuery.textScalerOf(context).scale(14) - 14)
+                .clamp(0, 72)
+                .toDouble(),
         decoration: const BoxDecoration(
             color: AppTheme.bgDarker,
             border: Border(right: BorderSide(color: AppTheme.borderDark))),
         child: SafeArea(
             child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: ListView(children: [
+            const Icon(Icons.sports_tennis_rounded,
+                color: AppTheme.limeNeon, size: 28),
+            const SizedBox(height: 14),
             Text('SMASHDECK',
-                style: AppTheme.chivo(
-                    size: 20,
-                    weight: FontWeight.w900,
-                    color: AppTheme.limeNeon)),
+                textAlign: TextAlign.center,
+                style: AppTheme.chivo(size: 19, weight: FontWeight.w800)),
             const SizedBox(height: 6),
-            Text('YOUR COURT. YOUR CLUB.',
+            Text('Your court. Your club.',
+                textAlign: TextAlign.center,
                 style:
-                    AppTheme.jetBrainsMono(size: 9, color: AppTheme.textMuted)),
-            const SizedBox(height: 40),
+                    AppTheme.spaceGrotesk(size: 12, color: AppTheme.textMuted)),
+            const SizedBox(height: 32),
             ...List.generate(
                 5,
                 (i) => Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: _navItem(i, horizontal: true),
                     )),
-            const Spacer(),
+            const SizedBox(height: 22),
+            const Divider(),
+            const SizedBox(height: 16),
             TextButton.icon(
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const MoreMenuScreen())),
               icon: const Icon(Icons.tune, size: 18),
               label: const Text('Club & account'),
+              style: TextButton.styleFrom(
+                foregroundColor: AppTheme.textMuted,
+                minimumSize: const Size(48, 48),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              ),
             ),
           ]),
         )),
       );
 
-  Widget _bottomBar() => Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+  Widget _bottomBar() => SafeArea(
+        top: false,
+        minimum: const EdgeInsets.fromLTRB(8, 6, 8, 8),
         child: GlassPanel(
-            radius: 24,
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: Row(
-                    children:
-                        List.generate(5, (i) => Expanded(child: _navItem(i))),
-                  )),
-            )),
+          padding: const EdgeInsets.all(4),
+          child: LayoutBuilder(builder: (context, constraints) {
+            final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;
+            final itemWidth = math.max(
+              constraints.maxWidth / _labels.length,
+              textScale > 1.2 ? 64 * textScale : 56.0,
+            );
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [
+                for (var i = 0; i < _labels.length; i++)
+                  SizedBox(width: itemWidth, child: _navItem(i)),
+              ]),
+            );
+          }),
+        ),
       );
 
   Widget _navItem(int i, {bool horizontal = false}) {
@@ -188,45 +217,50 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper>
         : selected
             ? AppTheme.limeNeon
             : AppTheme.textMuted;
-    final icon = AnimatedSlide(
-        duration: AppMotion.durationOf(context),
-        offset: selected ? const Offset(0, -.06) : Offset.zero,
-        curve: Curves.easeOutBack,
-        child: Icon(_icons[i], size: umpire ? 25 : 22, color: color));
+    final icon = Icon(_icons[i], size: 22, color: color);
     final label = Text(_labels[i],
-        maxLines: 1,
+        textAlign: horizontal ? TextAlign.start : TextAlign.center,
         style: AppTheme.spaceGrotesk(
-            size: horizontal ? 14 : 10, weight: FontWeight.w700, color: color));
+            size: horizontal ? 14 : 11,
+            height: 1.25,
+            weight: selected || umpire ? FontWeight.w700 : FontWeight.w500,
+            color: color));
     return Semantics(
       selected: selected,
       button: true,
       label: umpire ? 'Start live umpire' : _labels[i],
+      excludeSemantics: true,
+      onTap: () => _select(i),
       child: PressScale(
           child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
                 onTap: () => _select(i),
                 child: AnimatedContainer(
                   duration: AppMotion.durationOf(context),
                   curve: AppMotion.curve,
-                  constraints: const BoxConstraints(minHeight: 56),
+                  constraints: const BoxConstraints(minHeight: 60),
                   padding: EdgeInsets.symmetric(
-                      horizontal: horizontal ? 14 : 4, vertical: 8),
+                      horizontal: horizontal ? 12 : 4, vertical: 10),
                   decoration: BoxDecoration(
                     border: Border.all(
                         color: selected
-                            ? AppTheme.limeNeon.withValues(alpha: .18)
+                            ? AppTheme.limeNeon.withValues(alpha: .22)
                             : Colors.transparent),
                     color: umpire
                         ? AppTheme.limeNeon
                         : selected
-                            ? AppTheme.limeNeon.withValues(alpha: .09)
+                            ? AppTheme.limeNeon.withValues(alpha: .07)
                             : Colors.transparent,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: horizontal
-                      ? Row(children: [icon, const SizedBox(width: 12), label])
+                      ? Row(children: [
+                          icon,
+                          const SizedBox(width: 12),
+                          Expanded(child: label),
+                        ])
                       : Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [icon, const SizedBox(height: 4), label]),

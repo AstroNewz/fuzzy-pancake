@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/app_motion.dart';
 
-/// SmashDeck Design System — Stitch UI
-/// Navy deep-space base + electric lime-neon accents
-/// Matching stitch_smashdeck_badminton_club_manager mockups exactly
+/// SmashDeck design system: quiet navy surfaces and athletic lime accents.
 class AppTheme {
   // ─── Stitch Primary Palette ────────────────────────────────────────────────
   static const Color limeNeon = Color(0xFFC3F400); // Primary CTA / OVR numbers
@@ -14,22 +12,22 @@ class AppTheme {
   static const Color mintBright = Color(0xFF6FFBBE); // Secondary fixed
 
   // ─── Background & Surfaces ────────────────────────────────────────────────
-  static const Color bgDark = Color(0xFF0A122A); // Main canvas (deep navy)
-  static const Color bgDarker = Color(0xFF050D25); // Lowest surface
-  static const Color cardDark = Color(0xFF171E37); // Elevated card
-  static const Color cardMid = Color(0xFF212942); // container-high
-  static const Color cardBright = Color(0xFF313852); // surface-bright
+  static const Color bgDark = Color(0xFF0D1522); // Main canvas (deep navy)
+  static const Color bgDarker = Color(0xFF090F19); // Lowest surface
+  static const Color cardDark = Color(0xFF172130); // Elevated card
+  static const Color cardMid = Color(0xFF202C3B); // container-high
+  static const Color cardBright = Color(0xFF2C394A); // surface-bright
   static const Color surfaceVar =
-      Color(0xFF2C344D); // surface-variant / container-highest
+      Color(0xFF263344); // surface-variant / container-highest
 
   // ─── Borders ──────────────────────────────────────────────────────────────
-  static const Color borderDark = Color(0xFF2A3550);
-  static const Color borderLight = Color(0xFF8E9379); // outline
+  static const Color borderDark = Color(0xFF303E50);
+  static const Color borderLight = Color(0xFF8492A5); // outline
 
   // ─── Text ─────────────────────────────────────────────────────────────────
-  static const Color textWhite = Color(0xFFDBE1FF); // on-surface
-  static const Color textMuted = Color(0xFFA7B3CA);
-  static const Color textMutedDark = Color(0xFF8997B1);
+  static const Color textWhite = Color(0xFFF0F3F8); // on-surface
+  static const Color textMuted = Color(0xFFB2BECE);
+  static const Color textMutedDark = Color(0xFF96A5BA);
 
   // ─── Semantic Status ──────────────────────────────────────────────────────
   static const Color errorRed = Color(0xFFFFB4AB); // error
@@ -107,13 +105,13 @@ class AppTheme {
   static TextStyle get headlineMd =>
       chivo(size: 18, weight: FontWeight.w800, letterSpacing: -0.2);
   static TextStyle get bodyLg =>
-      spaceGrotesk(size: 15, weight: FontWeight.w500, height: 1.35);
+      spaceGrotesk(size: 16, weight: FontWeight.w500, height: 1.45);
   static TextStyle get bodyMd =>
-      spaceGrotesk(size: 13.5, weight: FontWeight.w400, height: 1.35);
+      spaceGrotesk(size: 14, weight: FontWeight.w400, height: 1.45);
   static TextStyle get bodySm =>
-      spaceGrotesk(size: 11.5, weight: FontWeight.w400, height: 1.3);
+      spaceGrotesk(size: 12, weight: FontWeight.w400, height: 1.4);
   static TextStyle get labelCaps =>
-      jetBrainsMono(size: 10, weight: FontWeight.w700, letterSpacing: 0.8);
+      jetBrainsMono(size: 11, weight: FontWeight.w600, letterSpacing: 0.6);
   static TextStyle get statBadge =>
       jetBrainsMono(size: 13.5, weight: FontWeight.w800, letterSpacing: 0.3);
   static TextStyle get displayOvr =>
@@ -204,7 +202,7 @@ class AppTheme {
         color: cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: borderDark, width: 1),
         ),
       ),
@@ -215,35 +213,35 @@ class AppTheme {
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.jetBrainsMono(
+          textStyle: GoogleFonts.spaceGrotesk(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            letterSpacing: 0.08 * 14,
+            letterSpacing: 0.2,
           ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surfaceVar,
+        fillColor: cardDark,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderDark),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderDark),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: limeNeon, width: 1.5),
         ),
         labelStyle: const TextStyle(color: textMuted),
-        hintStyle: TextStyle(
-          color: textMuted.withValues(alpha: 0.6),
+        hintStyle: const TextStyle(
+          color: textMutedDark,
           fontSize: 14,
         ),
         prefixIconColor: textMuted,

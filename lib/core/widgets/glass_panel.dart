@@ -18,23 +18,23 @@ class GlassPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ClipRRect(
         borderRadius: BorderRadius.circular(radius),
         child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: DecoratedBox(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppTheme.cardBright.withValues(alpha: .62),
-                          AppTheme.bgDarker.withValues(alpha: .78)
+                          AppTheme.cardDark.withValues(alpha: .96),
+                          AppTheme.cardDark.withValues(alpha: .90)
                         ]),
-                    border:
-                        Border.all(color: Colors.white.withValues(alpha: .12)),
+                    border: Border.all(color: AppTheme.borderDark),
                     borderRadius: BorderRadius.circular(radius)),
                 child: Stack(children: [
                   Positioned.fill(
                       child: FilmGrain(
-                          intensity: ref.watch(appearanceProvider).grain * .6)),
+                          intensity:
+                              ref.watch(appearanceProvider).grain * .18)),
                   Padding(padding: padding, child: child),
                 ]))),
       );
